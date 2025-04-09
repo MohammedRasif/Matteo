@@ -3,7 +3,6 @@
 import { Bell } from "lucide-react"
 import { NavLink } from "react-router-dom"
 
-
 const UserDashboardNavbar = () => {
     return (
         <div className="flex items-center justify-between w-full h-16 px-6 bg-white max-w-[180vh] mx-auto">
@@ -29,22 +28,22 @@ const UserDashboardNavbar = () => {
 
             {/* User profile and notification on the right */}
             <div className="flex items-center space-x-4">
-                <div>
-                    <button className="pt-2 rounded-full hover:bg-gray-100">
-                        <Bell className="h-7 w-6 text-gray-600" />
+                <NavLink>
+                <div className="relative cursor-pointer">
+                    <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 ">
+                        <Bell className="h-7 w-7 text-gray-600" /> {/* Increased base size */}
                     </button>
-                    <div className=" absolute text-[10px] p-[5px]  top-[18px] right-[268px] bg-red-400 rounded-full "></div>
+                    <div className="absolute text-[10px] p-[5px] top-[6px] right-[10px] bg-red-400 rounded-full"></div>
                 </div>
+                </NavLink>
                 <div className="flex items-center space-x-2">
                     <div className="h-10 w-10">
                         <img
                             src="https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738148405/fotor-2025010923230_1_u9l6vi.png"
-
+                            alt="User profile"
                         />
-
                     </div>
                     <span className="text-[17px] font-medium">Cameron</span>
-
                 </div>
             </div>
         </div>
