@@ -30,7 +30,7 @@ const AdminDashboardSidebar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/dashboard/chat"
+                    to="/Admin_Dashboard/Message"
                     className={({ isActive }) =>
                         `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
                         }`
@@ -84,6 +84,11 @@ const AdminDashboardSidebar = () => {
                     <BiSupport className="h-6 w-6" />
                     <h1 className="text-lg font-medium">Support</h1>
                 </NavLink>
+            </div>
+
+            {/* logout */}
+            <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-3 absolute bottom-0 cursor-pointer">
+                <button className="text-lg font-medium cursor-pointer">Logout</button>
             </div>
         </div>
     );

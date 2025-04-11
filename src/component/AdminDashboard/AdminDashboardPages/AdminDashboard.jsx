@@ -42,10 +42,46 @@ const AdminDashboard = () => {
         { name: 'Fri', uv: 3490, pv: 4300, amt: 2100 },
     ];
 
+    const topEarners = [
+        {
+            id: 1,
+            username: "username1335",
+            userId: "46593292",
+            total: "$33,000",
+            currentOrder: "$33,000",
+            profileImage: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg",
+        },
+        {
+            id: 2,
+            username: "username1335",
+            userId: "46593292",
+            total: "$33,000",
+            currentOrder: "$33,000",
+            profileImage: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/woman-on-a-football-field.jpg",
+        },
+        {
+            id: 3,
+            username: "username1335",
+            userId: "46593292",
+            total: "$33,000",
+            currentOrder: "$33,000",
+            profileImage: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg",
+        },
+        {
+            id: 4,
+            username: "username1335",
+            userId: "46593292",
+            total: "$33,000",
+            currentOrder: "$33,000",
+            profileImage: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg",
+        },
+       
+    ]
+
     return (
-        <div className="p-5">
+        <div className="p-5 mt-5">
             {/* Metrics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div className="bg-white rounded-lg p-4 flex justify-between items-center ">
                     <div>
                         <p className="text-gray-500 text-[20px]">Total sales today</p>
@@ -77,9 +113,9 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            <div className="flex gap-5">
+            <div className="flex gap-4">
                 {/* Chart 1 - Line Chart (2/3 width) */}
-                <div className="bg-white rounded-lg p-4 mb-6 w-2/3">
+                <div className="bg-white rounded-lg p-4 mb-5 w-2/3">
                     <h3 className="text-xl font-semibold mb-4">Sales Overview (Line Chart)</h3>
                     <div style={{ height: '330px' }}>
                         <ResponsiveContainer width="100%" height="100%">
@@ -128,14 +164,87 @@ const AdminDashboard = () => {
                                 <Tooltip />
                                 <Legend />
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <Bar 
-                                    dataKey="pv" 
-                                    fill="#8884d8" 
-                                    background={{ fill: '#eee' }} 
+                                <Bar
+                                    dataKey="pv"
+                                    fill="#8884d8"
+                                    background={{ fill: '#eee' }}
                                     name="Upgrades Per Day" // Custom label for the legend
+                                    radius={[8, 8, 8, 8]}
                                 />
                             </BarChart>
                         </ResponsiveContainer>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div className="flex items-center space-x-4">
+                {/* table */}
+                <div className=" w-1/3  bg-gray-50 rounded-lg overflow-hidden shadow-sm">
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">Top earners this month</th>
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">User ID</th>
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">Current order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topEarners.map((earner) => (
+                                    <tr key={earner.id} className="border-b border-gray-100 hover:bg-gray-50">
+                                        <td className="py-3 px-4">
+                                            <div className="flex items-center">
+                                               
+                                                <span className="text-gray-700">{earner.username}</span>
+                                                <div className="h-8 w-8 rounded-full overflow-hidden mr-3">
+                                                    
+                                                    </div>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-4 text-gray-700">{earner.userId}</td>
+                                        <td className="py-3 px-4 text-blue-500 font-medium">{earner.currentOrder}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {/* table 2 */}
+                <div className=" w-2/3 bg-gray-50 rounded-lg overflow-hidden shadow-sm">
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">Top earners this month</th>
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">User ID</th>
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">Total</th>
+                                    <th className="text-left py-3 px-4 font-medium text-gray-700">Current order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topEarners.map((earner) => (
+                                    <tr key={earner.id} className="border-b border-gray-100 hover:bg-gray-50">
+                                        <td className="py-3 px-4">
+                                            <div className="flex items-center">
+                                                <div className="h-8 w-8 rounded-full overflow-hidden mr-3">
+                                                    <img
+                                                        src={earner.profileImage || "/placeholder.svg"}
+                                                        alt={earner.username}
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                </div>
+                                                <span className="text-gray-700">{earner.username}</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-4 text-gray-700">{earner.userId}</td>
+                                        <td className="py-3 px-4 text-blue-500 font-medium">{earner.total}</td>
+                                        <td className="py-3 px-4 text-blue-500 font-medium">{earner.currentOrder}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
