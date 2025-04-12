@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Bot, Briefcase, Clock, FileText, Settings, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { TbBrandWechat } from "react-icons/tb";
 import { MdOutlineDashboard } from "react-icons/md";
 import { IoMdNotificationsOutline } from "react-icons/io";
