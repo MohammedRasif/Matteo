@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { PaperclipIcon, SendIcon, Bot } from "lucide-react"
+import { PaperclipIcon, SendIcon } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import { VscRobot } from "react-icons/vsc"
 
@@ -11,7 +11,7 @@ const AdminDashboardAiChat = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [hasUserSentMessage, setHasUserSentMessage] = useState(false)
     const [selectedImage, setSelectedImage] = useState(null)
-    const [selectedFileName, setSelectedFileName] = useState("") // State for file name
+    const [selectedFileName, setSelectedFileName] = useState("")
     const messagesEndRef = useRef(null)
     const inputRef = useRef(null)
     const fileInputRef = useRef(null)
@@ -20,9 +20,14 @@ const AdminDashboardAiChat = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
+    // Scroll to bottom and focus input field when messages change
     useEffect(() => {
         scrollToBottom()
-    }, [messages])
+        // Focus the input field after a message is sent
+        if (hasUserSentMessage) {
+            inputRef.current?.focus()
+        }
+    }, [messages, hasUserSentMessage])
 
     const generateAIResponse = async (userMessage) => {
         setIsLoading(true)
@@ -67,17 +72,15 @@ const AdminDashboardAiChat = () => {
         }
     }
 
-    // Handle image selection
     const handleImageUpload = (e) => {
         const file = e.target.files[0]
         if (file) {
             const imageUrl = URL.createObjectURL(file)
             setSelectedImage(imageUrl)
-            setSelectedFileName(file.name) // Store the file name
+            setSelectedFileName(file.name)
         }
     }
 
-    // Handle sending the message or image
     const handleSendMessage = async () => {
         if (newMessage.trim() === "" && !selectedImage) return
 
@@ -98,7 +101,7 @@ const AdminDashboardAiChat = () => {
                 ...prev,
                 {
                     image: selectedImage,
-                    fileName: selectedFileName, // Include file name in the message
+                    fileName: selectedFileName,
                     isUser: true,
                     timestamp: new Date(),
                 },
@@ -107,9 +110,8 @@ const AdminDashboardAiChat = () => {
 
         setNewMessage("")
         setSelectedImage(null)
-        setSelectedFileName("") // Clear the file name after sending
+        setSelectedFileName("")
         setHasUserSentMessage(true)
-        inputRef.current?.focus()
 
         if (userMessage) {
             await generateAIResponse(userMessage)
@@ -124,7 +126,7 @@ const AdminDashboardAiChat = () => {
     }
 
     return (
-        <div className="flex flex-col h-screen bg-gray-50">
+        <div className="flex flex-col h-screen bg-gray-50" style={{ height: "82vh" }}>
             {/* Header with AI bot info */}
             <div className="flex items-center space-x-4 p-3 border-b border-gray-200 bg-white">
                 <div className="h-[46px] w-11 rounded-full bg-[#2F80A9] flex items-center justify-center">
@@ -137,18 +139,13 @@ const AdminDashboardAiChat = () => {
             <div className="flex-1 overflow-y-auto p-4 space-y-6 relative">
                 {/* Default message */}
                 {!hasUserSentMessage && (
-                    <div className="absolute bottom-0 ">
-                        <div className="flex items-start space-x-3 ">
+                    <div className="absolute bottom-0">
+                        <div className="flex items-start space-x-3">
                             <div className="h-10 w-10 rounded-full bg-[#2F80A9] text-white flex items-center justify-center">
                                 <VscRobot className="h-5 w-5" />
                             </div>
                             <div
-                                className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm inline-block"
-                                style={{
-                                    whiteSpace: "normal",
-                                    wordBreak: "break-word",
-                                    overflow: "hidden",
-                                }}
+                                className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm max-w-[70%]"
                             >
                                 <ReactMarkdown>
                                     Hello! I'm your AI assistant. How can I help you today?
@@ -163,25 +160,20 @@ const AdminDashboardAiChat = () => {
                     <div key={index} className="flex w-full">
                         {message.isUser ? (
                             <div className="flex flex-col items-end w-full">
-                                <div className="flex justify-start items-start space-x-3 ml-auto">
+                                <div className="flex justify-end items-end space-x-3">
                                     {message.text ? (
                                         <div
-                                            className="px-4 py-3 rounded-xl bg-[#2F80A9] text-white lg:text-[18px] shadow-md inline-block "
-                                            style={{
-                                                whiteSpace: "normal",
-                                                wordBreak: "break-word",
-                                                overflow: "hidden",
-                                            }}
+                                            className="px-4 py-3 rounded-xl bg-[#2F80A9] text-white lg:text-[16px] shadow-md w-1/2"
                                         >
                                             <span>{message.text}</span>
                                         </div>
                                     ) : (
                                         <div className="flex justify-end">
-                                            <div className="">
+                                            <div>
                                                 <img
                                                     src={message.image}
                                                     alt="Uploaded"
-                                                    className="rounded-lg  shadow-md w-24 h-12 "
+                                                    className="rounded-lg shadow-md w-24 h-12"
                                                 />
                                                 {message.fileName && (
                                                     <p className="text-xs text-gray-500 mt-1">{message.fileName}</p>
@@ -190,7 +182,11 @@ const AdminDashboardAiChat = () => {
                                         </div>
                                     )}
                                     <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                                        <span className="text-xs text-gray-600">You</span>
+                                        <img
+                                            src="https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738148405/fotor-2025010923230_1_u9l6vi.png"
+                                            alt=""
+                                            className="h-10 w-10 rounded-full object-cover"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -201,12 +197,7 @@ const AdminDashboardAiChat = () => {
                                         <VscRobot className="h-5 w-5 text-white" />
                                     </div>
                                     <div
-                                        className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm inline-block max-w-[70%]"
-                                        style={{
-                                            whiteSpace: "normal",
-                                            wordBreak: "break-word",
-                                            overflow: "hidden",
-                                        }}
+                                        className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm max-w-[70%]"
                                     >
                                         <ReactMarkdown>{message.text}</ReactMarkdown>
                                     </div>
@@ -245,7 +236,6 @@ const AdminDashboardAiChat = () => {
                 <div ref={messagesEndRef} />
             </div>
 
-
             {selectedImage && (
                 <div className="mb-3 ml-3 flex items-center space-x-3">
                     <div className="relative">
@@ -283,9 +273,6 @@ const AdminDashboardAiChat = () => {
 
             {/* Message input area */}
             <div className="border-t border-gray-200 p-3 bg-white">
-
-
-
                 <div className="flex items-center bg-gray-100 rounded-full px-4 py-3">
                     <input
                         type="file"

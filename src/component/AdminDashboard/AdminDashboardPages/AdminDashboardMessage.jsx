@@ -11,7 +11,7 @@ const AdminDashboardMessage = () => {
         { id: "U001", name: "Alice", number: "3", message: "hello", bot: "hello", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg" },
         { id: "U002", name: "Bob", number: "2", message: "how are you", bot: "how are you", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg" },
         { id: "U003", name: "Charlie", number: "3", message: "are you ok", bot: "are you ok", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg" },
-        { id: "U008", name: "Ramis", number: "", message: "are you know me", bot: "are you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg" },
+        { id: "U008", name: "Ramis", number: "", message: "are you know me", bot: "are you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg" },
         { id: "U004", name: "Bijoy", number: "5", message: "are you know me", bot: "are you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529173/samples/two-ladies.jpg" },
         { id: "U005", name: "Pappu", number: "", message: "show this", bot: "show this", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg" },
         { id: "U006", name: "Rasif", number: "", message: "are you crazy", bot: "are you crazy", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/smiling-man.jpg" },
@@ -44,7 +44,7 @@ const AdminDashboardMessage = () => {
     return (
         <div className="mt-10 m-4 roboto">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
-            <div className="flex" style={{ height: "70vh" }}>
+            <div className="flex" style={{ height: "82vh" }}>
                 {/* User List Sidebar */}
                 <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">
                     <div className="m-3">
