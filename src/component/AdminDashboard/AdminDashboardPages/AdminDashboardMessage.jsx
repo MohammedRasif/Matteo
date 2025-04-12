@@ -1,57 +1,107 @@
-import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { VscRobot } from "react-icons/vsc";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 
 const AdminDashboardMessage = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // Get the current route
+    const [selectedUserId, setSelectedUserId] = useState(null);
 
-    // Sample user data (replace with your actual data source)
     const users = [
-        { id: "U001", name: "Alice", message: "hello", image: "https://via.placeholder.com/40" },
-        { id: "U002", name: "Bob", message: "how are you", image: "https://via.placeholder.com/40" },
-        { id: "U003", name: "Charlie", message: "are you ok", image: "https://via.placeholder.com/40" },
+        { id: "U001", name: "Alice", number: "3", message: "hello", bot: "hello", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg" },
+        { id: "U002", name: "Bob", number: "2", message: "how are you", bot: "how are you", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg" },
+        { id: "U003", name: "Charlie", number: "3", message: "are you ok", bot: "are you ok", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg" },
+        { id: "U008", name: "Ramis", number: "", message: "are you know me", bot: "are you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg" },
+        { id: "U004", name: "Bijoy", number: "5", message: "are you know me", bot: "are you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529173/samples/two-ladies.jpg" },
+        { id: "U005", name: "Pappu", number: "", message: "show this", bot: "show this", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg" },
+        { id: "U006", name: "Rasif", number: "", message: "are you crazy", bot: "are you crazy", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/smiling-man.jpg" },
+        { id: "U007", name: "Sojib", number: "", message: "do you know me", bot: "do you know me", image: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529168/samples/people/kitchen-bar.jpg" },
     ];
 
-    // Handle click to navigate to user's message route
+    // Update selectedUserId based on the current route
+    useEffect(() => {
+        const pathParts = location.pathname.split("/");
+        const userIdFromPath = pathParts[pathParts.length - 1];
+
+        // Check if the route is for a user (not chatbot)
+        if (pathParts.includes("Message") && users.some(user => user.id === userIdFromPath)) {
+            setSelectedUserId(userIdFromPath);
+        } else {
+            setSelectedUserId(null); // Reset when on chatbot or other routes
+        }
+    }, [location.pathname]);
+
     const handleUserClick = (user) => {
+        setSelectedUserId(user.id);
         navigate(`/Admin_Dashboard/Message/${user.id}`, { state: { user } });
+    };
+
+    const handleChatbotClick = () => {
+        setSelectedUserId(null); // Ensure no user is selected
+        navigate("/Admin_Dashboard/Message/chatbot");
     };
 
     return (
         <div className="mt-10 m-4 roboto">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
-            <div className="flex h-screen">
+            <div className="flex" style={{ height: "70vh" }}>
                 {/* User List Sidebar */}
-                <div className="w-1/4 bg-gray-50 dark:bg-[#1E232E] p-4 border-r border-gray-200 dark:border-gray-700">
-                    <div>
-                        <input type="text" name="" placeholder="Search" className=" border border-gray-300 rounded-md w-full pl-2 py-[10px]" id="" />
+                <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">
+                    <div className="m-3">
+                        <input
+                            type="text"
+                            name=""
+                            placeholder="Search"
+                            className="border border-gray-300 rounded-md w-full pl-2 py-[10px]"
+                            id=""
+                        />
                     </div>
 
-                    <NavLink to="/Admin_Dashboard/Message/chatbot" className="text-2xl">
-                        Ai Chat
-                    </NavLink>
-                    <div className="space-y-2">
+                    <div
+                        onClick={handleChatbotClick}
+                        className={`flex items-center space-x-2 px-5 py-[10px] mt-2 cursor-pointer ${location.pathname === "/Admin_Dashboard/Message/chatbot"
+                                ? "bg-[#B6E3FC]"
+                                : "hover:bg-[#B6E3FC]"
+                            }`}
+                    >
+                        <div className="bg-[#2F80A9] h-12 w-12 text-white flex items-center justify-center rounded-full">
+                            <VscRobot size={25} />
+                        </div>
+                        <div className="text-xl">
+                            <h1 className="pt-1 font-semibold">Smart Ai Assistant</h1>
+                        </div>
+                    </div>
+
+                    {/* User list container */}
+                    <div className="overflow-y-auto flex-1">
                         {users.map((user) => (
                             <div
                                 key={user.id}
                                 onClick={() => handleUserClick(user)}
-                                className="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-[#252c3b] text-gray-700 dark:text-gray-200 transition-colors"
+                                className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#252c3b] text-gray-700 dark:text-gray-200 transition-colors border-b border-gray-200 ${selectedUserId === user.id ? "bg-blue-100 dark:bg-[#2F80A9]" : ""
+                                    }`}
                             >
                                 <img
                                     src={user.image}
                                     alt={user.name}
                                     className="w-10 h-10 rounded-full mr-3 object-cover"
                                 />
-                                <div>
-                                    <span className="font-medium">{user.name}</span>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">{user.id}</p>
+                                <div className="relative">
+                                    <span className="font-medium text-[15px]">{user.name}</span>
+                                    {user.number && (
+                                        <h1 className="absolute top-1 left-[30vh] text-[12px] bg-[#0B7EBB] text-white px-[5px] rounded-full">
+                                            {user.number}
+                                        </h1>
+                                    )}
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+
                 {/* Outlet for Messages */}
-                <div className="w-3/4 p-6 bg-white dark:bg-[#252c3b]">
-                    <Outlet /> {/* Renders content based on route */}
+                <div className="w-3/4 bg-white dark:bg-[#252c3b] rounded-r-lg">
+                    <Outlet />
                 </div>
             </div>
         </div>
