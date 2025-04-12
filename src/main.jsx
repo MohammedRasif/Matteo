@@ -15,6 +15,7 @@ import AdminDashboard from './component/AdminDashboard/AdminDashboardPages/Admin
 import AdminDashboardMessage from './component/AdminDashboard/AdminDashboardPages/AdminDashboardMessage.jsx';
 import AdminDashboardChats from './component/AdminDashboard/AdminDashboardPages/AdminDashboardChats.jsx';
 import AdminDashboardAiChat from './component/AdminDashboard/AdminDashboardPages/AdminDashboardAiChat.jsx';
+import AdminDashboardNotification from './component/AdminDashboard/AdminDashboardPages/AdminDashboardNotification.jsx';
 
 const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
             element:<AdminDashboardAiChat/>
           }
         ]
+      },
+      {
+        path:"/Admin_Dashboard/notification",
+        element:<AdminDashboardNotification/>
       }
     ]
   }

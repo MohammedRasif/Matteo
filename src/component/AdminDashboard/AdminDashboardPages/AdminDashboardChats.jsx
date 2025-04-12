@@ -106,7 +106,7 @@ const AdminDashboardChats = () => {
                     <div key={index}>
                         {message.isUser ? (
                             <div className="flex justify-end space-x-2">
-                                <div className="max-w-xs bg-[#E2E8F0] text-gray-800 rounded-lg p-3 text-sm">
+                                <div className="max-w-xs bg-[#2F80A9] text-white rounded-lg p-3 text-md font-medium">
                                     {message.image && (
                                         <div className="mb-2">
                                             <img
@@ -132,7 +132,7 @@ const AdminDashboardChats = () => {
                                     className="h-8 w-8 rounded-full object-cover"
                                     alt={user.user.name}
                                 />
-                                <div className="max-w-xs bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-sm shadow-sm">
+                                <div className="max-w-xs bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-md font-medium shadow-sm">
                                     <h1>{message.text}</h1>
                                 </div>
                             </div>
