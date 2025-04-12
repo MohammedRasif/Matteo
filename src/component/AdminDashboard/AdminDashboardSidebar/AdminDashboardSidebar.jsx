@@ -1,17 +1,24 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Users } from "lucide-react";
 import { TbBrandWechat } from "react-icons/tb";
-import { MdOutlineDashboard } from "react-icons/md";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { MdManageAccounts, MdOutlineDashboard } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import { BiSupport } from "react-icons/bi";
-
+import { useState } from "react";
+import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 
 const AdminDashboardSidebar = () => {
     const location = useLocation();
-    const isProjectActive = location.pathname.startsWith('/dashboard/Project');
+    const [isOpen, setIsOpen] = useState(false);
+
+    // Check if Management or its sub-routes are active
+    const isManagementActive =
+        location.pathname.startsWith("/Admin_Dashboard/management") ||
+        location.pathname === "/Admin_Dashboard/user" ||
+        location.pathname === "/Admin_Dashboard/order";
+
     return (
-        <div className="pt-24">
+        <div className="pt-24 relative h-full">
             <NavLink to="/" className="nunito text-center">
                 <h1 className="text-[22px]">Cameron Malek</h1>
                 <h1 className="text-[16px] text-gray-400">Ui/Ux</h1>
@@ -21,7 +28,9 @@ const AdminDashboardSidebar = () => {
                     to="/Admin_Dashboard"
                     end
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -32,30 +41,68 @@ const AdminDashboardSidebar = () => {
                 <NavLink
                     to="/Admin_Dashboard/Message"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
-                    <TbBrandWechat
-                        className="h-6 w-6" />
+                    <TbBrandWechat className="h-6 w-6" />
                     <h1 className="text-lg font-medium">Chats</h1>
                 </NavLink>
 
-                <NavLink
-                    to="/Admin_Dashboard/notification"
-                    className={() =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isProjectActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
-                        }`
-                    }
+                {/* Management Section */}
+                <div className={`${isManagementActive ? "bg-[#0D95DD] rounded-md" : ""}`}>
+                    <div className="pl-5">
+                        <button
+                            className="flex items-center"
+                            onClick={() => setIsOpen(!isOpen)}
+                        >
+                            <div
+                                className={`flex items-center space-x-2 h-[50px] transition-all duration-300 cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
+                                    }`}
+                            >
+                                <MdManageAccounts className="h-6 w-6" />
+                                <h1 className="text-lg font-medium">Management</h1>
+                                {isOpen ? <IoChevronUp className="ml-16" /> : <IoChevronDown className="ml-16" />}
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Submenu (Animated Expand) */}
+                <div
+                    className={` space-y-2 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
                 >
-                    <IoMdNotificationsOutline className="h-6 w-6" />
-                    <h1 className="text-lg font-medium">Notification</h1>
-                </NavLink>
+                    <NavLink
+                        to="/Admin_Dashboard/user"
+                        className={({ isActive }) =>
+                            `h-[50px] flex items-center  pl-5   text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md " : ""
+                            }`
+                        }
+                    >
+                        <Users className="mx-2 h-5 w-5" />
+                        User
+                    </NavLink>
+                    <NavLink
+                        to="/Admin_Dashboard/order"
+                        className={({ isActive }) =>
+                            `h-[50px] flex items-center  pl-5   text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md " : ""
+                            }`
+                        }
+                    >
+                        <IoWalletOutline className="mx-2 h-5 w-5" />
+                        Order
+                    </NavLink>
+                </div>
 
                 <NavLink
                     to="/dashboard/addEmploye"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -66,7 +113,9 @@ const AdminDashboardSidebar = () => {
                 <NavLink
                     to="/dashboard/taskProgress"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -77,7 +126,9 @@ const AdminDashboardSidebar = () => {
                 <NavLink
                     to="/dashboard/manageSubscription"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -86,12 +137,12 @@ const AdminDashboardSidebar = () => {
                 </NavLink>
             </div>
 
-            {/* logout */}
+            {/* Logout */}
             <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-3 absolute bottom-0 cursor-pointer">
                 <button className="text-lg font-medium cursor-pointer">Logout</button>
             </div>
         </div>
     );
-}
+};
 
 export default AdminDashboardSidebar;
