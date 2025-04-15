@@ -100,25 +100,25 @@ const AdminDashboardUser = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by username or ID"
+              placeholder="Search by order ID or username"
+              className="w-full rounded-md border border-gray-300 bg-gray-100 py-2 pl-3 pr-10 text-sm focus:outline-none sm:w-80"
               value={searchQuery}
               onChange={handleSearch}
-              className="w-64 py-1.5 px-4 pr-10 rounded-md border border-gray-400 text-xs placeholder:text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
-            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <Search size={16} />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
+              <Search className="h-5 w-5" />
             </button>
           </div>
         </div>
 
         <div className=" rounded-md ">
           {/* Table header */}
-          <div className="grid grid-cols-5 bg-gray-300 py-2 px-4 border-b border-gray-200">
-            <div className="font-medium text-gray-700 text-[15px]">User ID</div>
-            <div className="font-medium text-gray-700 text-[15px]">Starting Date</div>
-            <div className="font-medium text-gray-700 text-[15px]">Package</div>
-            <div className="font-medium text-gray-700 text-[15px]">User info</div>
-            <div className="font-medium text-gray-700 text-[15px]">Action</div>
+          <div className="grid grid-cols-5 bg-gray-300 py-2 px-4 border-b  border-gray-200">
+            <div className="font-bold text-gray-700 text-[14px]">User ID</div>
+            <div className="font-bold text-gray-700 text-[14px]">Starting Date</div>
+            <div className="font-bold text-gray-700 text-[14px]">Package</div>
+            <div className="font-bold text-gray-700 text-[14px]">User info</div>
+            <div className="font-bold text-gray-700 text-[14px]">Action</div>
           </div>
 
           {/* Table rows */}
@@ -128,13 +128,13 @@ const AdminDashboardUser = () => {
                 key={index}
                 className="grid grid-cols-5 py-3 px-4 items-center border-b border-gray-300 "
               >
-                <div className="text-gray-700 text-[14px]">{user.id}</div>
-                <div className="text-gray-700 text-[14px]">{user.startDate}</div>
-                <div className="text-gray-700 text-[14px]">{user.package}</div>
+                <div className="text-gray-700 text-[13px]">{user.id}</div>
+                <div className="text-gray-700 text-[13px]">{user.startDate}</div>
+                <div className="text-gray-700 text-[13px]">{user.package}</div>
                 <div>
                   <button
                     onClick={() => handleUserInfo(user.id)}
-                    className="flex items-center gap-1 px-3 py-1 text-[14px] text-gray-600  rounded border border-gray-200 "
+                    className="flex items-center gap-1 px-3 py-1 text-[13px] text-gray-600  rounded border border-gray-200 "
                   >
                     <FileText size={14} />
                     <span>Click</span>
@@ -205,7 +205,7 @@ const AdminDashboardUser = () => {
               </button>
             </div>
 
-            <p className="text-gray-600 mb-4 text-[14px]">
+            <p className="text-gray-600 mb-4 text-[13px]">
               Are you sure you want to delete user ID:{" "}
               <span className="font-medium">{activePopup.replace("delete-", "")}</span>? This action cannot be undone.
             </p>
@@ -250,7 +250,7 @@ const AdminDashboardUser = () => {
               </h1>
             </div>
 
-            <p className="px-10 text-[14px] text-gray-500">
+            <p className="px-10 text-[13px] text-gray-500">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum recusandae vitae dolorum quam modi quae ab
               placeat magni porro. Ducimus temporibus dicta qui sapiente illo? Quo impedit quidem nisi voluptatibus
               laboriosam eaque, praesentium omnis facilis commodi delectus odio ex, iusto, repudiandae eius deleniti
@@ -260,7 +260,7 @@ const AdminDashboardUser = () => {
             <div className="flex justify-center gap-2 mt-5">
               <button
                 onClick={handleClosePopup}
-                className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer text-[15px]"
+                className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer text-[14px]"
               >
                 Okey
               </button>

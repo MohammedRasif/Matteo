@@ -42,8 +42,8 @@ const AdminDashboardSidebar = () => {
                         }`
                     }
                 >
-                    <MdOutlineDashboard className="h-6 w-6" />
-                    <h1 className="text-lg font-medium">Dashboard</h1>
+                    <MdOutlineDashboard className="h-5 w-5" />
+                    <h1 className="text-[16px] font-medium">Dashboard</h1>
                 </NavLink>
 
                 <NavLink
@@ -55,8 +55,8 @@ const AdminDashboardSidebar = () => {
                         }`
                     }
                 >
-                    <TbBrandWechat className="h-6 w-6" />
-                    <h1 className="text-lg font-medium">Chats</h1>
+                    <TbBrandWechat className="h-5 w-5" />
+                    <h1 className="text-[16px] font-medium">Chats</h1>
                 </NavLink>
 
                 {/* Management Section */}
@@ -70,8 +70,8 @@ const AdminDashboardSidebar = () => {
                                 className={`flex items-center space-x-2 h-[50px] transition-all duration-300 cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
                                     }`}
                             >
-                                <MdManageAccounts className="h-6 w-6" />
-                                <h1 className="text-lg font-medium">Management</h1>
+                                <MdManageAccounts className="h-5 w-5" />
+                                <h1 className="text-[16px] font-medium">Management</h1>
                                 {isOpen ? <IoChevronUp className="ml-16" /> : <IoChevronDown className="ml-16" />}
                             </div>
                         </button>
@@ -116,8 +116,8 @@ const AdminDashboardSidebar = () => {
                                 className={`flex items-center space-x-2 h-[50px] transition-all duration-300 cursor-pointer ${isSupportActive ? "bg-[#0D95DD] text-white" : ""
                                     }`}
                             >
-                                <BiSupport className="h-6 w-6" />
-                                <h1 className="text-lg font-medium">Support</h1>
+                                <BiSupport className="h-5 w-5" />
+                                <h1 className="text-[16px] font-medium">Support</h1>
                                 {isSupportOpen ? <IoChevronUp className="ml-[105px]" /> : <IoChevronDown className="ml-[105px]" />}
                             </div>
                         </button>
@@ -160,14 +160,14 @@ const AdminDashboardSidebar = () => {
                         }`
                     }
                 >
-                    <IoWalletOutline className="h-6 w-6" />
-                    <h1 className="text-lg font-medium">Wallet</h1>
+                    <IoWalletOutline className="h-5 w-5" />
+                    <h1 className="text-[16px] font-medium">Wallet</h1>
                 </NavLink>
             </div>
 
             {/* Logout */}
             <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-3 absolute bottom-0 cursor-pointer">
-                <button className="text-lg font-medium cursor-pointer">Logout</button>
+                <button className="text-[16px] font-medium cursor-pointer">Logout</button>
             </div>
         </div>
     );

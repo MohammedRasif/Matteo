@@ -296,7 +296,7 @@ const AdminDashboardOrder = () => {
                 <div className="rounded-lg">
                     <table className="w-full table-auto">
                         <thead>
-                            <tr className="border-b border-gray-200 text-left text-sm font-medium text-gray-700">
+                            <tr className="border-b border-gray-300 bg-gray-300 text-left text-sm font-medium text-gray-700">
                                 <th className="px-6 py-3">Buyer name</th>
                                 <th className="px-6 py-3">Seller name</th>
                                 <th className="px-6 py-3">Order id</th>
