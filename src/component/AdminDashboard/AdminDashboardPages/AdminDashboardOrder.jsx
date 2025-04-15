@@ -90,8 +90,9 @@ const AdminDashboardOrder = () => {
     const [activeActionDropdown, setActiveActionDropdown] = useState(null)
     const [activePopup, setActivePopup] = useState(null) // Tracks which popup is active
 
-    // Ref for closing dropdowns and popups
-    const dropdownRef = useRef(null)
+    // Refs for closing dropdowns and popups
+    const filterDropdownRef = useRef(null)
+    const actionDropdownRefs = useRef([])
     const popupRef = useRef(null)
 
     // Filter options matching the image
@@ -140,9 +141,16 @@ const AdminDashboardOrder = () => {
     // Close dropdowns when clicking outside
     useEffect(() => {
         function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setActiveActionDropdown(null)
+            // Filter dropdown
+            if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
                 setShowFilterDropdown(false)
+            }
+            // Action dropdowns
+            const isOutsideActionDropdown = actionDropdownRefs.current.every(
+                (ref) => !ref || !ref.contains(event.target)
+            )
+            if (isOutsideActionDropdown) {
+                setActiveActionDropdown(null)
             }
         }
 
@@ -232,17 +240,17 @@ const AdminDashboardOrder = () => {
     }
 
     return (
-        <div className="min-h-screen  roboto">
+        <div className=" roboto">
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
-                <h1 className="text-3xl font-semibold text-gray-800 py-5">List of orders</h1>
+                <h1 className="text-3xl font-semibold text-gray-800 py-5">List of order</h1>
 
                 {/* Navigation and Search */}
                 <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                    <div className="relative" ref={dropdownRef}>
+                    <div className="relative" ref={filterDropdownRef}>
                         <button
                             onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                            className="flex items-center gap-1 rounded-md bg-gray-100 px-4 py-2 text-sm text-gray-600  hover:bg-gray-50 cursor-pointer"
+                            className="flex items-center gap-1 rounded-md bg-gray-100 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 cursor-pointer"
                         >
                             {activeFilter}
                             <ChevronDown className="h-4 w-4" />
@@ -250,12 +258,15 @@ const AdminDashboardOrder = () => {
 
                         {/* Filter Dropdown */}
                         {showFilterDropdown && (
-                            <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-md bg-gray-100 ">
+                            <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-md bg-gray-100">
                                 <div className="py-1">
                                     {filterOptions.map((option) => (
                                         <button
                                             key={option}
-                                            onClick={() => applyStatusFilter(option)}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                applyStatusFilter(option)
+                                            }}
                                             className="flex w-full items-center justify-between px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                                         >
                                             {option}
@@ -282,7 +293,7 @@ const AdminDashboardOrder = () => {
                 </div>
 
                 {/* Orders Table */}
-                <div className=" rounded-lg ">
+                <div className="rounded-lg">
                     <table className="w-full table-auto">
                         <thead>
                             <tr className="border-b border-gray-200 text-left text-sm font-medium text-gray-700">
@@ -296,7 +307,7 @@ const AdminDashboardOrder = () => {
                         </thead>
                         <tbody>
                             {orders.map((order, index) => (
-                                <tr key={order.id} className="border-b border-gray-300 text-sm ">
+                                <tr key={order.id} className="border-b border-gray-300 text-sm">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-2">
                                             <img
@@ -320,7 +331,7 @@ const AdminDashboardOrder = () => {
                                     <td className="px-6 py-4 text-gray-700">{order.id}</td>
                                     <td className="px-6 py-4 text-gray-700">{order.amount}</td>
                                     <td className="px-6 py-4">{renderStatus(order.status)}</td>
-                                    <td className="px-6 py-4 relative" ref={dropdownRef}>
+                                    <td className="px-6 py-4 relative">
                                         <button
                                             className="text-gray-400 hover:text-gray-600 cursor-pointer"
                                             onClick={() => setActiveActionDropdown(activeActionDropdown === index ? null : index)}
@@ -330,12 +341,18 @@ const AdminDashboardOrder = () => {
 
                                         {/* Action Dropdown */}
                                         {activeActionDropdown === index && (
-                                            <div className="absolute right-0 top-full z-20 mt-1 w-48 rounded-md bg-gray-100 shadow-lg">
+                                            <div
+                                                ref={(el) => (actionDropdownRefs.current[index] = el)}
+                                                className="absolute right-0 top-full z-20 mt-1 w-48 rounded-md bg-gray-100 shadow-lg"
+                                            >
                                                 <div className="py-1">
                                                     {actionOptions.map((action, actionIndex) => (
                                                         <button
                                                             key={actionIndex}
-                                                            onClick={() => handleActionClick(action)}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                handleActionClick(action)
+                                                            }}
                                                             className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                                                         >
                                                             <action.icon className="h-4 w-4" />
@@ -354,30 +371,18 @@ const AdminDashboardOrder = () => {
             </div>
 
             {/* Popups for each action */}
-            {/* {activePopup === "cancel" && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50"
-                    onClick={handleOverlayClick}
-                >
-                    <div ref={popupRef} className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-                        <p className="text-gray-700 mb-4">Cancel the order</p>
-                        <button
-                            onClick={handleClosePopup}
-                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )} */}
             {activePopup === "settlement" && (
                 <div
                     className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50"
                     onClick={handleOverlayClick}
                 >
-                    <div ref={popupRef} className="bg-gray-100 rounded-lg p-3 shadow-lg max-w-md w-full">
-                        <p className="text-gray-700 mb-4">Partial settlement</p>
-                        <form className="mb-6 p-4  ">
+                    <div
+                        ref={popupRef}
+                        className="bg-gray-100 rounded-lg p-3 shadow-lg max-w-md w-full"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <p className="text-gray-700 mb-4 text-sm">Partial settlement</p>
+                        <form className="mb-6 p-4">
                             <div className="space-y-4">
                                 {/* Top two inputs side-by-side */}
                                 <div className="flex flex-col gap-4 sm:flex-row sm:gap-2">
@@ -399,7 +404,7 @@ const AdminDashboardOrder = () => {
                                         <input
                                             type="text"
                                             id="seller2"
-                                            placeholder="Enter seller name"
+                                            placeholder="Enter buyer name"
                                             className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
                                         />
                                     </div>
@@ -412,7 +417,7 @@ const AdminDashboardOrder = () => {
                                     <input
                                         type="text"
                                         id="seller3"
-                                        placeholder="Enter seller name"
+                                        placeholder="Enter note"
                                         className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
                                     />
                                 </div>
@@ -421,13 +426,13 @@ const AdminDashboardOrder = () => {
                         <div className="flex flex-row gap-2 px-4">
                             <button
                                 onClick={handleClosePopup}
-                                className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD]"
+                                className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleClosePopup}
-                                className="w-full px-4 h-9 border cursor-pointer border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD]"
+                                className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
                             >
                                 Done
                             </button>
@@ -435,54 +440,6 @@ const AdminDashboardOrder = () => {
                     </div>
                 </div>
             )}
-            {/* {activePopup === "delivery" && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50"
-                    onClick={handleOverlayClick}
-                >
-                    <div ref={popupRef} className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-                        <p className="text-gray-700 mb-4">View delivery</p>
-                        <button
-                            onClick={handleClosePopup}
-                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-            {activePopup === "assess" && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50"
-                    onClick={handleOverlayClick}
-                >
-                    <div ref={popupRef} className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-                        <p className="text-gray-700 mb-4">Assess the order</p>
-                        <button
-                            onClick={handleClosePopup}
-                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-            {activePopup === "project" && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50"
-                    onClick={handleOverlayClick}
-                >
-                    <div ref={popupRef} className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-                        <p className="text-gray-700 mb-4">View project details</p>
-                        <button
-                            onClick={handleClosePopup}
-                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )} */}
         </div>
     )
 }

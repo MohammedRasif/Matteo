@@ -346,7 +346,7 @@ const AdminDashboardSupport = () => {
 
                         <div className="flex items-center justify-center my-2">
                             <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-5 py-2 w-56 rounded-md flex items-center justify-center">
-                            Description
+                                Description
                             </h1>
                         </div>
 
