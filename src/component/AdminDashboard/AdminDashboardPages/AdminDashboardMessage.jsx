@@ -44,7 +44,7 @@ const AdminDashboardMessage = () => {
     return (
         <div className="mt-10 m-4 roboto">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
-            <div className="flex" style={{ height: "82vh" }}>
+            <div className="flex" style={{ height: "80vh" }}>
                 {/* User List Sidebar */}
                 <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">
                     <div className="m-3">
@@ -59,15 +59,15 @@ const AdminDashboardMessage = () => {
 
                     <div
                         onClick={handleChatbotClick}
-                        className={`flex items-center space-x-2 px-5 py-[10px] mt-2 cursor-pointer ${location.pathname === "/Admin_Dashboard/Message/chatbot"
-                                ? "bg-[#B6E3FC]"
-                                : "hover:bg-[#B6E3FC]"
+                        className={`flex items-center space-x-2 px-[10px] py-[8px] mt-2 cursor-pointer ${location.pathname === "/Admin_Dashboard/Message/chatbot"
+                            ? "bg-[#B6E3FC]"
+                            : "hover:bg-[#B6E3FC]"
                             }`}
                     >
-                        <div className="bg-[#2F80A9] h-12 w-12 text-white flex items-center justify-center rounded-full">
+                        <div className="bg-[#2F80A9] h-10 w-10 text-white flex items-center justify-center rounded-full">
                             <VscRobot size={25} />
                         </div>
-                        <div className="text-xl">
+                        <div className="text-md">
                             <h1 className="pt-1 font-semibold">Smart Ai Assistant</h1>
                         </div>
                     </div>
@@ -84,12 +84,12 @@ const AdminDashboardMessage = () => {
                                 <img
                                     src={user.image}
                                     alt={user.name}
-                                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                                    className="w-8 h-8 rounded-full mr-3 object-cover"
                                 />
                                 <div className="relative">
                                     <span className="font-medium text-[15px]">{user.name}</span>
                                     {user.number && (
-                                        <h1 className="absolute top-1 left-[30vh] text-[12px] bg-[#0B7EBB] text-white px-[5px] rounded-full">
+                                        <h1 className="absolute top-1 left-[28vh] text-[12px] bg-[#0B7EBB] text-white px-[5px] rounded-full">
                                             {user.number}
                                         </h1>
                                     )}
@@ -101,6 +101,10 @@ const AdminDashboardMessage = () => {
 
                 {/* Outlet for Messages */}
                 <div className="w-3/4 bg-white dark:bg-[#252c3b] rounded-r-lg">
+                    {/* defalte message */}
+                    <div>
+
+                    </div>
                     <Outlet />
                 </div>
             </div>

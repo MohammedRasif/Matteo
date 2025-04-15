@@ -20,6 +20,7 @@ import AdminDashboardUser from './component/AdminDashboard/AdminDashboardPages/A
 import AdminDashboardOrder from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrder.jsx';
 import AdminDashboardBlog from './component/AdminDashboard/AdminDashboardPages/AdminDashboardBlog.jsx';
 import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPages/AdminDashboardSupport.jsx';
+import AdminDashboardAssessment from './component/AdminDashboard/AdminDashboardPages/AdminDashboardAssessment.jsx';
 
 const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
       {
         path:"/Admin_Dashboard/support",
         element:<AdminDashboardSupport/>
+      },
+      {
+        path:"/Admin_Dashboard/Assessment",
+        element:<AdminDashboardAssessment/>
       },
     ]
   }
