@@ -18,6 +18,8 @@ import AdminDashboardAiChat from './component/AdminDashboard/AdminDashboardPages
 import AdminDashboardNotification from './component/AdminDashboard/AdminDashboardPages/AdminDashboardNotification.jsx';
 import AdminDashboardUser from './component/AdminDashboard/AdminDashboardPages/AdminDashboardUser.jsx';
 import AdminDashboardOrder from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrder.jsx';
+import AdminDashboardBlog from './component/AdminDashboard/AdminDashboardPages/AdminDashboardBlog.jsx';
+import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPages/AdminDashboardSupport.jsx';
 
 const router = createBrowserRouter([
   {
@@ -78,6 +80,14 @@ const router = createBrowserRouter([
       {
         path:"/Admin_Dashboard/order",
         element:<AdminDashboardOrder/>
+      },
+      {
+        path:"/Admin_Dashboard/blog",
+        element:<AdminDashboardBlog/>
+      },
+      {
+        path:"/Admin_Dashboard/support",
+        element:<AdminDashboardSupport/>
       },
     ]
   }
