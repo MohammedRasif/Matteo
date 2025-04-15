@@ -8,6 +8,7 @@ import { useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { RiBloggerLine } from "react-icons/ri";
 import { GrSupport } from "react-icons/gr";
+import { TiTicket } from "react-icons/ti";
 
 const AdminDashboardSidebar = () => {
     const location = useLocation();
@@ -23,7 +24,8 @@ const AdminDashboardSidebar = () => {
     // Check if Support or its sub-routes are active
     const isSupportActive =
         location.pathname === "/Admin_Dashboard/blog" ||
-        location.pathname === "/Admin_Dashboard/orders";
+        location.pathname === "/Admin_Dashboard/orders" || 
+        location.pathname === "/Admin_Dashboard/tickets";
 
     return (
         <div className="pt-24 relative h-full">
@@ -140,14 +142,14 @@ const AdminDashboardSidebar = () => {
                         Blog
                     </NavLink>
                     <NavLink
-                        to="/Admin_Dashboard/support"
+                        to="/Admin_Dashboard/tickets"
                         className={({ isActive }) =>
                             `h-[50px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
-                        <GrSupport className="mx-2 h-5 w-5" />
-                        Support
+                        <TiTicket className="mx-2 h-5 w-5" />
+                        Tickets
                     </NavLink>
                 </div>
 
