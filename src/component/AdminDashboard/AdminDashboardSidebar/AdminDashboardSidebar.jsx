@@ -6,9 +6,10 @@ import { IoWalletOutline } from "react-icons/io5";
 import { BiSupport } from "react-icons/bi";
 import { useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { RiBloggerLine } from "react-icons/ri";
+import { RiBloggerLine, RiShoppingCartLine } from "react-icons/ri";
 import { GrSupport } from "react-icons/gr";
 import { TiTicket } from "react-icons/ti";
+import { LiaShopware } from "react-icons/lia";
 
 const AdminDashboardSidebar = () => {
     const location = useLocation();
@@ -24,7 +25,7 @@ const AdminDashboardSidebar = () => {
     // Check if Support or its sub-routes are active
     const isSupportActive =
         location.pathname === "/Admin_Dashboard/blog" ||
-        location.pathname === "/Admin_Dashboard/orders" || 
+        location.pathname === "/Admin_Dashboard/orders" ||
         location.pathname === "/Admin_Dashboard/tickets";
 
     return (
@@ -38,27 +39,27 @@ const AdminDashboardSidebar = () => {
                     to="/Admin_Dashboard"
                     end
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
                             ? "bg-[#0D95DD] text-white rounded-md"
                             : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <MdOutlineDashboard className="h-5 w-5" />
-                    <h1 className="text-[16px] font-medium">Dashboard</h1>
+                    <h1 className="text-[15px] font-medium">Dashboard</h1>
                 </NavLink>
 
                 <NavLink
                     to="/Admin_Dashboard/Message"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
                             ? "bg-[#0D95DD] text-white rounded-md"
                             : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <TbBrandWechat className="h-5 w-5" />
-                    <h1 className="text-[16px] font-medium">Chats</h1>
+                    <h1 className="text-[15px] font-medium">Chats</h1>
                 </NavLink>
 
                 {/* Management Section */}
@@ -69,11 +70,11 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 h-[50px] transition-all duration-300 cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
+                                className={`flex items-center space-x-2 py-[11px] transition-all duration-300 cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
                                     }`}
                             >
                                 <MdManageAccounts className="h-5 w-5" />
-                                <h1 className="text-[16px] font-medium">Management</h1>
+                                <h1 className="text-[15px] font-medium">Management</h1>
                                 {isOpen ? <IoChevronUp className="ml-16" /> : <IoChevronDown className="ml-16" />}
                             </div>
                         </button>
@@ -88,22 +89,22 @@ const AdminDashboardSidebar = () => {
                     <NavLink
                         to="/Admin_Dashboard/user"
                         className={({ isActive }) =>
-                            `h-[50px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <Users className="mx-2 h-5 w-5" />
-                        User
+                        <h1 className="text-[15px] font-medium">Order</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/order"
                         className={({ isActive }) =>
-                            `h-[50px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
-                        <IoWalletOutline className="mx-2 h-5 w-5" />
-                        Order
+                        <RiShoppingCartLine className="mx-2 h-5 w-5" />
+                        <h1 className="text-[15px] font-medium">Oder</h1>
                     </NavLink>
                 </div>
 
@@ -115,11 +116,11 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsSupportOpen(!isSupportOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 h-[50px] transition-all duration-300 cursor-pointer ${isSupportActive ? "bg-[#0D95DD] text-white" : ""
+                                className={`flex items-center space-x-2 py-[11px] transition-all duration-300 cursor-pointer ${isSupportActive ? "bg-[#0D95DD] text-white" : ""
                                     }`}
                             >
                                 <BiSupport className="h-5 w-5" />
-                                <h1 className="text-[16px] font-medium">Support</h1>
+                                <h1 className="text-[15px] font-medium">Support</h1>
                                 {isSupportOpen ? <IoChevronUp className="ml-[105px]" /> : <IoChevronDown className="ml-[105px]" />}
                             </div>
                         </button>
@@ -134,42 +135,52 @@ const AdminDashboardSidebar = () => {
                     <NavLink
                         to="/Admin_Dashboard/blog"
                         className={({ isActive }) =>
-                            `h-[50px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <RiBloggerLine className="mx-2 h-5 w-5" />
-                        Blog
+                        <h1 className="text-[15px] font-medium">Blog</h1>
+                    </NavLink>
+                    <NavLink
+                        to="/Admin_Dashboard/orders"
+                        className={({ isActive }) =>
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            }`
+                        }
+                    >
+                        <LiaShopware className="mx-2 h-5 w-5" />
+                        <h1 className="text-[15px] font-medium"> Orders</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/tickets"
                         className={({ isActive }) =>
-                            `h-[50px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
-                        <TiTicket className="mx-2 h-5 w-5" />
-                        Tickets
+                        <TiTicket className="mx-2 h-5 w-5 " />
+                        <h1 className="text-[15px] font-medium">Tickets</h1>
                     </NavLink>
                 </div>
 
                 <NavLink
                     to="/dashboard/taskProgress"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${isActive
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
                             ? "bg-[#0D95DD] text-white rounded-md"
                             : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <IoWalletOutline className="h-5 w-5" />
-                    <h1 className="text-[16px] font-medium">Wallet</h1>
+                    <h1 className="text-[15px] font-medium">Wallet</h1>
                 </NavLink>
             </div>
 
             {/* Logout */}
-            <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-3 absolute bottom-0 cursor-pointer">
-                <button className="text-[16px] font-medium cursor-pointer">Logout</button>
+            <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
+                <button className="text-[15px] font-medium cursor-pointer">Logout</button>
             </div>
         </div>
     );
