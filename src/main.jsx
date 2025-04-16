@@ -20,7 +20,8 @@ import AdminDashboardUser from './component/AdminDashboard/AdminDashboardPages/A
 import AdminDashboardOrder from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrder.jsx';
 import AdminDashboardBlog from './component/AdminDashboard/AdminDashboardPages/AdminDashboardBlog.jsx';
 import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPages/AdminDashboardSupport.jsx';
-import AdminDashboardAssessment from './component/AdminDashboard/AdminDashboardPages/AdminDashboardAssessment.jsx';
+import AdminDashboardOrders from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrders.jsx';
+import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx';
 
 const router = createBrowserRouter([
   {
@@ -91,8 +92,12 @@ const router = createBrowserRouter([
         element:<AdminDashboardSupport/>
       },
       {
-        path:"/Admin_Dashboard/Assessment",
-        element:<AdminDashboardAssessment/>
+        path:"/Admin_Dashboard/order_Assessment",
+        element:<AdminDashboardOrderAsses/>
+      },
+      {
+        path:"/Admin_Dashboard/orders",
+        element:<AdminDashboardOrders/>
       },
     ]
   }
