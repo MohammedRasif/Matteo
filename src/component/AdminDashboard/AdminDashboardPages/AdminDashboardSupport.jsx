@@ -193,7 +193,7 @@ const AdminDashboardSupport = () => {
         <div className="roboto">
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
-                <h1 className="mb-6 text-center text-2xl font-semibold text-gray-800 pt-5">Support tickets</h1>
+                <h1 className="mb-6 text-2xl font-semibold text-gray-800 pt-5">Support tickets</h1>
 
                 {/* Search and Filter */}
                 <div className="mb-4 flex justify-between">

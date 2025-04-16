@@ -260,7 +260,7 @@ const AdminDashboardBlog = () => {
         <div className="min-h-screen roboto">
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
-                <h1 className="text-3xl font-semibold text-gray-800 py-6">Blog reports</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 py-6">Blog reports</h1>
 
                 {/* Tabs */}
                 <div className="mb-6 flex justify-center">
@@ -268,8 +268,8 @@ const AdminDashboardBlog = () => {
                         <button
                             onClick={() => setActiveTab("Reports")}
                             className={`px-4 py-2 text-sm font-medium cursor-pointer ${activeTab === "Reports"
-                                    ? "bg-[#0D95DD] text-white"
-                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                ? "bg-[#0D95DD] text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                                 } rounded-l-md`}
                         >
                             Reports
@@ -277,8 +277,8 @@ const AdminDashboardBlog = () => {
                         <button
                             onClick={() => setActiveTab("Posts")}
                             className={`px-4 py-2 text-sm font-medium cursor-pointer ${activeTab === "Posts"
-                                    ? "bg-[#0D95DD] text-white"
-                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                ? "bg-[#0D95DD] text-white"
+                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                                 } rounded-r-md`}
                         >
                             Posts
@@ -286,7 +286,7 @@ const AdminDashboardBlog = () => {
                     </div>
                 </div>
 
-                
+
 
                 {/* Reports Table */}
                 {activeTab === "Reports" && (
@@ -300,7 +300,6 @@ const AdminDashboardBlog = () => {
                                     <th className="px-6 py-3">Post ID</th>
                                     <th className="px-6 py-3 flex items-center">
                                         Status
-                                        <ChevronRight className="h-4 w-4 ml-1" />
                                     </th>
                                 </tr>
                             </thead>
@@ -340,7 +339,7 @@ const AdminDashboardBlog = () => {
                                             >
                                                 {report.status}
                                             </span>
-                                            <ChevronRight className="h-4 w-4 text-gray-400" />
+
                                         </td>
                                     </tr>
                                 ))}

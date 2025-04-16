@@ -46,7 +46,7 @@ const AdminDashboardMessage = () => {
 
     return (
         <div className="mt-10 m-4 roboto">
-            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
+            <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
             <div className="flex" style={{ height: "80vh" }}>
                 {/* User List Sidebar */}
                 <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">

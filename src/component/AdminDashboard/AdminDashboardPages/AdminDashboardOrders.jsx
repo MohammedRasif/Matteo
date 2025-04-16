@@ -189,7 +189,7 @@ const AdminDashboardOrders = () => {
         <div className="roboto">
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
-                <h1 className="text-3xl font-semibold text-gray-800 py-5">List of order</h1>
+                <h1 className="text-2xl font-semibold text-gray-800 py-5">List of order</h1>
 
                 {/* Navigation and Search */}
                 <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

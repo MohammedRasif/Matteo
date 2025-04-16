@@ -50,7 +50,7 @@ const OrderTable = () => {
 
     return (
         <div className=" p-6 rounded-lg roboto">
-            <h1 className="text-3xl font-semibold text-gray-800 py-5 ">Order</h1>
+            <h1 className="text-2xl font-semibold text-gray-800 py-5 ">Order</h1>
             <div className="flex justify-between items-center mb-3">
                 <div className="relative">
                     <button
@@ -90,11 +90,11 @@ const OrderTable = () => {
                     <input
                         type="text"
                         placeholder="Search by order ID"
-                        className="pl-7 pr-3 py-1.5 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 w-56 text-[14px]"
+                        className="pl-7 pr-3 py-1.5 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 w-56 text-[14px]"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
-                    <svg className="w-3 h-3 absolute left-2.5 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    <svg className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </div>
             </div>
 

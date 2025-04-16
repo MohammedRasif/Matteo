@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { GoAlert } from 'react-icons/go';
 
 const AdminDashboardWithdrawal = () => {
     const [withdrawalRequests, setWithdrawalRequests] = useState([
@@ -17,10 +18,14 @@ const AdminDashboardWithdrawal = () => {
     const [showStatusDropdown, setShowStatusDropdown] = useState(false);
     const [showActionMenu, setShowActionMenu] = useState(null);
     const [showViewPopup, setShowViewPopup] = useState(false);
+    const [showWarningPopup, setShowWarningPopup] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState(null);
+    const [warningMessage, setWarningMessage] = useState('Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.');
 
-    // Ref to track action menu dropdowns
+    // Refs for click outside detection
     const actionMenuRefs = useRef([]);
+    const popupRef = useRef(null);
+    const warningPopupRef = useRef(null);
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -67,7 +72,18 @@ const AdminDashboardWithdrawal = () => {
 
     const handleClosePopup = () => {
         setShowViewPopup(false);
+        setShowWarningPopup(false);
         setSelectedRequest(null);
+    };
+
+    const handleGiveWarning = (request) => {
+        setSelectedRequest(request);
+        setShowWarningPopup(true);
+        setShowActionMenu(null);
+    };
+
+    const handleOverlayClick = (e) => {
+        handleClosePopup();
     };
 
     // Close action menu when clicking outside
@@ -88,14 +104,14 @@ const AdminDashboardWithdrawal = () => {
     }, []);
 
     return (
-        <div className="p-6">
+        <div className="p-6 roboto">
             <div className="mx-auto">
-                <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800">Withdrawal requests</h1>
+                <h1 className="text-2xl font-semibold mb-6 text-gray-800 mt-2">Withdrawal requests</h1>
 
                 <div className="flex justify-between items-center mb-6">
                     <div className="relative">
                         <button
-                            className="text-gray-700 flex items-center text-sm bg-gray-50 px-3 py-1 rounded-sm"
+                            className="text-gray-700 flex items-center text-sm bg-gray-50 px-3 py-1 rounded-sm cursor-pointer"
                             onClick={handleStatusClick}
                         >
                             {statusFilter}
@@ -105,7 +121,8 @@ const AdminDashboardWithdrawal = () => {
                         </button>
 
                         {showStatusDropdown && (
-                            <div className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36">
+                            <div ref={warningPopupRef}
+                             className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36">
                                 <ul className="py-1">
                                     <li
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
@@ -156,25 +173,25 @@ const AdminDashboardWithdrawal = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-300">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Business name
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Request id
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Amount
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Date of request
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Wallet
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 text-left text-[14px] font-bold text-gray-900 uppercase tracking-wider">
                                     Action
                                 </th>
                             </tr>
@@ -246,7 +263,7 @@ const AdminDashboardWithdrawal = () => {
                                                     </button>
                                                     <button
                                                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                                        onClick={() => setShowActionMenu(null)}
+                                                        onClick={() => handleGiveWarning(request)}
                                                     >
                                                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -264,13 +281,13 @@ const AdminDashboardWithdrawal = () => {
                 </div>
             </div>
 
-            {/* View Popup - Updated to match the design in the image */}
+            {/* View Popup - Profile details */}
             {showViewPopup && selectedRequest && (
-                <div className="fixed inset-0  flex items-center justify-center backdrop-blur-[3px] z-50">
+                <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50">
                     <div className="bg-gray-100 rounded-lg shadow-lg max-w-xl w-full">
                         {/* Back button header */}
                         <div className="p-4 flex items-center">
-                            <button 
+                            <button
                                 className="flex items-center text-gray-800 font-medium cursor-pointer"
                                 onClick={handleClosePopup}
                             >
@@ -280,27 +297,27 @@ const AdminDashboardWithdrawal = () => {
                                 Back
                             </button>
                         </div>
-                        
+
                         {/* Profile section */}
                         <div className="px-6 pb-4">
                             <div className="flex items-start">
-                                <img 
-                                    src={selectedRequest.profileImg || "/placeholder.svg"} 
-                                    alt="" 
-                                    className="w-24 h-24 rounded-full mr-6" 
+                                <img
+                                    src={selectedRequest.profileImg || "/placeholder.svg"}
+                                    alt=""
+                                    className="w-24 h-24 rounded-full mr-6"
                                 />
                                 <div>
                                     <h2 className="text-xl font-medium text-gray-800">{selectedRequest.username}</h2>
                                     <p className="text-gray-600">{selectedRequest.role || "Ui/Ux Designer"}</p>
                                     <div className="mt-2">
                                         <p className="text-gray-700">
-                                            Rating: <span className="font-medium">{selectedRequest.rating || "4.7"}</span> 
+                                            Rating: <span className="font-medium">{selectedRequest.rating || "4.7"}</span>
                                             <span className="text-gray-500"> ({selectedRequest.reviews || "8"} Reviews)</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Description */}
                             <div className="mt-6">
                                 <h3 className="text-lg font-medium text-gray-800 mb-2">Description</h3>
@@ -308,7 +325,7 @@ const AdminDashboardWithdrawal = () => {
                                     {selectedRequest.description || "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,"}
                                 </p>
                             </div>
-                            
+
                             {/* Stats grid */}
                             <div className="mt-6 grid grid-cols-2 gap-y-4">
                                 <div className='flex items-center space-x-8'>
@@ -336,26 +353,77 @@ const AdminDashboardWithdrawal = () => {
                                     <p className="font-medium">{selectedRequest.experience || "1 year"}</p>
                                 </div>
                             </div>
-                            
+
                             {/* Skills */}
                             <div className="mt-6">
                                 <h3 className="text-lg font-medium text-gray-800 mb-1">Skills</h3>
                                 <p className="text-gray-700">
-                                    {selectedRequest.skills ? 
-                                        selectedRequest.skills.join(', ') : 
+                                    {selectedRequest.skills ?
+                                        selectedRequest.skills.join(', ') :
                                         "Typing, Web Design, Graphics Design, SEO, Ui/Ux Design"}
                                 </p>
                             </div>
-                            
+
                             {/* Languages */}
                             <div className="mt-6 flex">
                                 <p className="text-gray-600 mr-2">Language:</p>
                                 <p className="text-gray-700 font-medium">
-                                    {selectedRequest.languages ? 
-                                        selectedRequest.languages.join(', ') : 
+                                    {selectedRequest.languages ?
+                                        selectedRequest.languages.join(', ') :
                                         "English, Bangla"}
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Warning Popup - New design matching the image */}
+            {showWarningPopup && selectedRequest && (
+                <div className="fixed inset-0 flex items-center justify-center backdrop-blur-[3px] z-50">
+                    <div
+                        ref={warningPopupRef}
+                        className="bg-gray-50 rounded-lg shadow-lg max-w-md w-full p-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Back button */}
+                        <div className="flex items-center mb-4">
+                            <button
+                                className="text-gray-500 flex items-center text-sm cursor-pointer"
+                                onClick={handleClosePopup}
+                            >
+                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                                Back
+                            </button>
+                        </div>
+
+                        {/* Warning header - Centered and made "thicker" */}
+                        <div className="border border-blue-500 text-red-500 rounded-md w-32 p-[4px] mb-4 flex items-center space-x-3 justify-center mx-auto">
+                            <div className=" mb-1">
+                                <GoAlert size={24} /> {/* Increased size and stroke width */}
+                            </div>
+                            <span className=" font-bold text-lg">
+                                Warning
+                            </span>
+                        </div>
+
+                        {/* Warning message */}
+                        <div className="mb-6">
+                            <p className="text-gray-600 text-sm">
+                                {warningMessage}
+                            </p>
+                        </div>
+
+                        {/* Okay button */}
+                        <div className="flex justify-center">
+                            <button
+                                onClick={handleClosePopup}
+                                className="px-8 py-2 bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none text-md font-medium cursor-pointer"
+                            >
+                                Okay
+                            </button>
                         </div>
                     </div>
                 </div>

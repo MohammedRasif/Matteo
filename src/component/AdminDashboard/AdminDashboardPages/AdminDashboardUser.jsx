@@ -95,7 +95,7 @@ const AdminDashboardUser = () => {
     <div className="p-5 pt-10 roboto">
       <div className="mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-semibold text-gray-800">User management</h1>
+          <h1 className="text-2xl font-semibold text-gray-800">User management</h1>
 
           <div className="relative">
             <input
@@ -134,7 +134,7 @@ const AdminDashboardUser = () => {
                 <div>
                   <button
                     onClick={() => handleUserInfo(user.id)}
-                    className="flex items-center gap-1 px-3 py-1 text-[13px] text-gray-600  rounded border border-gray-200 "
+                    className="flex items-center gap-1 px-3 py-1 text-[13px] text-gray-600  rounded border border-gray-200 bg-gray-300 cursor-pointer"
                   >
                     <FileText size={14} />
                     <span>Click</span>
