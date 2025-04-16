@@ -7,9 +7,8 @@ import { BiSupport } from "react-icons/bi";
 import { useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { RiBloggerLine, RiShoppingCartLine } from "react-icons/ri";
-import { GrSupport } from "react-icons/gr";
-import { TiTicket } from "react-icons/ti";
 import { LiaShopware } from "react-icons/lia";
+import { TiTicket } from "react-icons/ti";
 
 const AdminDashboardSidebar = () => {
     const location = useLocation();
@@ -26,7 +25,8 @@ const AdminDashboardSidebar = () => {
     const isSupportActive =
         location.pathname === "/Admin_Dashboard/blog" ||
         location.pathname === "/Admin_Dashboard/orders" ||
-        location.pathname === "/Admin_Dashboard/tickets";
+        location.pathname === "/Admin_Dashboard/tickets" ||
+        location.pathname === "/Admin_Dashboard/order_Assessment"; // Added this route
 
     return (
         <div className="pt-24 relative h-full">
@@ -39,9 +39,10 @@ const AdminDashboardSidebar = () => {
                     to="/Admin_Dashboard"
                     end
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
-                            ? "bg-[#0D95DD] text-white rounded-md"
-                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
+                            isActive
+                                ? "bg-[#0D95DD] text-white rounded-md"
+                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -52,9 +53,10 @@ const AdminDashboardSidebar = () => {
                 <NavLink
                     to="/Admin_Dashboard/Message"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
-                            ? "bg-[#0D95DD] text-white rounded-md"
-                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
+                            isActive
+                                ? "bg-[#0D95DD] text-white rounded-md"
+                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
@@ -70,8 +72,9 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 py-[11px] transition-all duration-300 cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
-                                    }`}
+                                className={`flex items-center space-x-2 py-[11px] cursor-pointer ${
+                                    isManagementActive ? "bg-[#0D95DD] text-white" : ""
+                                }`}
                             >
                                 <MdManageAccounts className="h-5 w-5" />
                                 <h1 className="text-[15px] font-medium">Management</h1>
@@ -83,28 +86,31 @@ const AdminDashboardSidebar = () => {
 
                 {/* Management Submenu */}
                 <div
-                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
+                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${
+                        isOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
                 >
                     <NavLink
                         to="/Admin_Dashboard/user"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <Users className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Order</h1>
+                        <h1 className="text-[15px] font-medium">User</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/order"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <RiShoppingCartLine className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Oder</h1>
+                        <h1 className="text-[15px] font-medium">Order</h1>
                     </NavLink>
                 </div>
 
@@ -116,12 +122,17 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsSupportOpen(!isSupportOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 py-[11px] transition-all duration-300 cursor-pointer ${isSupportActive ? "bg-[#0D95DD] text-white" : ""
-                                    }`}
+                                className={`flex items-center space-x-2 py-[11px]  cursor-pointer ${
+                                    isSupportActive ? "bg-[#0D95DD] text-white" : ""
+                                }`}
                             >
                                 <BiSupport className="h-5 w-5" />
                                 <h1 className="text-[15px] font-medium">Support</h1>
-                                {isSupportOpen ? <IoChevronUp className="ml-[105px]" /> : <IoChevronDown className="ml-[105px]" />}
+                                {isSupportOpen ? (
+                                    <IoChevronUp className="ml-[105px]" />
+                                ) : (
+                                    <IoChevronDown className="ml-[105px]" />
+                                )}
                             </div>
                         </button>
                     </div>
@@ -129,13 +140,15 @@ const AdminDashboardSidebar = () => {
 
                 {/* Support Submenu */}
                 <div
-                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${isSupportOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
-                        }`}
+                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${
+                        isSupportOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                    }`}
                 >
                     <NavLink
                         to="/Admin_Dashboard/blog"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
@@ -145,21 +158,26 @@ const AdminDashboardSidebar = () => {
                     <NavLink
                         to="/Admin_Dashboard/orders"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+                                isActive ||
+                                location.pathname === "/Admin_Dashboard/order_Assessment"
+                                    ? "bg-blue-300 text-white font-medium rounded-md"
+                                    : ""
                             }`
                         }
                     >
                         <LiaShopware className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium"> Orders</h1>
+                        <h1 className="text-[15px] font-medium">Orders</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/tickets"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
-                        <TiTicket className="mx-2 h-5 w-5 " />
+                        <TiTicket className="mx-2 h-5 w-5" />
                         <h1 className="text-[15px] font-medium">Tickets</h1>
                     </NavLink>
                 </div>
@@ -167,9 +185,10 @@ const AdminDashboardSidebar = () => {
                 <NavLink
                     to="/dashboard/taskProgress"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
-                            ? "bg-[#0D95DD] text-white rounded-md"
-                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
+                            isActive
+                                ? "bg-[#0D95DD] text-white rounded-md"
+                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >

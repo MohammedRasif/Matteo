@@ -126,7 +126,7 @@ const AdminDashboardAiChat = () => {
     }
 
     return (
-        <div className="flex flex-col h-screen bg-gray-50" style={{ height: "82vh" }}>
+        <div className="flex flex-col h-screen bg-gray-50" style={{ height: "80vh" }}>
             {/* Header with AI bot info */}
             <div className="flex items-center space-x-4 p-3 border-b border-gray-200 bg-white">
                 <div className="h-[46px] w-11 rounded-full bg-[#2F80A9] flex items-center justify-center">
