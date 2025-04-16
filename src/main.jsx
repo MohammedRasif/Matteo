@@ -16,6 +16,13 @@ import AdminDashboardMessage from './component/AdminDashboard/AdminDashboardPage
 import AdminDashboardChats from './component/AdminDashboard/AdminDashboardPages/AdminDashboardChats.jsx';
 import AdminDashboardAiChat from './component/AdminDashboard/AdminDashboardPages/AdminDashboardAiChat.jsx';
 import AdminDashboardNotification from './component/AdminDashboard/AdminDashboardPages/AdminDashboardNotification.jsx';
+import AdminDashboardUser from './component/AdminDashboard/AdminDashboardPages/AdminDashboardUser.jsx';
+import AdminDashboardOrder from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrder.jsx';
+import AdminDashboardBlog from './component/AdminDashboard/AdminDashboardPages/AdminDashboardBlog.jsx';
+import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPages/AdminDashboardSupport.jsx';
+import AdminDashboardOrders from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrders.jsx';
+import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx';
+import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx';
 
 const router = createBrowserRouter([
   {
@@ -68,7 +75,35 @@ const router = createBrowserRouter([
       {
         path:"/Admin_Dashboard/notification",
         element:<AdminDashboardNotification/>
-      }
+      },
+      {
+        path:"/Admin_Dashboard/user",
+        element:<AdminDashboardUser/>
+      },
+      {
+        path:"/Admin_Dashboard/order",
+        element:<AdminDashboardOrder/>
+      },
+      {
+        path:"/Admin_Dashboard/blog",
+        element:<AdminDashboardBlog/>
+      },
+      {
+        path:"/Admin_Dashboard/tickets",
+        element:<AdminDashboardSupport/>
+      },
+      {
+        path:"/Admin_Dashboard/order_Assessment",
+        element:<AdminDashboardOrderAsses/>
+      },
+      {
+        path:"/Admin_Dashboard/orders",
+        element:<AdminDashboardOrders/>
+      },
+      {
+        path:"/Admin_Dashboard/withdrawal",
+        element:<AdminDashboardWithdrawal/>
+      },
     ]
   }
 

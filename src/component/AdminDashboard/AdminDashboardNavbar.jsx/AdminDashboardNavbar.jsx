@@ -31,9 +31,9 @@ const AdminDashboardNavbar = () => {
 
                     {/* User profile and notification on the right */}
                     <div className="flex items-center space-x-4">
-                        <NavLink>
-                            <div className="relative cursor-pointer">
-                                <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 ">
+                        <NavLink to="/Admin_Dashboard/notification" className="cursor-pointer">
+                            <div className="relative ">
+                                <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 cursor-pointer ">
                                     <Bell className="h-7 w-7 text-gray-600" /> {/* Increased base size */}
                                 </button>
                                 <div className="absolute text-[10px] p-[5px] top-[6px] right-[10px] bg-red-400 rounded-full"></div>

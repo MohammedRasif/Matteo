@@ -1,8 +1,13 @@
+import Banner from "../Shared/Banner";
+import Opportunities from "../Shared/Opportunities";
+import ServiceAndBusiness from "../Shared/ServiceAndBusiness";
 
 const Home = () => {
     return (
         <div>
-            <h1>this is home section</h1>
+            <Banner/>
+            <Opportunities/>
+            <ServiceAndBusiness/>
         </div>
     );
 }
