@@ -39,29 +39,27 @@ const AdminDashboardSidebar = () => {
                     to="/Admin_Dashboard"
                     end
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
-                            isActive
-                                ? "bg-[#0D95DD] text-white rounded-md"
-                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <MdOutlineDashboard className="h-5 w-5" />
-                    <h1 className="text-[15px] font-medium">Dashboard</h1>
+                    <h1 className="text-[17px] font-medium">Dashboard</h1>
                 </NavLink>
 
                 <NavLink
                     to="/Admin_Dashboard/Message"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
-                            isActive
-                                ? "bg-[#0D95DD] text-white rounded-md"
-                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <TbBrandWechat className="h-5 w-5" />
-                    <h1 className="text-[15px] font-medium">Chats</h1>
+                    <h1 className="text-[17px] font-medium">Chats</h1>
                 </NavLink>
 
                 {/* Management Section */}
@@ -72,12 +70,11 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsOpen(!isOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 py-[11px] cursor-pointer ${
-                                    isManagementActive ? "bg-[#0D95DD] text-white" : ""
-                                }`}
+                                className={`flex items-center space-x-2 py-[11px] cursor-pointer ${isManagementActive ? "bg-[#0D95DD] text-white" : ""
+                                    }`}
                             >
                                 <MdManageAccounts className="h-5 w-5" />
-                                <h1 className="text-[15px] font-medium">Management</h1>
+                                <h1 className="text-[17px] font-medium">Management</h1>
                                 {isOpen ? <IoChevronUp className="ml-16" /> : <IoChevronDown className="ml-16" />}
                             </div>
                         </button>
@@ -86,31 +83,28 @@ const AdminDashboardSidebar = () => {
 
                 {/* Management Submenu */}
                 <div
-                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${
-                        isOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
+                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
                 >
                     <NavLink
                         to="/Admin_Dashboard/user"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <Users className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">User</h1>
+                        <h1 className="text-[17px] font-medium">User</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/order"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <RiShoppingCartLine className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Order</h1>
+                        <h1 className="text-[17px] font-medium">Order</h1>
                     </NavLink>
                 </div>
 
@@ -122,12 +116,11 @@ const AdminDashboardSidebar = () => {
                             onClick={() => setIsSupportOpen(!isSupportOpen)}
                         >
                             <div
-                                className={`flex items-center space-x-2 py-[11px]  cursor-pointer ${
-                                    isSupportActive ? "bg-[#0D95DD] text-white" : ""
-                                }`}
+                                className={`flex items-center space-x-2 py-[11px]  cursor-pointer ${isSupportActive ? "bg-[#0D95DD] text-white" : ""
+                                    }`}
                             >
                                 <BiSupport className="h-5 w-5" />
-                                <h1 className="text-[15px] font-medium">Support</h1>
+                                <h1 className="text-[17px] font-medium">Support</h1>
                                 {isSupportOpen ? (
                                     <IoChevronUp className="ml-[105px]" />
                                 ) : (
@@ -140,66 +133,61 @@ const AdminDashboardSidebar = () => {
 
                 {/* Support Submenu */}
                 <div
-                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${
-                        isSupportOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
-                    }`}
+                    className={`space-y-2 ml-5 overflow-hidden transition-all duration-300 ${isSupportOpen ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+                        }`}
                 >
                     <NavLink
                         to="/Admin_Dashboard/blog"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <RiBloggerLine className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Blog</h1>
+                        <h1 className="text-[17px] font-medium">Blog</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/orders"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                                isActive ||
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ||
                                 location.pathname === "/Admin_Dashboard/order_Assessment"
-                                    ? "bg-blue-300 text-white font-medium rounded-md"
-                                    : ""
+                                ? "bg-blue-300 text-white font-medium rounded-md"
+                                : ""
                             }`
                         }
                     >
                         <LiaShopware className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Orders</h1>
+                        <h1 className="text-[17px] font-medium">Orders</h1>
                     </NavLink>
                     <NavLink
                         to="/Admin_Dashboard/tickets"
                         className={({ isActive }) =>
-                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                                isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
+                            `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${isActive ? "bg-blue-300 text-white font-medium rounded-md" : ""
                             }`
                         }
                     >
                         <TiTicket className="mx-2 h-5 w-5" />
-                        <h1 className="text-[15px] font-medium">Tickets</h1>
+                        <h1 className="text-[17px] font-medium">Tickets</h1>
                     </NavLink>
                 </div>
 
                 <NavLink
                     to="/Admin_Dashboard/withdrawal"
                     className={({ isActive }) =>
-                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
-                            isActive
-                                ? "bg-[#0D95DD] text-white rounded-md"
-                                : "hover:bg-[#0daddd] hover:text-white rounded-md"
+                        `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive
+                            ? "bg-[#0D95DD] text-white rounded-md"
+                            : "hover:bg-[#0daddd] hover:text-white rounded-md"
                         }`
                     }
                 >
                     <RiAlignItemTopLine className="h-5 w-5" />
-                    <h1 className="text-[15px] font-medium">Withdrawal requests</h1>
+                    <h1 className="text-[17px] font-medium">Withdrawal requests</h1>
                 </NavLink>
             </div>
 
             {/* Logout */}
             <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
-                <button className="text-[15px] font-medium cursor-pointer">Logout</button>
+                <button className="text-[17px] font-medium cursor-pointer">Logout</button>
             </div>
         </div>
     );
