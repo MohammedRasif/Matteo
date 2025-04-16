@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { GoArrowLeft } from 'react-icons/go';
 
 const OrderTable = () => {
     const [orders, setOrders] = useState([
-        { id: '46593292', buyerName: 'username1335', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$33,000', status: 'Solved' },
-        { id: '28474562', buyerName: 'username1563', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$65,000', status: 'Processing' },
-        { id: '74895487', buyerName: 'username1128', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$17,000', status: 'Processing' },
-        { id: '62621762', buyerName: 'username1422', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$21,000', status: 'Solved' },
-        { id: '81919847', buyerName: 'username1001', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$46,000', status: 'Processing' },
-        { id: '25757262', buyerName: 'username1123', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$26,000', status: 'Solved' },
-        { id: '19384746', buyerName: 'username1232', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$62,000', status: 'Processing' },
-        { id: '23446333', buyerName: 'username1893', buyerImg: '/placeholder.svg', sellerName: 'username1335', sellerImg: '/placeholder.svg', amount: '$12,000', status: 'Solved' },
+        { id: '46593292', buyerName: 'username1335', buyerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/woman-on-a-football-field.jpg', amount: '$33,000', status: 'Solved' },
+        { id: '28474562', buyerName: 'username1563', buyerImg: '/https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg', amount: '$65,000', status: 'Processing' },
+        { id: '74895487', buyerName: 'username1128', buyerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg', amount: '$17,000', status: 'Processing' },
+
     ]);
 
     const [filteredOrders, setFilteredOrders] = useState(orders);
@@ -135,7 +132,7 @@ const OrderTable = () => {
                                 <td className="py-4">{order.amount}</td>
                                 <td className="py-4">
                                     <button
-                                        className="text-blue-500 hover:underline text-xs"
+                                        className="text-blue-500 hover:underline text-xs cursor-pointer"
                                         onClick={() => handleViewClick(order)}
                                     >
                                         View
@@ -157,16 +154,40 @@ const OrderTable = () => {
 
             {/* Popup */}
             {showPopup && selectedOrder && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-5 rounded-lg shadow-lg max-w-md w-full">
-                        <h2 className="text-lg font-semibold mb-3">Order Details</h2>
-                        <p className="mb-3 text-sm">This is the order information popup for Order #{selectedOrder.id}.</p>
-                        <button
-                            className="bg-blue-500 text-white px-3 py-1.5 rounded text-xs hover:bg-blue-600"
-                            onClick={() => setShowPopup(false)}
-                        >
-                            Close
-                        </button>
+
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
+                    <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <button
+                                onClick={() => setShowPopup(false)}
+                                className="text-gray-400 text-[15px] hover:text-gray-600 flex cursor-pointer"
+                            >
+                                <GoArrowLeft className="h-4 w-4 mt-[4px]" />
+                                back
+                            </button>
+                        </div>
+
+                        <div className="flex items-center justify-center my-2">
+                            <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+                                Support request
+                            </h1>
+                        </div>
+
+                        <p className="px-10 text-[14px] text-gray-500">
+                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum recusandae vitae dolorum quam
+                            modi quae ab placeat magni porro. Ducimus temporibus dicta qui sapiente illo? Quo impedit
+                            quidem nisi voluptatibus laboriosam eaque, praesentium omnis facilis commodi delectus odio ex,
+                            iusto, repudiandae eius deleniti molestiae. Hic unde doloremque consequatur rerum et?
+                        </p>
+
+                        <div className="flex justify-center gap-2 mt-5">
+                            <button
+                                onClick={() => setShowPopup(false)}
+                                className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+                            >
+                                Okey
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
