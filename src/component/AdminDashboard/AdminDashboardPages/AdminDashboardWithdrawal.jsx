@@ -82,9 +82,9 @@ const AdminDashboardWithdrawal = () => {
         setShowActionMenu(null);
     };
 
-    const handleOverlayClick = (e) => {
-        handleClosePopup();
-    };
+    // const handleOverlayClick = (e) => {
+    //     handleClosePopup();
+    // };
 
     // Close action menu when clicking outside
     useEffect(() => {
@@ -121,8 +121,7 @@ const AdminDashboardWithdrawal = () => {
                         </button>
 
                         {showStatusDropdown && (
-                            <div ref={warningPopupRef}
-                             className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36">
+                            <div ref={warningPopupRef} className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36">
                                 <ul className="py-1">
                                     <li
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"

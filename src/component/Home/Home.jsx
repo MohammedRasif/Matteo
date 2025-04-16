@@ -1,8 +1,11 @@
+import Banner from "../Shared/Banner";
+import Opportunities from "../Shared/Opportunities";
 
 const Home = () => {
     return (
         <div>
-            <h1>this is home section</h1>
+            <Banner/>
+            <Opportunities/>
         </div>
     );
 }
