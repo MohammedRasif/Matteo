@@ -22,6 +22,7 @@ import AdminDashboardBlog from './component/AdminDashboard/AdminDashboardPages/A
 import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPages/AdminDashboardSupport.jsx';
 import AdminDashboardOrders from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrders.jsx';
 import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx';
+import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx';
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path:"/Admin_Dashboard/orders",
         element:<AdminDashboardOrders/>
+      },
+      {
+        path:"/Admin_Dashboard/withdrawal",
+        element:<AdminDashboardWithdrawal/>
       },
     ]
   }

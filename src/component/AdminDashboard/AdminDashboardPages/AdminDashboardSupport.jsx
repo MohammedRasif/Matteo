@@ -252,7 +252,7 @@ const AdminDashboardSupport = () => {
                                 <th className="px-6 py-3">Ticket ID</th>
                                 <th className="px-6 py-3 flex items-center">
                                     Status
-                                    <ChevronRight className="h-4 w-4 ml-1" />
+                                    
                                 </th>
                             </tr>
                         </thead>
@@ -271,7 +271,7 @@ const AdminDashboardSupport = () => {
                                     </td>
                                     <td className="px-6 py-4 text-gray-700">{ticket.dateOfCreation}</td>
                                     <td className="px-6 py-4">
-                                        <a href="#" className="text-blue-500 hover:underline">
+                                        <a href="#" className=" hover:underline">
                                             {ticket.ticketId}
                                         </a>
                                     </td>
@@ -283,11 +283,11 @@ const AdminDashboardSupport = () => {
                                             }
                                         >
                                             <span
-                                                className={ticket.status === "Solved" ? "text-green-600" : "text-blue-600"}
+                                                className={ticket.status === "Solved" ? "" : ""}
                                             >
                                                 {ticket.status}
                                             </span>
-                                            <ChevronRight className="h-4 w-4 text-gray-400" />
+                                            
                                         </button>
 
                                         {/* Status Dropdown */}

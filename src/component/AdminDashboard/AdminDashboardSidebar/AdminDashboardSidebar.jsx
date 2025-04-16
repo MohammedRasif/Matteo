@@ -6,7 +6,7 @@ import { IoWalletOutline } from "react-icons/io5";
 import { BiSupport } from "react-icons/bi";
 import { useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { RiBloggerLine, RiShoppingCartLine } from "react-icons/ri";
+import { RiAlignItemTopLine, RiBloggerLine, RiShoppingCartLine } from "react-icons/ri";
 import { LiaShopware } from "react-icons/lia";
 import { TiTicket } from "react-icons/ti";
 
@@ -183,7 +183,7 @@ const AdminDashboardSidebar = () => {
                 </div>
 
                 <NavLink
-                    to="/dashboard/taskProgress"
+                    to="/Admin_Dashboard/withdrawal"
                     className={({ isActive }) =>
                         `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
                             isActive
@@ -192,8 +192,8 @@ const AdminDashboardSidebar = () => {
                         }`
                     }
                 >
-                    <IoWalletOutline className="h-5 w-5" />
-                    <h1 className="text-[15px] font-medium">Wallet</h1>
+                    <RiAlignItemTopLine className="h-5 w-5" />
+                    <h1 className="text-[15px] font-medium">Withdrawal requests</h1>
                 </NavLink>
             </div>
 
