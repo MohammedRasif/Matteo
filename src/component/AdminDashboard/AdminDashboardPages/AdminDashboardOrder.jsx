@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Added useRef import
 import { GoArrowLeft } from 'react-icons/go';
 
-const OrderTable = () => {
+const Order = () => {
     const [orders, setOrders] = useState([
         { id: '46593292', buyerName: 'username1335', buyerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/woman-on-a-football-field.jpg', amount: '$33,000', status: 'Solved' },
-        { id: '28474562', buyerName: 'username1563', buyerImg: '/https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg', amount: '$65,000', status: 'Processing' },
+        { id: '28474562', buyerName: 'username1563', buyerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg', amount: '$65,000', status: 'Processing' },
         { id: '74895487', buyerName: 'username1128', buyerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/samples/upscale-face-1.jpg', sellerName: 'username1335', sellerImg: 'https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg', amount: '$17,000', status: 'Processing' },
-
     ]);
 
     const [filteredOrders, setFilteredOrders] = useState(orders);
@@ -15,6 +14,9 @@ const OrderTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showPopup, setShowPopup] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+
+    // Ref for the sort dropdown
+    const sortDropdownRef = useRef(null);
 
     useEffect(() => {
         let result = orders;
@@ -34,6 +36,23 @@ const OrderTable = () => {
         setFilteredOrders(result);
     }, [orders, sortOption, searchQuery]);
 
+    // Close sort dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                sortDropdownRef.current &&
+                !sortDropdownRef.current.contains(event.target)
+            ) {
+                setShowSortOptions(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     const handleViewClick = (order) => {
         setSelectedOrder(order);
         setShowPopup(true);
@@ -52,7 +71,7 @@ const OrderTable = () => {
         <div className=" p-6 rounded-lg roboto">
             <h1 className="text-2xl font-semibold text-gray-800 py-5 ">Order</h1>
             <div className="flex justify-between items-center mb-3">
-                <div className="relative">
+                <div className="relative" ref={sortDropdownRef}> {/* Assign ref to the parent div */}
                     <button
                         onClick={handleSortClick}
                         className="flex items-center text-gray-700 text-[15px] font-medium cursor-pointer bg-gray-50 px-2 py-1 rounded-md"
@@ -109,7 +128,6 @@ const OrderTable = () => {
                             <th className="py-2">Request</th>
                             <th className="py-2 pr-2 flex items-center">
                                 Status
-
                             </th>
                         </tr>
                     </thead>
@@ -143,7 +161,6 @@ const OrderTable = () => {
                                         <span className={order.status === 'Solved' ? '' : ''}>
                                             {order.status}
                                         </span>
-
                                     </div>
                                 </td>
                             </tr>
@@ -154,7 +171,6 @@ const OrderTable = () => {
 
             {/* Popup */}
             {showPopup && selectedOrder && (
-
                 <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
                     <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
                         <div className="flex items-center justify-between mb-4">
@@ -195,4 +211,4 @@ const OrderTable = () => {
     );
 };
 
-export default OrderTable;
+export default Order;

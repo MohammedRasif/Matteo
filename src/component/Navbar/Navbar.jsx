@@ -3,7 +3,6 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-    const [activeSection, setActiveSection] = useState("banner");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Toggle mobile menu
@@ -11,57 +10,13 @@ const Navbar = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
 
-    // Scroll to section with offset for fixed navbar
-    const scrollToSection = (id) => {
-        const section = document.getElementById(id);
-        if (section) {
-            const offset = 50; // Offset for fixed navbar
-            const sectionPosition = section.getBoundingClientRect().top + window.scrollY;
-            const offsetPosition = sectionPosition - offset;
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-            });
-            setActiveSection(id);
-        } else {
-            console.log(`Section with id "${id}" not found`);
-        }
-    };
-
-    // Get class for section links based on active section
-    const getSectionLinkClass = (sectionId) => {
-        if (sectionId === "inspiration") {
-            return `px-4 py-2 text-[14px] font-medium rounded-sm ${activeSection === sectionId ? "bg-[#003049] text-white" : "bg-[#003049] text-white"
-                }`;
-        }
-        return `text-[14px] font-medium ${activeSection === sectionId ? "text-[#003049]" : "text-[#003049] hover:text-[#0077B6]"
-            }`;
-    };
-
-    // Track active section on scroll
-    useEffect(() => {
-        const handleScroll = () => {
-            const sections = ["banner", "features", "about", "pricing", "contact"];
-            const scrollPosition = window.scrollY + 100;
-
-            for (const section of sections) {
-                const element = document.getElementById(section);
-                if (element) {
-                    const offsetTop = element.offsetTop;
-                    const offsetHeight = element.offsetHeight;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                        if (activeSection !== section) {
-                            setActiveSection(section);
-                        }
-                        break;
-                    }
-                }
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [activeSection]);
+    // Function to determine active link styles
+    const getNavLinkClass = ({ isActive }) =>
+        `text-[16px] font-medium px-3 py-2 rounded-md transition-colors ${
+            isActive
+                ? "bg-black text-white"
+                : "text-gray-800 hover:bg-gray-100"
+        }`;
 
     return (
         <>
@@ -70,8 +25,8 @@ const Navbar = () => {
                 <div className="bg-[#0077B6] w-full py-[10px]"></div>
 
                 {/* Navbar content with max width */}
-                <div className="flex items-center justify-between w-full h-16 px-4 sm:px-6    bg-white ">
-                    <div className=" flex items-center justify-between w-full max-w-[1430px]  mx-auto">
+                <div className="flex items-center justify-between w-full h-16 px-4 sm:px-6 bg-white">
+                    <div className="flex items-center justify-between w-full max-w-[1430px] mx-auto">
                         {/* Logo on the left */}
                         <div className="flex items-center">
                             <NavLink to="/" className="text-[28px] sm:text-[32px] font-bold text-[#0077b6]">
@@ -87,57 +42,23 @@ const Navbar = () => {
                         </div>
 
                         {/* Navigation links (desktop view) */}
-                        <div className="hidden md:flex items-center space-x-6">
-                            <a
-                                href="#inspiration"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection("inspiration");
-                                }}
-                                className={getSectionLinkClass("inspiration")}
-                            >
+                        <div className="hidden md:flex items-center space-x-2">
+                            <NavLink to="/" className={getNavLinkClass}>
+                                HOME
+                            </NavLink>
+                            <NavLink to="/browse_projects" className={getNavLinkClass}>
                                 INSPIRATION
-                            </a>
-                            <NavLink to="/pricing"
-
-                            // onClick={(e) => {
-                            //     e.preventDefault();
-                            //     scrollToSection("pricing");
-                            // }}
-                            // className={getSectionLinkClass("pricing")}
-                            >
+                            </NavLink>
+                            <NavLink to="/pricing" className={getNavLinkClass}>
                                 PRICING
                             </NavLink>
-                            <a
-                                href="#service_community"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection("service_community");
-                                }}
-                                className={getSectionLinkClass("service_community")}
-                            >
+                            <NavLink to="/all_Projects" className={getNavLinkClass}>
                                 SERVICE COMMUNITY
-                            </a>
-                            <a
-                                href="#reviews"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection("reviews");
-                                }}
-                                className={getSectionLinkClass("reviews")}
-                            >
-                                REVIEWS
-                            </a>
-                            <a
-                                href="#contact"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    scrollToSection("contact");
-                                }}
-                                className={getSectionLinkClass("contact")}
-                            >
+                            </NavLink>
+                           
+                            <NavLink to="/contact" className={getNavLinkClass}>
                                 CONTACT US
-                            </a>
+                            </NavLink>
                         </div>
 
                         {/* Login button on the right (desktop view) */}
@@ -147,7 +68,11 @@ const Navbar = () => {
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <NavLink
                                         to="/login"
-                                        className="relative bg-[#0077B6] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors"
+                                        className={({ isActive }) =>
+                                            `relative bg-[#0077B6] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors ${
+                                                isActive ? "bg-black" : ""
+                                            }`
+                                        }
                                     >
                                         <span className="text-lg font-semibold">Login</span>
                                         <ArrowRight className="h-5 w-5" />
@@ -165,61 +90,41 @@ const Navbar = () => {
                 {/* Mobile menu (visible when toggled on mobile) */}
                 {isMobileMenuOpen && (
                     <div className="md:hidden bg-white px-4 py-4 flex flex-col space-y-4 max-w-[1430px] mx-auto">
-                        <a
-                            href="#inspiration"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection("inspiration");
-                                toggleMobileMenu();
-                            }}
-                            className={getSectionLinkClass("inspiration")}
+                        <NavLink
+                            to="/browse_projects"
+                            className={getNavLinkClass}
+                            onClick={toggleMobileMenu}
                         >
                             INSPIRATION
-                        </a>
-                        <a
-                            href="#pricing"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection("pricing");
-                                toggleMobileMenu();
-                            }}
-                            className={getSectionLinkClass("pricing")}
+                        </NavLink>
+                        <NavLink
+                            to="/pricing"
+                            className={getNavLinkClass}
+                            onClick={toggleMobileMenu}
                         >
                             PRICING
-                        </a>
-                        <a
-                            href="#service_community"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection("service_community");
-                                toggleMobileMenu();
-                            }}
-                            className={getSectionLinkClass("service_community")}
+                        </NavLink>
+                        <NavLink
+                            to="/all_project"
+                            className={getNavLinkClass}
+                            onClick={toggleMobileMenu}
                         >
                             SERVICE COMMUNITY
-                        </a>
-                        <a
-                            href="#reviews"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection("reviews");
-                                toggleMobileMenu();
-                            }}
-                            className={getSectionLinkClass("reviews")}
+                        </NavLink>
+                        <NavLink
+                            to="/reviews"
+                            className={getNavLinkClass}
+                            onClick={toggleMobileMenu}
                         >
                             REVIEWS
-                        </a>
-                        <a
-                            href="#contact"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection("contact");
-                                toggleMobileMenu();
-                            }}
-                            className={getSectionLinkClass("contact")}
+                        </NavLink>
+                        <NavLink
+                            to="/contact"
+                            className={getNavLinkClass}
+                            onClick={toggleMobileMenu}
                         >
                             CONTACT US
-                        </a>
+                        </NavLink>
                         <NavLink
                             to="/login"
                             className="relative bg-[#0077B6] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors w-fit"

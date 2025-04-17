@@ -26,6 +26,7 @@ import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardP
 import Pricing from './component/Shared/Pricing.jsx';
 import BrowseProjects from './component/Shared/BrowseProjects.jsx';
 import AllProjects from './component/Shared/AllProjects.jsx';
+import Question from './component/Shared/Question.jsx';
 
 const router = createBrowserRouter([
   {
@@ -37,23 +38,28 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/pricing",
+        element: <Pricing />,
+      },
+      {
+        path: "/browse_projects",
+        element: <BrowseProjects />,
+      },
+      {
+        path: "/all_Projects",
+        element: <AllProjects />,
+      },
+      {
+        path: "/contact",
+        element: < Question/>,
+      },
 
     ],
 
   },
 
-  {
-    path: "/pricing",
-    element: <Pricing />,
-  },
-  {
-    path: "/browse_projects",
-    element: <BrowseProjects />,
-  },
-  {
-    path: "/all_Projects",
-    element: <AllProjects />,
-  },
+
   // ----------user dashboard---------
   {
     path: "/dashboard",

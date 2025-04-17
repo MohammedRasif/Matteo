@@ -313,7 +313,7 @@ const AllProjects = () => {
     }, [activeProjectMenu, showBidModal])
 
     return (
-        <div className="bg-slate-50 min-h-screen roboto">
+        <div className="bg-slate-50 min-h-screen roboto pt-10">
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Main content */}
@@ -321,7 +321,7 @@ const AllProjects = () => {
                         {/* Sort and search */}
                         <div className="flex flex-col md:flex-row justify-between mb-6">
                             <div className="relative mb-4 md:mb-0" ref={sortDropdownRef}>
-                                <div className="flex items-center text-sm text-gray-600">
+                                <div className="flex items-center text-md text-gray-600">
                                     <span className="mr-2 font-bold">Sort by:</span>
                                     <button
                                         className="flex items-center text-gray-800  cursor-pointer bg-white px-3 py-1 shadow rounded-sm"

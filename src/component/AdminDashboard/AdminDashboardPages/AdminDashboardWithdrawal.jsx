@@ -24,6 +24,7 @@ const AdminDashboardWithdrawal = () => {
 
     // Refs for click outside detection
     const actionMenuRefs = useRef([]);
+    const statusDropdownRef = useRef(null); // New ref for status dropdown
     const popupRef = useRef(null);
     const warningPopupRef = useRef(null);
 
@@ -82,18 +83,23 @@ const AdminDashboardWithdrawal = () => {
         setShowActionMenu(null);
     };
 
-    // const handleOverlayClick = (e) => {
-    //     handleClosePopup();
-    // };
-
-    // Close action menu when clicking outside
+    // Close dropdowns and menus when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
+            // Close action menu
             const isOutsideActionMenu = actionMenuRefs.current.every(
                 (ref) => !ref || !ref.contains(event.target)
             );
             if (isOutsideActionMenu) {
                 setShowActionMenu(null);
+            }
+
+            // Close status dropdown
+            if (
+                statusDropdownRef.current &&
+                !statusDropdownRef.current.contains(event.target)
+            ) {
+                setShowStatusDropdown(false);
             }
         };
 
@@ -121,7 +127,10 @@ const AdminDashboardWithdrawal = () => {
                         </button>
 
                         {showStatusDropdown && (
-                            <div ref={warningPopupRef} className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36">
+                            <div
+                                ref={statusDropdownRef} // Assign ref to status dropdown
+                                className="absolute top-full left-0 mt-1 bg-white shadow-lg rounded-md z-10 w-36"
+                            >
                                 <ul className="py-1">
                                     <li
                                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
@@ -238,7 +247,7 @@ const AdminDashboardWithdrawal = () => {
 
                                         {showActionMenu === request.id && (
                                             <div
-                                                ref={(el) => (actionMenuRefs.current[index] = el)} // Assign ref to each dropdown
+                                                ref={(el) => (actionMenuRefs.current[index] = el)}
                                                 className="absolute right-24 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
                                             >
                                                 <div className="py-1">
@@ -401,7 +410,7 @@ const AdminDashboardWithdrawal = () => {
                         {/* Warning header - Centered and made "thicker" */}
                         <div className="border border-blue-500 text-red-500 rounded-md w-32 p-[4px] mb-4 flex items-center space-x-3 justify-center mx-auto">
                             <div className=" mb-1">
-                                <GoAlert size={24} /> {/* Increased size and stroke width */}
+                                <GoAlert size={24} />
                             </div>
                             <span className=" font-bold text-lg">
                                 Warning

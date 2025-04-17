@@ -85,7 +85,7 @@ const Pricing = () => {
     return (
         <section className="pt-10 roboto">
             <div className="container mx-auto px-4">
-                <div >
+                {/* <div >
 
                     <NavLink to="/">
                         <button className="flex items-center space-x-1 bg-[#309ED7] text-white px-7 py-2 rounded-md cursor-pointer">
@@ -94,7 +94,7 @@ const Pricing = () => {
                             <h1 className="text-[20px]">Back</h1>
                         </button>
                     </NavLink>
-                </div>
+                </div> */}
                 <h1 className="uppercase text-center text-3xl sm:text-5xl font-medium text-gray-600 mb-3 sm:mb-5  tracking-wider">PRICING</h1>
 
                 {/* Toggle */}
@@ -175,7 +175,7 @@ const Pricing = () => {
                 </div>
             </div>
             <Faq />
-            <Footer/>
+            
         </section>
     )
 }

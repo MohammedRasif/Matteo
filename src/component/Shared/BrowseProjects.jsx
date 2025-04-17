@@ -237,7 +237,7 @@ const BrowseProjects = () => {
     }
 
     return (
-        <div className="bg-slate-50 min-h-screen roboto">
+        <div className="bg-slate-50 min-h-screen roboto pt-10">
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col md:flex-row gap-6">
                     {/* Main content */}
