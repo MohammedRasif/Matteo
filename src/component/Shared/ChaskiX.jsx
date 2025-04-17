@@ -1,11 +1,10 @@
-import { Network, LayoutGrid,  } from "lucide-react";
 import img from "../image/group.png"
 import img1 from "../image/groupp.png"
 import img2 from "../image/grouppp.png"
 
 const ChaskiX = () => {
     return (
-        <div className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-50 py-28 px-4 sm:px-6 lg:px-8">
             <div className="max-w-[150vh] mx-auto ">
                 <h1 className="uppercase text-center text-3xl sm:text-5xl font-medium text-gray-600 mb-3 sm:mb-5  tracking-wider">WHY ChaskiX?</h1>
                 <p className="text-center text-[18px] text-gray-500 mb-20">Trusted by over 120,000 field service pros, get up and running in no time.</p>

@@ -23,6 +23,7 @@ import AdminDashboardSupport from './component/AdminDashboard/AdminDashboardPage
 import AdminDashboardOrders from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrders.jsx';
 import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx';
 import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx';
+import Pricing from './component/Shared/Pricing.jsx';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      
     ],
+    
+  },
+
+  {
+    path: "/pricing",
+    element: <Pricing />,
   },
   // ----------user dashboard---------
   {
