@@ -24,6 +24,7 @@ import AdminDashboardOrders from './component/AdminDashboard/AdminDashboardPages
 import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx';
 import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx';
 import Pricing from './component/Shared/Pricing.jsx';
+import BrowseProjects from './component/Shared/BrowseProjects.jsx';
 
 const router = createBrowserRouter([
   {
@@ -35,14 +36,18 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      
+
     ],
-    
+
   },
 
   {
     path: "/pricing",
     element: <Pricing />,
+  },
+  {
+    path: "/browse_projects",
+    element: <BrowseProjects />,
   },
   // ----------user dashboard---------
   {
@@ -75,42 +80,42 @@ const router = createBrowserRouter([
             element: <AdminDashboardChats />
           },
           {
-            path:"chatbot",
-            element:<AdminDashboardAiChat/>
+            path: "chatbot",
+            element: <AdminDashboardAiChat />
           }
         ]
       },
       {
-        path:"/Admin_Dashboard/notification",
-        element:<AdminDashboardNotification/>
+        path: "/Admin_Dashboard/notification",
+        element: <AdminDashboardNotification />
       },
       {
-        path:"/Admin_Dashboard/user",
-        element:<AdminDashboardUser/>
+        path: "/Admin_Dashboard/user",
+        element: <AdminDashboardUser />
       },
       {
-        path:"/Admin_Dashboard/order",
-        element:<AdminDashboardOrder/>
+        path: "/Admin_Dashboard/order",
+        element: <AdminDashboardOrder />
       },
       {
-        path:"/Admin_Dashboard/blog",
-        element:<AdminDashboardBlog/>
+        path: "/Admin_Dashboard/blog",
+        element: <AdminDashboardBlog />
       },
       {
-        path:"/Admin_Dashboard/tickets",
-        element:<AdminDashboardSupport/>
+        path: "/Admin_Dashboard/tickets",
+        element: <AdminDashboardSupport />
       },
       {
-        path:"/Admin_Dashboard/order_Assessment",
-        element:<AdminDashboardOrderAsses/>
+        path: "/Admin_Dashboard/order_Assessment",
+        element: <AdminDashboardOrderAsses />
       },
       {
-        path:"/Admin_Dashboard/orders",
-        element:<AdminDashboardOrders/>
+        path: "/Admin_Dashboard/orders",
+        element: <AdminDashboardOrders />
       },
       {
-        path:"/Admin_Dashboard/withdrawal",
-        element:<AdminDashboardWithdrawal/>
+        path: "/Admin_Dashboard/withdrawal",
+        element: <AdminDashboardWithdrawal />
       },
     ]
   }
