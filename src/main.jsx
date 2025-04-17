@@ -25,6 +25,7 @@ import AdminDashboardOrderAsses from './component/AdminDashboard/AdminDashboardP
 import AdminDashboardWithdrawal from './component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx';
 import Pricing from './component/Shared/Pricing.jsx';
 import BrowseProjects from './component/Shared/BrowseProjects.jsx';
+import AllProjects from './component/Shared/AllProjects.jsx';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: "/browse_projects",
     element: <BrowseProjects />,
+  },
+  {
+    path: "/all_Projects",
+    element: <AllProjects />,
   },
   // ----------user dashboard---------
   {
