@@ -8,7 +8,9 @@ import { BiSupport } from "react-icons/bi";
 
 const UserDashboardSidebar = () => {
   const location = useLocation();
-  const isProjectActive = location.pathname.startsWith('/dashboard/Project');
+  const isProjectActive = location.pathname.startsWith('/dashboard/user_notifications');
+
+
 
   return (
     <div className="pt-24">
@@ -21,74 +23,68 @@ const UserDashboardSidebar = () => {
           to="/dashboard"
           end
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <MdOutlineDashboard className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Dashboard</h1>
+          <MdOutlineDashboard className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Dashboard</h1>
         </NavLink>
 
         <NavLink
           to="/dashboard/chat"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <TbBrandWechat 
-          className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Chats</h1>
+          <TbBrandWechat
+            className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Chats</h1>
         </NavLink>
 
         <NavLink
-          to="/dashboard/Project"
+          to="/dashboard/user_notifications"
           className={() =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isProjectActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isProjectActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <IoMdNotificationsOutline className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Notification</h1>
+          <IoMdNotificationsOutline className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Notification</h1>
         </NavLink>
 
         <NavLink
-          to="/dashboard/addEmploye"
+          to="/dashboard/user_profile_dettails"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <Users className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Profile</h1>
+          <Users className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Profile</h1>
         </NavLink>
 
         <NavLink
-          to="/dashboard/taskProgress"
+          to="/dashboard/user_wallet"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <IoWalletOutline className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Wallet</h1>
+          <IoWalletOutline className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Wallet</h1>
         </NavLink>
 
         <NavLink
-          to="/dashboard/manageSubscription"
+          to="/dashboard/userSupport"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 transition-colors duration-200 ${
-              isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <BiSupport className="h-6 w-6" />
-          <h1 className="text-lg font-medium">Support</h1>
+          <BiSupport className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">Support</h1>
         </NavLink>
       </div>
     </div>

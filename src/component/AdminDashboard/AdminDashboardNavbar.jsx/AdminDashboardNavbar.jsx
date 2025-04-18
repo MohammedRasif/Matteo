@@ -17,17 +17,15 @@ const AdminDashboardNavbar = () => {
                     </div>
 
                     {/* Navigation NavLinks in the middle */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        <NavLink to="/blog" className="text-[16px] font-medium">
-                            BLOG
-                        </NavLink>
+                    {/* <div className="hidden md:flex items-center space-x-8">
+                        
                         <NavLink to="/pricing" className="text-[16px] font-medium">
                             PRICING
                         </NavLink>
-                        <NavLink to="/service-community" className="text-[16px] font-medium">
+                        <NavLink to="/all_Projects" className="text-[16px] font-medium">
                             SERVICE COMMUNITY
                         </NavLink>
-                    </div>
+                    </div> */}
 
                     {/* User profile and notification on the right */}
                     <div className="flex items-center space-x-4">

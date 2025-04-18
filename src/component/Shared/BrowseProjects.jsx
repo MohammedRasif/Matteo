@@ -255,13 +255,13 @@ const BrowseProjects = () => {
                                 />
                             </div>
                             <div className="flex items-center">
-                                <span className="text-gray-600 mr-2">View by:</span>
+                                {/* <span className="text-gray-600 mr-2">View by:</span>
                                 <div className="relative">
                                     <button className="flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 text-sm">
                                         Most recent
                                         <FiChevronRight className="ml-2" />
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -354,9 +354,9 @@ const BrowseProjects = () => {
                                             </div>
                                             <div className="flex items-center">
 
-                                                <button className="text-gray-500 hover:text-gray-700">
+                                                {/* <button className="text-gray-500 hover:text-gray-700">
                                                     <FiMoreHorizontal size={18} />
-                                                </button>
+                                                </button> */}
                                             </div>
                                         </div>
                                         <div className="mb-3">
@@ -391,7 +391,7 @@ const BrowseProjects = () => {
                         {filteredPosts.length > 0 && (
                             <div className="flex items-center justify-center mt-6">
                                 <button
-                                    className="px-3 py-1 border border-gray-300 rounded-md mr-2 text-sm text-gray-600 hover:bg-gray-100"
+                                    className="px-3 py-1 border border-gray-300 rounded-md mr-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
                                 >
@@ -406,7 +406,7 @@ const BrowseProjects = () => {
                                     ) : (
                                         <button
                                             key={`page-${page}`}
-                                            className={`w-8 h-8 flex items-center justify-center rounded-md mx-1 text-sm ${currentPage === page
+                                            className={`w-8 h-8 flex items-center justify-center rounded-md mx-1 text-sm cursor-pointer ${currentPage === page
                                                 ? "bg-blue-500 text-white"
                                                 : "border border-gray-300 text-gray-600 hover:bg-gray-100"
                                                 }`}
@@ -418,7 +418,7 @@ const BrowseProjects = () => {
                                 )}
 
                                 <button
-                                    className="px-3 py-1 border border-gray-300 rounded-md ml-2 text-sm text-gray-600 hover:bg-gray-100"
+                                    className="px-3 py-1 border border-gray-300 rounded-md ml-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
                                 >
