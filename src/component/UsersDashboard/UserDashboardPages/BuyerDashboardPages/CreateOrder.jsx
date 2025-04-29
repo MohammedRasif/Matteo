@@ -1,150 +1,205 @@
 
+
 import { useState } from "react";
 import { GoArrowLeft } from "react-icons/go";
+import { GrSearch } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
-
 function CreateOrder() {
+    // State for form fields
     const [hourlyRate, setHourlyRate] = useState(false);
     const [fixedPrice, setFixedPrice] = useState(false);
-    // const [category, setCategory] = useState("");
-    // const [currency, setCurrency] = useState("USD");
+    const [category, setCategory] = useState("");
+    const [currency, setCurrency] = useState("USD");
+    const [title, setTitle] = useState("");
+    const [numPersons, setNumPersons] = useState("");
+    const [description, setDescription] = useState("");
+    const [skills, setSkills] = useState("");
+    const [location, setLocation] = useState("");
+    const [searchLocation, setSearchLocation] = useState("");
+    const [duration, setDuration] = useState("");
+    const [amount, setAmount] = useState("");
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+    // Form submission handler
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Basic validation
+        if (!title || !numPersons || !category) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+        // Collect form data
+        const formData = {
+            title,
+            category,
+            numPersons,
+            description,
+            skills,
+            location,
+            duration,
+            hourlyRate,
+            fixedPrice,
+            amount,
+            currency,
+        };
+        console.log("Form Data:", formData);
+        // TODO: Integrate with API or backend
+        alert("Order submitted successfully!");
+    };
 
     return (
-        <div className="  p-6 ">
+        <div className="p-6">
             {/* Header */}
-            <div className=" mb-6">
+            <div className="mb-6">
                 <Link to="/dashboard">
                     <button className="flex items-center text-[#154153] cursor-pointer gap-1">
                         <GoArrowLeft />
                         <span>Back</span>
-
-
                     </button>
                 </Link>
-                <h1 className="text-2xl font-bold text-center text-[#154153]  mb-8 text-[24px]">Create Order</h1>
-
+                <h1 className="text-2xl font-bold text-center text-[#154153] mb-8 text-[24px]">
+                    Create Order
+                </h1>
             </div>
 
             {/* Form */}
-            <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[#154153] ">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[#154153]">
                     <div className="md:col-span-1">
-                        <label className="block text-[16px] mb-2 text-[#154153]">Give a title to your task</label>
+                        <label className="block text-[16px] mb-2 text-[#154153]">
+                            Give a title to your task *
+                        </label>
                         <input
                             type="text"
                             placeholder="Enter text"
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
-                        />
-                    </div>
-                    <div className="md:col-span-1">
-                        <label className="block text-[16px] mb-2 text-[#154153]">Name the task category</label>
-                        {/* <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
-            >
-              <option value="" disabled>
-                Select type
-              </option>
-              <option value="cleaning">Cleaning</option>
-              <option value="delivery">Delivery</option>
-              <option value="repair">Repair</option>
-              <option value="other">Other</option>
-            </select> */}
-                        <input
-                            type="category"
-                            placeholder="Enter here"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             required
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded required"
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                         />
-
-
                     </div>
                     <div className="md:col-span-1">
-                        <label className="block text-[16px] mb-2 text-[#154153]">Number of person required *</label>
+                        <label className="block text-[16px] mb-2 text-[#154153]">
+                            Name the task category *
+                        </label>
                         <input
-                            type="num"
+                            type="text"
+                            placeholder="Enter here"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            required
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
+                        />
+                    </div>
+                    <div className="md:col-span-1">
+                        <label className="block text-[16px] mb-2 text-[#154153]">
+                            Number of person required *
+                        </label>
+                        <input
+                            type="number"
                             placeholder="Enter number"
-
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
+                            value={numPersons}
+                            onChange={(e) => setNumPersons(e.target.value)}
+                            required
+                            min="1"
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm mb-2 text-[#154153]">Describe the task</label>
+                    <label className="block text-sm mb-2 text-[#154153]">
+                        Describe the task
+                    </label>
                     <textarea
                         placeholder="Enter text"
-                        className="w-full h-[96px] px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="w-full h-[96px] px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                     />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <div className="flex items-center mb-2 text-[#154153]">
-                            <label className="block text-sm">Skill Required (max 5)</label>
-
-
-                        </div>
+                        <label className="block text-sm mb-2 text-[#154153]">
+                            Skill Required (max 5)
+                        </label>
                         <input
                             type="text"
                             placeholder="Enter text"
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
+                            value={skills}
+                            onChange={(e) => setSkills(e.target.value)}
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm mb-2 text-[#154153]">Task address/location (if required)</label>
+                        <label className="block text-sm mb-2 text-[#154153]">
+                            Task address/location (if required)
+                        </label>
                         <input
                             type="text"
                             placeholder="Enter text"
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                         />
                     </div>
                 </div>
 
                 {/* Map */}
-                <div className="border border-gray-200 rounded overflow-hidden">
-                    <div className="flex items-center justify-between p-2 bg-white">
-                        <div className="text-xs text-gray-500">(Task location)</div>
-                        <div className="flex items-center border rounded overflow-hidden flex-1 mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                            </svg>
+                <div className="rounded-[8px] mx-10 border my-8 border-[#5285A7] relative">
+                    {/* Search Bar and Controls */}
+                    <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between p-4">
+                        <div className="text-xs text-[#154153] py-5 bg-[#EEF2F5] px-10 rounded-[8px]">
+                            (Task location)
+                        </div>
+                        <div className="flex items-center rounded overflow-hidden flex-1 mx-4 relative">
+                            {!isSearchFocused && <GrSearch className="absolute ml-3 z-50" />}
                             <input
                                 type="text"
-                                placeholder="Search location"
-                                className="p-1 px-2 w-full text-sm focus:outline-none"
+                                placeholder={isSearchFocused ? "" : "Search location"}
+                                value={searchLocation}
+                                onChange={(e) => setSearchLocation(e.target.value)}
+                                onFocus={() => setIsSearchFocused(true)}
+                                onBlur={() => setIsSearchFocused(false)}
+                                className="text-sm pl-8 h-[55px] w-full mx-auto bg-[#F8FCFF] border border-[#5285A7] rounded-[8px] focus:outline-none"
                             />
                         </div>
-                        <button className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
+                        <button className="text-xs text-[#154153] py-5 bg-[#BDDDF4] border border-[#1D7EC5] px-10 rounded-[8px]">
                             Auto locate
                         </button>
-                        <div className="text-xs text-gray-500">(Task location)</div>
                     </div>
-                    <div className="relative h-[180px] bg-gray-100">
-                        <div className="w-full h-full bg-gray-200">
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                    <circle cx="12" cy="10" r="3" />
-                                </svg>
-                            </div>
-                        </div>
+
+                    {/* Google Map */}
+                    <div className="relative">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.35196272633!2d-73.97950600000001!3d40.697141499999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1744969095274!5m2!1sen!2sbd"
+                            width="100%"
+                            height="450"
+                            allowFullScreen
+                            loading="lazy"
+                            title="google map"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="relative"
+                        ></iframe>
                     </div>
                 </div>
 
                 <div className="flex justify-between gap-10 items-center">
                     <div className="w-full">
-                        <label className="block text-sm mb-2 text-[#154153]">Task Duration</label>
+                        <label className="block text-sm mb-2 text-[#154153]">
+                            Task Duration
+                        </label>
                         <input
                             type="text"
                             placeholder="e.g. 2 days"
-                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded "
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
+                            className="w-full px-3 py-2 border border-[#5C91B1] bg-[#F8FCFF] rounded"
                         />
                     </div>
-                    <div className="md:col-span-1 w-full">
+                    <div className="w-full">
                         <label className="block text-sm mb-2 text-[#154153]">Offering</label>
                         <div className="flex items-center space-x-4 mt-2">
                             <div className="flex items-center space-x-2">
@@ -153,7 +208,7 @@ function CreateOrder() {
                                     id="hourly"
                                     checked={hourlyRate}
                                     onChange={(e) => setHourlyRate(e.target.checked)}
-                                    className="rounded border-[#5C91B1] bg-[#F8FCFF] "
+                                    className="rounded border-[#5C91B1] bg-[#F8FCFF]"
                                 />
                                 <label htmlFor="hourly" className="text-sm">
                                     Hourly rate
@@ -165,7 +220,7 @@ function CreateOrder() {
                                     id="fixed"
                                     checked={fixedPrice}
                                     onChange={(e) => setFixedPrice(e.target.checked)}
-                                    className="rounded border-[#5C91B1] bg-[#F8FCFF] text-blue-600 focus:ring-blue-500"
+                                    className="rounded border-[#5C91B1] bg-[#F8FCFF]"
                                 />
                                 <label htmlFor="fixed" className="text-sm">
                                     Fixed price
@@ -173,33 +228,29 @@ function CreateOrder() {
                             </div>
                         </div>
                     </div>
-
-
                     <div className="flex w-full">
                         <input
                             type="text"
                             placeholder="Type total amount"
-                            className="rounded-l border-l border-y border-[#5C91B1] bg-[#F8FCFF] p-2 placeholder-[#154153] w-full "
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="rounded-l border-l border-y border-[#5C91B1] bg-[#F8FCFF] p-2 placeholder-[#154153] w-full"
                         />
-                        <div className="flex items-center rounded border  border-[#5C91B1]  bg-[#F8FCFF] text-[#154153] p-2 w-1/2 ">
-                            Currency (USD)
+                        <div className="flex items-center rounded border border-[#5C91B1] bg-[#F8FCFF] text-[#154153] p-2 w-1/2">
+                            Currency ({currency})
                         </div>
                     </div>
-
-
-
-
                 </div>
 
                 <div className="pt-10 text-center">
                     <button
                         type="submit"
-                        className="w-[231px] bg-[#2E9DE0]  text-[#F8FCFF] text-[20px] text-center py-2 rounded transition-colors"
+                        className="w-[231px] bg-[#2E9DE0] text-[#F8FCFF] text-[20px] text-center py-2 rounded transition-colors"
                     >
                         Submit
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

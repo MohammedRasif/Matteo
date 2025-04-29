@@ -26,7 +26,7 @@ const OrderManagement = () => {
                 <div className="bg-[#acaeaf23] rounded-full">
                     {/* Seller Tab */}
                     <button
-                        className={`px-6 py-2 rounded-full ${activeTab === "seller" ? "bg-[#1B97D8] text-white" : "text-[#012939]"}`}
+                        className={`px-6 py-2 rounded-full cursor-pointer ${activeTab === "seller" ? "bg-[#1B97D8] text-white" : "text-[#012939]"}`}
                         onClick={() => handleTabChange("seller")}
                     >
                         Seller
@@ -34,7 +34,7 @@ const OrderManagement = () => {
 
                     {/* Buyer Tab */}
                     <button
-                        className={`px-6 py-2 rounded-full ${activeTab === "buyer" ? "bg-[#1B97D8] text-white" : "text-[#012939]"}`}
+                        className={`px-6 py-2 rounded-full  cursor-pointer  ${activeTab === "buyer" ? "bg-[#1B97D8] text-white" : "text-[#012939]"}`}
                         onClick={() => handleTabChange("buyer")}
                     >
                         Buyer

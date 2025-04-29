@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 const UserDashboardNavbar = () => {
     return (
         <div >
-            <div className="bg-[#0077B6] w-full py-[10px] ">
+            <div className="bg-[#848239] w-full py-[10px] ">
 
             </div>
             <div>

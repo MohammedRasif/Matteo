@@ -43,6 +43,11 @@ import UserProfileDettails from './component/UsersDashboard/UserDashboardPages/U
 import UserWallet from './component/UsersDashboard/UserDashboardPages/UserWallet/UserWallet.jsx';
 import UserWithdrawalMethod from './component/UsersDashboard/UserDashboardPages/UserWithdrawalMethod/UserWithdrawalMethod.jsx';
 import UserNotifications from './component/UsersDashboard/UserDashboardPages/UserNotifications/UserNotifications.jsx';
+import UserDashboardMessage from './component/UsersDashboard/UserDashboardPages/UserDashboardMessage.jsx';
+import UserDashboardChats from './component/UsersDashboard/UserDashboardPages/UserDashboardChats.jsx';
+import UserDashboardAiChat from './component/UsersDashboard/UserDashboardPages/UserDashboardAiChat.jsx';
+import { Provider } from 'react-redux';
+import store from './Redux/store.js';
 
 const router = createBrowserRouter([
   {
@@ -109,6 +114,20 @@ const router = createBrowserRouter([
         index: true,
         element: <OrderManagement />
 
+      },
+      {
+        path: "Messages", // Relative path under /Admin_Dashboard
+        element: <UserDashboardMessage />,
+        children: [
+          {
+            path: ":id", // Relative path under /Admin_Dashboard/Message
+            element: <UserDashboardChats />
+          },
+          {
+            path: "chatbot",
+            element: <UserDashboardAiChat />
+          }
+        ]
       },
       {
         path: "userSupport",
@@ -213,8 +232,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    <Provider store={store}>
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>
+    </Provider>
   </StrictMode>,
 )

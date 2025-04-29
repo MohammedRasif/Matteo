@@ -69,7 +69,7 @@ function UserWithdrawalMethod() {
     };
 
     return (
-        <div className="p-6 nunito">
+        <div className="p-6 pt-10 nunito">
             <div className="relative">
                 <Link to="/dashboard/user_wallet" className="btn btn-sm flex items-center gap-2">
                     <GoArrowLeft /> <span>Back</span>

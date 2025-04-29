@@ -9,8 +9,14 @@ import { BiSupport } from "react-icons/bi";
 const UserDashboardSidebar = () => {
   const location = useLocation();
   const isProjectActive = location.pathname.startsWith('/dashboard/user_notifications');
-
-
+  const isDashboardActive =
+    location.pathname === '/dashboard' ||
+    location.pathname.startsWith('/dashboard/createBuyerOrder') ||
+    location.pathname.startsWith('/dashboard/createSellerOrder') ||
+    location.pathname.startsWith('/dashboard/buyer_order_create');
+  const isWalletActive =
+    location.pathname === '/dashboard/user_wallet' ||
+    location.pathname.startsWith('/dashboard/user_withdrawal_method');
 
   return (
     <div className="pt-24">
@@ -21,9 +27,8 @@ const UserDashboardSidebar = () => {
       <div className="flex flex-col gap-2 pt-10 mx-10">
         <NavLink
           to="/dashboard"
-          end
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+          className={() =>
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isDashboardActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
@@ -32,14 +37,13 @@ const UserDashboardSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/dashboard/chat"
+          to="/dashboard/Messages"
           className={({ isActive }) =>
             `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >
-          <TbBrandWechat
-            className="h-5 w-5" />
+          <TbBrandWechat className="h-5 w-5" />
           <h1 className="text-[17px] font-medium">Chats</h1>
         </NavLink>
 
@@ -67,8 +71,8 @@ const UserDashboardSidebar = () => {
 
         <NavLink
           to="/dashboard/user_wallet"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
+          className={() =>
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${isWalletActive ? 'bg-[#0D95DD] text-white rounded-md' : 'hover:bg-[#0daddd] hover:text-white rounded-md'
             }`
           }
         >

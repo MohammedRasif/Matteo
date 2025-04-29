@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState,  } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const Navbar = () => {
         <>
             <div className="shadow-md lg:fixed lg:top-0 lg:left-0 lg:right-0 lg:z-50 w-full">
                 {/* Top bar with full width */}
-                <div className="bg-[#0077B6] w-full py-[10px]"></div>
+                <div className="bg-green-600 w-full py-[10px]"></div>
 
                 {/* Navbar content with max width */}
                 <div className="flex items-center justify-between w-full h-16 px-4 sm:px-6 bg-white">

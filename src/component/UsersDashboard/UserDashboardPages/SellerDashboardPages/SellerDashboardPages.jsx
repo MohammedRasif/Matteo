@@ -178,16 +178,16 @@ function SellerDashboardPages() {
 
                 <div className="relative inline-block text-left" ref={dropdownRef}>
                     <div
-                        className="text-[#012939] flex items-center gap-1 bg-[#F6F8FA] p-2 rounded cursor-pointer"
+                        className="text-[#012939] flex items-center gap-1 bg-[#F6F8FA] px-2 py-1 rounded cursor-pointer text-[16px]"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <p>Active orders</p>
-                        <IoIosArrowForward className={`transition-transform ${isOpen ? "rotate-90" : ""}`} />
+                        <IoIosArrowForward />
                     </div>
 
                     {/* Dropdown options */}
                     {isOpen && (
-                        <div className="absolute mt-2 w-40 text-[#012939] bg-white shadow-md rounded p-2 z-10 space-y-2">
+                        <div className="absolute mt-2 w-40 text-[#012939]  bg-white shadow-md rounded p-2 z-10 space-y-2 ">
                             {["Cancel request", "Delivered", "Late", "Cancelled", "In-Progress", ""].map((status, index) => (
                                 <p
                                     key={index}
@@ -195,7 +195,7 @@ function SellerDashboardPages() {
                                         setStatusFilter(status);
                                         setIsOpen(false); // Close dropdown after selecting an option
                                     }}
-                                    className="hover:bg-gray-100 p-1 rounded cursor-pointer flex items-center gap-1"
+                                    className="hover:bg-gray-100 p-1 rounded cursor-pointer flex items-center gap-1 text-[15px]"
                                 >
                                     {status === "" ? "All Orders" : status}
                                     <IoIosArrowForward />
@@ -221,25 +221,25 @@ function SellerDashboardPages() {
             <hr className="mx-6 text-[#D8DBDD]" />
 
             {/* Orders Table */}
-            <div className="overflow-x-auto mx-6 mt-6">
-                <table className="min-w-full rounded-xl shadow-sm">
-                    <thead className="text-[#012939]">
+            <div className="overflow-x-auto mx-6 mt-2">
+                <table className="min-w-full rounded-md shadow-sm">
+                    <thead className="text-[#012939] text-[16px] border-b border-gray-300">
                         <tr>
-                            <th className="px-4 py-3 text-left">Username</th>
-                            <th className="px-4 py-3 text-left">Delivery time</th>
-                            <th className="px-4 py-3 text-left">Order ID</th>
-                            <th className="px-4 py-3 text-left">Amount</th>
-                            <th className="px-4 py-3 text-left">Status</th>
-                            <th className="px-4 py-3 text-left">Action</th>
+                            <th className="px-4 py-2 text-left">Username</th>
+                            <th className="px-4 py-2 text-left">Delivery time</th>
+                            <th className="px-4 py-2 text-left">Order ID</th>
+                            <th className="px-4 py-2 text-left">Amount</th>
+                            <th className="px-4 py-2 text-left">Status</th>
+                            <th className="px-4 py-2 text-left">Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {filteredOrders.map((order) => (
-                            <tr key={order.order_id} className="border-b border-[#C1DDEF] transition text-[#012939] text-[18px]">
+                            <tr key={order.order_id} className="border-b border-[#C1DDEF] transition text-[#012939] text-[14px]">
                                 {/* User info with profile image */}
                                 <td className="px-4 py-3 flex items-center gap-2">
-                                    <img src={order.image} alt={order.username} className="w-[38px] h-[38px] rounded-full" />
+                                    <img src={order.image} alt={order.username} className="w-[35px] h-[35px] rounded-full" />
                                     <span>{order.username}</span>
                                 </td>
 
