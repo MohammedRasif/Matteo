@@ -21,7 +21,7 @@ const ServiceAndBusiness = () => {
     ];
 
     return (
-        <div className="bg-[#F0F3F5] py-12 sm:py-16 roboto">
+        <div id="service_community" className="bg-[#F0F3F5] py-12 sm:py-28 roboto">
             <h1 className="uppercase text-center text-3xl sm:text-5xl font-medium text-gray-700 mb-3 sm:mb-5  tracking-wider">Made for all field services and businesses</h1>
             <p className="text-center text-[18px] text-gray-500 mb-20">Customize ChaskiX to grow your business. Schedule jobs, dispatch, <br />
             invoice and get paid all in one place.</p>

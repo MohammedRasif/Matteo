@@ -201,7 +201,7 @@ const AdminDashboardSupport = () => {
                     <div className="relative" ref={filterDropdownRef}>
                         <button
                             onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                            className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 bg-gray-100 px-4 rounded-sm py-[5px] cursor-pointer"
+                            className="flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900 bg-gray-100 px-4 rounded-sm py-[7px] cursor-pointer"
                         >
                             {activeFilter}
                             <ChevronRight className="h-4 w-4" />

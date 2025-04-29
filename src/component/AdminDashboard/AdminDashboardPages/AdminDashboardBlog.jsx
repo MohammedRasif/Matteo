@@ -216,8 +216,12 @@ const AdminDashboardBlog = () => {
             setReports(allReports)
             setPosts(allPosts)
         } else {
-            const filteredReports = allReports.filter((report) => report.postId.includes(searchInput))
-            const filteredPosts = allPosts.filter((post) => post.postId.includes(searchInput))
+            const filteredReports = allReports.filter((report) =>
+                report.postId.toLowerCase().includes(searchInput.toLowerCase())
+            )
+            const filteredPosts = allPosts.filter((post) =>
+                post.postId.toLowerCase().includes(searchInput.toLowerCase())
+            )
             setReports(filteredReports)
             setPosts(filteredPosts)
         }
@@ -263,30 +267,54 @@ const AdminDashboardBlog = () => {
                 <h1 className="text-2xl font-semibold text-gray-800 py-6">Blog reports</h1>
 
                 {/* Tabs */}
-                <div className="mb-6 flex justify-center">
+                <div className="mb-6 flex justify-between">
+                    <div></div>
                     <div className="inline-flex rounded-md border border-[#0D95DD]">
                         <button
                             onClick={() => setActiveTab("Reports")}
-                            className={`px-4 py-2 text-sm font-medium cursor-pointer ${activeTab === "Reports"
-                                ? "bg-[#0D95DD] text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                                } rounded-l-md`}
+                            className={`px-4 py-2 text-sm font-medium cursor-pointer ${
+                                activeTab === "Reports"
+                                    ? "bg-[#0D95DD] text-white"
+                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            } rounded-l-md`}
                         >
                             Reports
                         </button>
                         <button
                             onClick={() => setActiveTab("Posts")}
-                            className={`px-4 py-2 text-sm font-medium cursor-pointer ${activeTab === "Posts"
-                                ? "bg-[#0D95DD] text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                                } rounded-r-md`}
+                            className={`px-4 py-2 text-sm font-medium cursor-pointer ${
+                                activeTab === "Posts"
+                                    ? "bg-[#0D95DD] text-white"
+                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            } rounded-r-md`}
                         >
                             Posts
                         </button>
                     </div>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Search by post ID"
+                            className="pl-7 pr-3 py-1.5 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 w-56 text-[14px]"
+                            value={searchInput} // Updated to use searchInput
+                            onChange={(e) => setSearchInput(e.target.value)} // Updated to use setSearchInput
+                        />
+                        <svg
+                            className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                        </svg>
+                    </div>
                 </div>
-
-
 
                 {/* Reports Table */}
                 {activeTab === "Reports" && (
@@ -298,9 +326,7 @@ const AdminDashboardBlog = () => {
                                     <th className="px-6 py-3">Report details</th>
                                     <th className="px-6 py-3">Date of creation</th>
                                     <th className="px-6 py-3">Post ID</th>
-                                    <th className="px-6 py-3 flex items-center">
-                                        Status
-                                    </th>
+                                    <th className="px-6 py-3 flex items-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -332,14 +358,9 @@ const AdminDashboardBlog = () => {
                                             </a>
                                         </td>
                                         <td className="px-6 py-4 flex items-center justify-between">
-                                            <span
-                                                className={
-                                                    report.status === "Solved" ? "" : ""
-                                                }
-                                            >
+                                            <span className={report.status === "Solved" ? "" : ""}>
                                                 {report.status}
                                             </span>
-
                                         </td>
                                     </tr>
                                 ))}
