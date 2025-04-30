@@ -132,10 +132,10 @@ const Footer = () => {
                 <div className="max-w-screen-xl mx-auto flex justify-between  py-10   ">
                     <div className="mb-4">
 
-                        <h1 className="custom-heading text-8xl font-bold text-black uppercase">
+                        <h1 className="custom-heading text-8xl font-bold text-gray-600 uppercase">
                             CHASKIX
                         </h1>
-                        <h2 className="text-xl md:text-2xl font-semibold text-gray-400 mt-2 uppercase">
+                        <h2 className="text-xl md:text-2xl font-semibold text-gray-500 mt-2 uppercase">
                             INSPIRED BY THE SPIRIT <br /> OF THE CHASQUIS
                         </h2>
 
@@ -144,8 +144,8 @@ const Footer = () => {
                     {/* Description Section */}
                     <div>
                         <div className="mb-8 max-w-md">
-                            <h1 className="text-8xl font-bold text-black">STUDIOS</h1>
-                            <p className="text-sm md:text-base text-gray-700 leading-relaxed mt-4">
+                            <h1 className="text-8xl font-bold text-gray-600">STUDIOS</h1>
+                            <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-4">
                                 The name "Chaskix" honors the legendary Andean messengers, known for
                                 their strength, agility, and resourcefulness. Just like them, we
                                 deliver fast, reliable, and impactful solutions to connect and empower
@@ -155,7 +155,7 @@ const Footer = () => {
 
                         {/* Email Input Section */}
                         <div className="mb-8">
-                            <p className="text-lg font-semibold text-gray-800 mb-3 uppercase">
+                            <p className="text-lg font-semibold text-gray-600 mb-3 uppercase">
                                 KEEP UP WITH THE TRIBE
                             </p>
                             <div className="flex flex-col md:flex-row items-center">
