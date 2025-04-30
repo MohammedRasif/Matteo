@@ -58,7 +58,7 @@ const Reviews = () => {
                 <div className="relative overflow-hidden">
                     <button
                         onClick={goToPrevious}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-transparent text-gray-500 dark:text-white/70 hover:text-gray-700 dark:hover:text-white transition-colors"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-transparent text-gray-500  hover:text-gray-700  transition-colors"
                         aria-label="Previous review"
                     >
                         <ChevronLeft size={48} />
@@ -66,7 +66,7 @@ const Reviews = () => {
 
                     <button
                         onClick={goToNext}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-transparent text-gray-500 dark:text-white/70 hover:text-gray-700 dark:hover:text-white transition-colors"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-transparent text-gray-500  hover:text-gray-700 ansition-colors"
                         aria-label="Next review"
                     >
                         <ChevronRight size={48} />
@@ -92,11 +92,11 @@ const Reviews = () => {
                                 </div>
 
                                 <div className="max-w-2xl text-center md:text-left">
-                                    <p className="text-xl leading-relaxed text-gray-700 dark:text-white mb-4">
+                                    <p className="text-xl leading-relaxed text-gray-500 mb-4">
                                         "{testimonial.quote}"
                                     </p>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{testimonial.name}</h2>
-                                    <p className="text-lg text-gray-600 dark:text-gray-300">{testimonial.title}</p>
+                                    <h2 className="text-2xl font-bold text-gray-700 ">{testimonial.name}</h2>
+                                    <p className="text-lg text-gray-600 ">{testimonial.title}</p>
                                 </div>
                             </div>
                         ))}
