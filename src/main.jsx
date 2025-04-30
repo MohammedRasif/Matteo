@@ -32,7 +32,8 @@ import Login from './component/Shared/Login.jsx';
 import ConfirmEmail from './component/Shared/ConfirmEmail.jsx';
 import Verification from './component/Shared/Verification.jsx';
 import ConfirmPassword from './component/Shared/ConfirmPassword.jsx';
-import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx';
+// import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx';
+import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx'
 import BuyerDashboardPages from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/BuyerDashboardPages.jsx';
 import CreateOrder from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/CreateOrder.jsx';
 import CreatedOrderedTable from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/CreatedOrderedTable.jsx';

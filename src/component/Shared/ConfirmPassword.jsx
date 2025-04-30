@@ -1,5 +1,5 @@
 import { useState } from "react";
-import login_img from "../image/Mask group.png";
+import login_img from "../image/Maskgroup.png";
 import { LuLockKeyhole } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
@@ -46,7 +46,7 @@ function ConfirmPassword() {
                             <input
                                 id="password"
                                 type="password"
-                                placeholder={passwordFocused ? "" : "Password"}
+                                placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onFocus={() => setPasswordFocused(true)}
@@ -55,9 +55,9 @@ function ConfirmPassword() {
                                 required
                                 aria-required="true"
                             />
-                            {!passwordFocused && (
+                           
                                 <LuLockKeyhole className="text-[#959AA6] absolute bottom-3 left-3" />
-                            )}
+                            
                         </div>
 
                         <div className="relative">

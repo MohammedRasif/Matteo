@@ -1,5 +1,5 @@
 import { useState } from "react";
-import registration_img from '../image/Mask group.png';
+import registration_img from '../image/Maskgroup.png';
 
 import { MdEmail } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -41,7 +41,7 @@ function ConfirmEmail() {
                             <label className="block text-gray-700  mb-2">Email</label>
                             <input
                                 type="email"
-                                placeholder={emailFocused ? "" : "user@gmail.com"}
+                                placeholder="user@gmail.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 onFocus={() => setEmailFocused(true)}
@@ -49,9 +49,9 @@ function ConfirmEmail() {
                                 className="w-full  px-4 py-3 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
                                 required
                             />
-                            {!emailFocused && (
+                          
                                 <MdEmail className="text-[#959AA6] bottom-[58px] left-3 absolute" />
-                            )}
+                            
                         </div>
 
                         <div className="flex justify-center mt-16">

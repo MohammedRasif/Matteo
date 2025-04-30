@@ -1,7 +1,7 @@
 
 
 import { useState } from "react";
-import login_img from '../image/Mask group.png';
+import login_img from '../image/Maskgroup.png';
 import { LuLockKeyhole } from "react-icons/lu";
 import { MdEmail } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -41,7 +41,7 @@ function Login() {
                         <label className="block text-gray-700 mb-2">Email</label>
                         <input
                             type="email"
-                            placeholder={emailFocused ? "" : "user@gmail.com"}
+                            placeholder= "user@gmail.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             onFocus={() => setEmailFocused(true)}
@@ -49,16 +49,16 @@ function Login() {
                             className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
                             required
                         />
-                        {!emailFocused && (
+                        
                             <MdEmail className="text-[#959AA6] bottom-[12px] left-3 absolute" />
-                        )}
+                       
                     </div>
 
                     <div className="relative">
                         <label className="block text-gray-700 mb-2">Password</label>
                         <input
                             type="password"
-                            placeholder={passwordFocused ? "" : "Password"}
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onFocus={() => setPasswordFocused(true)}
@@ -66,9 +66,9 @@ function Login() {
                             className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
                             required
                         />
-                        {!passwordFocused && (
+                        
                             <LuLockKeyhole className="text-[#959AA6] absolute bottom-[14px] left-3" />
-                        )}
+                        
                     </div>
                     <NavLink to="/confirm_email">
                         <p className="text-[16px] text-[#1B97D8] text-end underline">Forget Password?</p>

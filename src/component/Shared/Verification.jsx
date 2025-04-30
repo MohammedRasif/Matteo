@@ -2,7 +2,7 @@
 
 
 import React, { useRef, useState } from 'react';
-import registration_img from '../image/Mask group.png';
+import registration_img from '../image/Maskgroup.png';
 import { NavLink } from 'react-router-dom';
 
 function Verification() {
