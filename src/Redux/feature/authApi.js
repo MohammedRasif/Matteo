@@ -2,6 +2,7 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+
 export const authApi = createApi({
     reducerPath: "authApi",
     baseQuery: fetchBaseQuery({
@@ -16,12 +17,27 @@ export const authApi = createApi({
                 body: data, // ✅ Sending email & password
             }),
         }),
+        login: builder.mutation({
+            query: (data) => ({
+                url: "/users/login/", // ✅ Your API endpoint
+                method: "POST",
+                body: data, // ✅ Sending email & password
+            }),
+        }),
+
+        registerVerification: builder.mutation({
+            query: (data) => ({
+                url: "/users/activate/",
+                method: "POST",
+                body: data,
+            })
+        }),
        
     }),
 });
 
 // ✅ Destructure the auto-generated hook
 export const { 
-    useRegisterMutation,
+    useRegisterMutation,useLoginMutation,useRegisterVerificationMutation
  } = authApi;
 export default authApi;
