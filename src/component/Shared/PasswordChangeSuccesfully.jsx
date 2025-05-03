@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import registration_img from '../image/Mask group.png'; // Adjust path as needed
+import registration_img from '../image/Maskgroup.png'; // Adjust path as needed
 
 function PasswordChangeSuccesfully() {
     return (

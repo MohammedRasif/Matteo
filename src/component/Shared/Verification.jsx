@@ -2,14 +2,20 @@
 
 
 import React, { useRef, useState } from 'react';
-import registration_img from '../image/Mask group.png';
-import { NavLink } from 'react-router-dom';
+import registration_img from '../image/Maskgroup.png';
+import { useNavigate } from 'react-router-dom';
+import { useRegisterVerificationMutation, useResendOtpMutation } from '../../Redux/feature/authApi';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Verification() {
-    const [otp, setOtp] = useState(["", "", "", ""]);
+    const [otp, setOtp] = useState(['', '', '', '']);
     const [focused, setFocused] = useState([false, false, false, false]);
-    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const inputRefs = useRef([]);
+    const [registerVerification, { isLoading: isVerifying }] = useRegisterVerificationMutation();
+    const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+    const navigate = useNavigate();
 
     const handleChange = (index, value) => {
         if (!/^\d?$/.test(value)) return;
@@ -20,7 +26,7 @@ function Verification() {
     };
 
     const handleKeyDown = (index, e) => {
-        if (e.key === "Backspace" && !otp[index] && index > 0) {
+        if (e.key === 'Backspace' && !otp[index] && index > 0) {
             inputRefs.current[index - 1].focus();
         }
     };
@@ -37,46 +43,200 @@ function Verification() {
         setFocused(newFocused);
     };
 
-    const handleSubmit = () => {
-        alert(`Entered OTP: ${otp.join("")}`);
+    const handleSubmit = async () => {
+        const email = localStorage.getItem('userEmail');
+        const otpString = otp.join('');
+
+        // Validate email
+        if (!email) {
+            toast.error('Email not found. Please register again.', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#ff4d4f',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+            navigate('/register');
+            return;
+        }
+
+        // Validate OTP
+        if (otpString.length !== 4 || !/^\d{4}$/.test(otpString)) {
+            toast.error('Please enter a valid 4-digit OTP.', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#ff4d4f',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+            return;
+        }
+
+        try {
+            const res = await registerVerification({ email, otp: otpString }).unwrap();
+            console.log('API Response:', res); // Log for debugging
+            if (!res.access_token) {
+                throw new Error(res.message || 'Invalid OTP');
+            }
+            localStorage.setItem('access_token', res.access_token);
+            localStorage.setItem('refresh_token', res.refresh_token);
+            const successMessage = res.message || 'OTP verified successfully!';
+            toast.success(successMessage, {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#00BF63',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+            navigate('/');
+            setOtp(["", "", "", ""]);// Close modal after 3 seconds
+
+        } catch (error) {
+            console.log('Verification Error:', error); // Log for debugging
+            const errorMessage =
+                error.data?.message ||
+                (error.status === 400 ? 'Invalid or expired OTP.' : 'OTP verification failed!');
+            toast.error(errorMessage, {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#ff4d4f',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+        }
     };
 
-    const handleResendClick = () => {
-        setIsModalOpen(true);
+    const handleResendClick = async () => {
+        const email = localStorage.getItem('userEmail');
+
+        if (!email) {
+            toast.error('Email not found. Please register again.', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#ff4d4f',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+            navigate('/register');
+            return;
+        }
+
+        try {
+            await resendOtp({ email }).unwrap();
+            setIsModalOpen(true);
+            setTimeout(() => {
+                setIsModalOpen(false);
+                setOtp(['', '', '', '']); // Clear OTP inputs
+            }, 2000);
+            // toast.success('New OTP sent to your email.', {
+            //     position: 'top-right',
+            //     autoClose: 3000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     theme: 'colored',
+            //     style: {
+            //         background: '#00BF63',
+            //         color: '#fff',
+            //         fontWeight: 'semibold',
+            //         borderRadius: '8px',
+            //     },
+            //     delay: 100,
+            // });
+        } catch (error) {
+            console.log('Resend OTP Error:', error); // Log for debugging
+            const errorMessage = error.data?.message || 'Failed to resend OTP.';
+            toast.error(errorMessage, {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                    background: '#ff4d4f',
+                    color: '#fff',
+                    fontWeight: 'semibold',
+                    borderRadius: '8px',
+                },
+                delay: 100,
+            });
+        }
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
-    // Handle click on the backdrop to close the modal
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
-            closeModal();
+            setIsModalOpen(false);
         }
     };
 
     return (
-        <div className="flex w-full h-screen justify-between items-center nunito">
+        <div className="flex w-full h-screen lg:flex-row flex-col justify-between items-center nunito">
             {/* Left Side: Image */}
-            <div className="w-1/2 h-screen pr-[24px]">
+            <div className="lg:w-1/2 w-full md:h-screen pr-[24px]">
                 <img
                     src={registration_img}
                     alt="Registration illustration"
-                    className="w-full h-screen p-10"
+                    className="w-full h-screen lg:py-10 lg:pl-16"
                 />
             </div>
 
             {/* Right Side: Verification Form */}
-            <div className="w-1/2">
-                <div className="text-center mb-20">
+            <div className="lg:w-1/2 w-full p-3">
+                <div className="text-center lg:mb-20 mb-10">
                     <h1 className="text-3xl text-[#000000]">ChaskiX</h1>
                     <p className="text-3xl text-[#000000]">Logo here</p>
                 </div>
-                <div className="w-1/2 flex mx-auto bg-[#F8FCFF] shadow-md rounded px-10 py-20">
-                    <div className="text-center space-y-8">
-                        {/* Header Text */}
-                        <p className="text-lg text-[#012939] font-semibold">
+                <div className="justify-center flex mx-auto rounded md:px-10 px-4 lg:py-20 py-4">
+                    <div className="text-center lx:space-y-8 space-y-4">
+                        <p className="md:text-lg text-sm text-[#012939] font-semibold">
                             We have sent you an activation code.
                         </p>
                         <p className="text-sm text-gray-600">
@@ -111,32 +271,33 @@ function Verification() {
                             If you didn’t receive a code!{' '}
                             <span
                                 onClick={handleResendClick}
-                                className="text-blue-500 cursor-pointer underline"
+                                className={`text-blue-500 cursor-pointer underline ${isResending ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 click here..
                             </span>
                         </p>
 
                         {/* Confirm Button */}
-                        <NavLink to="/confirm_password">
-                            <button
-                                onClick={handleSubmit}
-                                className="bg-[#1B97D8] text-[#F6F8FA] px-6 py-2 rounded-[8px] text-[16px] font-bold w-[123px] cursor-pointer"
-                            >
-                                Confirm
-                            </button>
-                        </NavLink>
+                        <button
+                            onClick={handleSubmit}
+                            disabled={isVerifying}
+                            className={`bg-[#1B97D8] text-[#F6F8FA] px-6 py-2 rounded-[8px] text-[16px] font-bold w-[123px] cursor-pointer ${isVerifying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                            {isVerifying ? 'Verifying...' : 'Confirm'}
+                        </button>
                     </div>
+
+                    <ToastContainer />
                 </div>
             </div>
 
             {/* Modal for Resend Link */}
             {isModalOpen && (
                 <div
-                    className="fixed inset-0 flex items-center justify-center  backdrop-blur bg-opacity-50 z-50 "
-                    onClick={handleBackdropClick} // Add click handler to backdrop
+                    className="fixed inset-0 flex items-center justify-center backdrop-blur bg-opacity-50 z-50"
+                    onClick={handleBackdropClick}
                 >
-                    <div className="bg-white rounded-lg p-6 w-96 shadow-lg space-y-8 py-10 ">
+                    <div className="bg-white rounded-lg p-6 w-96 shadow-lg space-y-8 py-10">
                         <div className="flex h-16 w-16 items-center justify-center rounded-full mx-auto bg-[#1B97D8] text-white">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +317,6 @@ function Verification() {
                         <p className="text-[#012939] text-[20px] font-medium text-center">
                             Code has been sent again
                         </p>
-
                     </div>
                 </div>
             )}
@@ -165,3 +325,5 @@ function Verification() {
 }
 
 export default Verification;
+
+
