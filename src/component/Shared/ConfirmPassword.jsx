@@ -173,7 +173,7 @@ function ConfirmPassword() {
             const response = await confirmPasswordMutation(passwordData).unwrap();
 
             showToast("Password updated successfully!", "success");
-            
+
             setTimeout(() => navigate("/login"), 1500);
         } catch (error) {
             const errorMessage = error?.data?.message || "Failed to update password. Please try again.";
@@ -181,6 +181,9 @@ function ConfirmPassword() {
             console.error("Password update error:", error);
         }
     };
+
+
+    
 
     return (
         <div className="flex items-center lg:flex-row flex-col justify-between w-full min-h-screen gap-10 nunito bg-gray-50">
