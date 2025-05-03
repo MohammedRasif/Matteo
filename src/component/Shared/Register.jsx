@@ -237,15 +237,15 @@ function Register() {
 
     return (
         <div className="flex items-center justify-between lg:flex-row flex-col w-full md:min-h-screen gap-10 nunito">
-            <ToastContainer position="top-right" autoClose={3000} />
-            <div className="lg:w-1/2 w-full h-screen">
+            <ToastContainer  autoClose={3000} />
+            <div className="lg:w-1/2 w-full lg:h-screen">
                 <img
                     src={registrationImage}
                     alt="Registration illustration"
-                    className="w-full h-screen py-10"
+                    className="w-full h-screen md:py-10 p-6 pl- "
                 />
             </div>
-            <div className="lg:w-1/2 w-full px-10 lg:px-40">
+            <div className="lg:w-1/2 w-full lg:px-40 p-6">
                 <div className="text-center mb-6">
                     <h1 className="text-3xl text-[#000000]">ChaskiX</h1>
                 </div>
@@ -345,6 +345,7 @@ function Register() {
                         </NavLink>
                     </p>
                 </form>
+            
             </div>
         </div>
     );

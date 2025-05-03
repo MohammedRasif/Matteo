@@ -206,7 +206,7 @@ function Login() {
         <img
           src={login_img}
           alt="Registration illustration"
-          className="w-full h-screen md:py-10 p-6"
+          className="w-full h-screen  lg:py-10 p-6"
         />
       </div>
       <div className="lg:w-1/2 w-full lg:px-40 p-6">

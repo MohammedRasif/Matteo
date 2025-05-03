@@ -49,6 +49,7 @@ import UserDashboardChats from './component/UsersDashboard/UserDashboardPages/Us
 import UserDashboardAiChat from './component/UsersDashboard/UserDashboardPages/UserDashboardAiChat.jsx';
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
+import ConfirmPasswordVerification from './component/Shared/ConfirmPasswordVerification.jsx';
 
 const router = createBrowserRouter([
   {
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
   {
     path: '/password_change_succesfull',
     element: <PasswordChangeSuccesfully />
+  },
+  {
+    path: "/confirm_password_verification",
+    element: <ConfirmPasswordVerification />
   },
 
   // ----------user dashboard---------
@@ -226,6 +231,7 @@ const router = createBrowserRouter([
         path: "/Admin_Dashboard/withdrawal",
         element: <AdminDashboardWithdrawal />
       },
+      
     ]
   }
 
