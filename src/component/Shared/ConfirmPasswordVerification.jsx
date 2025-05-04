@@ -41,6 +41,16 @@ function ConfirmPasswordVerification() {
         newFocused[index] = false;
         setFocused(newFocused);
     };
+    const handlePaste = (e) => {
+        const pasteData = e.clipboardData.getData('text').trim();
+        if (!/^\d{4}$/.test(pasteData)) return;
+
+        const newOtp = pasteData.split('');
+        setOtp(newOtp);
+
+        const lastIndex = newOtp.length - 1;
+        inputRefs.current[lastIndex]?.focus();
+    };
 
     const handleSubmit = async () => {
         const email = localStorage.getItem("userEmail");
@@ -248,15 +258,18 @@ function ConfirmPasswordVerification() {
                                     key={index}
                                     type="text"
                                     maxLength="1"
+                                    aria-label={`OTP digit ${index + 1}`}
                                     placeholder={focused[index] || digit ? '' : '*'}
                                     value={digit}
                                     onChange={(e) => handleChange(index, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(index, e)}
                                     onFocus={() => handleFocus(index)}
                                     onBlur={() => handleBlur(index)}
+                                    onPaste={handlePaste}
                                     ref={(el) => (inputRefs.current[index] = el)}
                                     className="w-12 h-12 text-center text-xl border border-gray-300 rounded-full pt-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
+                                
                             ))}
                         </div>
 

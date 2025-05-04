@@ -59,7 +59,7 @@ function ConfirmEmail() {
         <img
           src={registration_img}
           alt="Registration illustration"
-          className="w-full h-screen lg:py-10 p-6 lg:pl-16"
+          className="w-full h-screen lg:py-10 p-6 "
         />
       </div>
       <div className="lg:w-1/2 w-full lg:px-40 p-6">
@@ -83,7 +83,7 @@ function ConfirmEmail() {
                 onFocus={() => setEmailFocused(true)}
                 onBlur={() => setEmailFocused(email !== "")}
                 className="w-full px-4 py-3 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
-                required
+                
               />
               <MdEmail className="text-[#959AA6] bottom-[58px] left-3 absolute" />
             </div>

@@ -84,7 +84,7 @@ function ConfirmPassword() {
                 <img
                     src={login_img}
                     alt="Password reset illustration"
-                    className="w-full h-full object-cover p-10 lg:pl-16"
+                    className="w-full h-full  lg:py-10 p-6"
                 />
             </div>
 
@@ -108,7 +108,7 @@ function ConfirmPassword() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full px-4 py-3 border bg-[#F8FCFF] border-[#5C91B1] rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#1B97D8] transition duration-200"
-                                required
+                            
                                 disabled={isConfirming}
                             />
                             <LuLockKeyhole className="absolute top-12 left-3 text-[#959AA6]" />
@@ -126,7 +126,7 @@ function ConfirmPassword() {
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 className="w-full px-4 py-3 border bg-[#F8FCFF] border-[#5C91B1] rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#1B97D8] transition duration-200"
-                                required
+                              
                                 disabled={isConfirming}
                             />
                             <LuLockKeyhole className="absolute top-12 left-3 text-[#959AA6]" />
