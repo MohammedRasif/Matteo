@@ -59,21 +59,21 @@ function ConfirmEmail() {
         <img
           src={registration_img}
           alt="Registration illustration"
-          className="w-full h-screen lg:py-10 p-6 "
+          className="w-full lg:h-screen lg:py-10 p-6 "
         />
       </div>
       <div className="lg:w-1/2 w-full lg:px-40 p-6">
-        <div className="text-center mb-20">
+        <div className="text-center lg:mb-20 mb-5">
           <h1 className="text-3xl text-[#000000]">ChaskiX</h1>
           <p className="text-3xl text-[#000000]">Logo here</p>
         </div>
 
-        <div className="rounded px-10 py-20">
-          <h2 className="text-[28px] font-medium text-center text-[#012939] mb-6">
+        <div className="rounded lg:px-10 lg:py-20">
+          <h2 className="text-[28px] font-medium text-center text-[#012939] lg:mb-6">
             Confirm email
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative py-10">
+            <div className="relative lg:py-10">
               <label className="block text-gray-700 mb-2">Email</label>
               <input
                 type="email"
@@ -85,7 +85,7 @@ function ConfirmEmail() {
                 className="w-full px-4 py-3 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
                 
               />
-              <MdEmail className="text-[#959AA6] bottom-[58px] left-3 absolute" />
+              <MdEmail className="text-[#959AA6] lg:bottom-[58px] bottom-4 left-3 absolute" />
             </div>
 
             <div className="flex justify-center mt-16">

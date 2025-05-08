@@ -95,7 +95,7 @@ function Register() {
                 <img
                     src={registrationImage}
                     alt="Registration illustration"
-                    className="w-full h-screen md:py-10 p-6 pl- "
+                    className="w-full lg:h-screen md:py-10 p-6 pl- "
                 />
             </div>
             <div className="lg:w-1/2 w-full lg:px-40 p-6">
