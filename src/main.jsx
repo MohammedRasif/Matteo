@@ -50,6 +50,9 @@ import UserDashboardAiChat from './component/UsersDashboard/UserDashboardPages/U
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
 import ConfirmPasswordVerification from './component/Shared/ConfirmPasswordVerification.jsx';
+import PrivateRoute from './Root/PrivetRoute.jsx';
+import NewPasswordRoute from './Root/NewPasswordRoute.jsx';
+import VerificationRoute from './Root/VerificationRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -63,7 +66,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/pricing",
-        element: <Pricing />,
+        element: <Pricing /> ,
       },
       {
         path: "/browse_projects",
@@ -100,7 +103,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/confirm_password',
-    element: <ConfirmPassword />
+    element: <NewPasswordRoute><ConfirmPassword /></NewPasswordRoute>
   },
   {
     path: '/password_change_succesfull',
@@ -108,7 +111,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/confirm_password_verification",
-    element: <ConfirmPasswordVerification />
+    element: <VerificationRoute><ConfirmPasswordVerification /></VerificationRoute> 
   },
 
   // ----------user dashboard---------
@@ -137,15 +140,15 @@ const router = createBrowserRouter([
       },
       {
         path: "userSupport",
-        element: <UserSupport></UserSupport>
+        element: <UserSupport/>
       },
       {
         path: "sellerDashboardPages",
-        element: <BuyerDashboardPages></BuyerDashboardPages>
+        element: <BuyerDashboardPages/>
       },
       {
         path: "createBuyerOrder",
-        element: <CreateOrder></CreateOrder>
+        element: <CreateOrder/>
       },
 
       {
