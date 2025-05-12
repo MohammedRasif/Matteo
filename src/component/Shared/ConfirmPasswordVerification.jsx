@@ -1,55 +1,32 @@
 
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import registration_img from '../image/Maskgroup.png';
 import { useNavigate } from 'react-router-dom';
 import { useRegisterVerificationMutation, useResendOtpMutation } from '../../Redux/feature/authApi';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
-function Verification() {
-    const [otp, setOtp] = useState(['', '', '', '']);
+function ConfirmPasswordVerification() {
+    const [otp, setOtp] = useState(["", "", "", ""]);
     const [focused, setFocused] = useState([false, false, false, false]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
     const inputRefs = useRef([]);
-    const [registerVerification, { isLoading: isVerifying }] = useRegisterVerificationMutation();
-    const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+    const [registerVerification, { isLoading }] = useRegisterVerificationMutation();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        inputRefs.current[0]?.focus();
-    }, []);
-
-    const showToast = (type, message, bg = '#ff4d4f') => {
-        toast[type](message, {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: 'colored',
-            style: {
-                background: bg,
-                color: '#fff',
-                fontWeight: 'semibold',
-                borderRadius: '8px',
-            },
-            delay: 100,
-        });
-    };
+    const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
 
     const handleChange = (index, value) => {
         if (!/^\d?$/.test(value)) return;
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
-        if (value && index < 3) inputRefs.current[index + 1]?.focus();
+        if (value && index < 3) inputRefs.current[index + 1].focus();
     };
 
     const handleKeyDown = (index, e) => {
-        if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            inputRefs.current[index - 1]?.focus();
+        if (e.key === "Backspace" && !otp[index] && index > 0) {
+            inputRefs.current[index - 1].focus();
         }
     };
 
@@ -64,7 +41,6 @@ function Verification() {
         newFocused[index] = false;
         setFocused(newFocused);
     };
-
     const handlePaste = (e) => {
         const pasteData = e.clipboardData.getData('text').trim();
         if (!/^\d{4}$/.test(pasteData)) return;
@@ -76,73 +52,178 @@ function Verification() {
         inputRefs.current[lastIndex]?.focus();
     };
 
-    
-
     const handleSubmit = async () => {
-        const email = localStorage.getItem('userEmail');
-        const otpString = otp.join('');
+        const email = localStorage.getItem("userEmail");
+        const otpString = otp.join(""); // Concatenate OTP digits (e.g., ["5", "3", "5", "9"] → "5359")
 
         if (!email) {
-            showToast('error', 'Email not found. Please register again.');
-            navigate('/register');
+            toast.error("Email not found. Please register again.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#ff4d4f",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
             return;
         }
 
         if (otpString.length !== 4 || !/^\d{4}$/.test(otpString)) {
-            showToast('error', 'Please enter a valid 4-digit OTP.');
+            toast.error("Please enter a valid 4-digit OTP.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#ff4d4f",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
             return;
         }
 
         try {
             const res = await registerVerification({ email, otp: otpString }).unwrap();
-            if (!res.access_token) throw new Error(res.message || 'Invalid OTP');
-
-            localStorage.setItem('access_token', res.access_token);
-            localStorage.setItem('refresh_token', res.refresh_token);
-
-            showToast('success', res.message || 'OTP verified successfully!', '#00BF63');
-            navigate('/');
-            setOtp(["", "", "", ""]);
+            console.log("backendResponse", res);
+            if (res.access_token) {
+                localStorage.setItem("access_token", res.access_token);
+                localStorage.setItem("refresh_token", res.refresh_token);
+                console.log("Access Token:", res.access_token);
+                console.log("Refresh Token:", res.refresh_token);
+            } else {
+                console.warn("No access token found in response");
+            }
+            const successMessage = res.message || "OTP verified successfully!";
+            console.log("Success:", successMessage);
+            toast.success(successMessage, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#00BF63",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
+            navigate("/confirm_password");
         } catch (error) {
-            console.log('Verification Error:', error);
-            const errorMessage = error.data?.message || 'OTP verification failed!';
-            showToast('error', errorMessage);
+            const errorMessage = error.data?.message || "OTP verification failed!";
+            console.log("Error:", errorMessage);
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#ff4d4f",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
         }
     };
 
     const handleResendClick = async () => {
-        const email = localStorage.getItem('userEmail');
+        const email = localStorage.getItem("userEmail");
 
         if (!email) {
-            showToast('error', 'Email not found. Please register again.');
-            navigate('/register');
+            toast.error("Email not found. Please register again.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#ff4d4f",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
             return;
         }
 
         try {
-            await resendOtp({ email }).unwrap();
+            const res = await resendOtp({ email }).unwrap();
             setIsModalOpen(true);
+            toast.success(res.message || "OTP resent successfully!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#00BF63",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
             setTimeout(() => {
                 setIsModalOpen(false);
-                setOtp(['', '', '', '']);
-            }, 2000);
+            }, 3000);
+            
+            setOtp(["", "", "", ""]);// Close modal after 3 seconds
         } catch (error) {
-            console.log('Resend OTP Error:', error);
-            const errorMessage = error.data?.message || 'Failed to resend OTP.';
-            showToast('error', errorMessage);
+            const errorMessage = error.data?.message || "Failed to resend OTP!";
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                style: {
+                    background: "#ff4d4f",
+                    color: "#fff",
+                    fontWeight: "semibold",
+                    borderRadius: "8px",
+                },
+            });
+            setIsModalOpen(false); // Close modal immediately on error
         }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
     };
 
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
-            setIsModalOpen(false);
+            closeModal();
         }
     };
 
     return (
         <div className="flex w-full h-screen lg:flex-row flex-col justify-between items-center nunito">
             {/* Left Side: Image */}
-            <div className="lg:w-1/2 w-full md:h-screen pr-[24px]">
+            <div className="lg:w-1/2 w-full md:h-screen pr-[24px] ">
                 <img
                     src={registration_img}
                     alt="Registration illustration"
@@ -158,6 +239,7 @@ function Verification() {
                 </div>
                 <div className="justify-center flex mx-auto rounded md:px-10 px-4 lg:py-20 py-4">
                     <div className="text-center lx:space-y-8 space-y-4">
+                        {/* Header Text */}
                         <p className="md:text-lg text-sm text-[#012939] font-semibold">
                             We have sent you an activation code.
                         </p>
@@ -174,7 +256,7 @@ function Verification() {
                             {otp.map((digit, index) => (
                                 <input
                                     key={index}
-                                    type="tel"
+                                    type="text"
                                     maxLength="1"
                                     aria-label={`OTP digit ${index + 1}`}
                                     placeholder={focused[index] || digit ? '' : '*'}
@@ -187,6 +269,7 @@ function Verification() {
                                     ref={(el) => (inputRefs.current[index] = el)}
                                     className="w-12 h-12 text-center text-xl border border-gray-300 rounded-full pt-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
+                                
                             ))}
                         </div>
 
@@ -204,17 +287,17 @@ function Verification() {
                         {/* Confirm Button */}
                         <button
                             onClick={handleSubmit}
-                            disabled={isVerifying}
-                            className={`bg-[#1B97D8] text-[#F6F8FA] px-6 py-2 rounded-[8px] text-[16px] font-bold w-[123px] cursor-pointer ${isVerifying ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isLoading}
+                            className={`bg-[#1B97D8] text-[#F6F8FA] px-6 py-2 rounded-[8px] text-[16px] font-bold w-[123px] cursor-pointer ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            {isVerifying ? 'Verifying...' : 'Confirm'}
+                            {isLoading ? 'Verifying...' : 'Confirm'}
                         </button>
                     </div>
-                    <ToastContainer />
+                    <ToastContainer/>
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* Modal for Resend Link */}
             {isModalOpen && (
                 <div
                     className="fixed inset-0 flex items-center justify-center backdrop-blur bg-opacity-50 z-50"
@@ -247,7 +330,4 @@ function Verification() {
     );
 }
 
-export default Verification;
-
-
-
+export default ConfirmPasswordVerification;

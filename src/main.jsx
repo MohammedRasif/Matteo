@@ -32,7 +32,8 @@ import Login from './component/Shared/Login.jsx';
 import ConfirmEmail from './component/Shared/ConfirmEmail.jsx';
 import Verification from './component/Shared/Verification.jsx';
 import ConfirmPassword from './component/Shared/ConfirmPassword.jsx';
-import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx';
+// import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx';
+import PasswordChangeSuccesfully from './component/Shared/PasswordChangeSuccesfully.jsx'
 import BuyerDashboardPages from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/BuyerDashboardPages.jsx';
 import CreateOrder from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/CreateOrder.jsx';
 import CreatedOrderedTable from './component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/CreatedOrderedTable.jsx';
@@ -48,6 +49,10 @@ import UserDashboardChats from './component/UsersDashboard/UserDashboardPages/Us
 import UserDashboardAiChat from './component/UsersDashboard/UserDashboardPages/UserDashboardAiChat.jsx';
 import { Provider } from 'react-redux';
 import store from './Redux/store.js';
+import ConfirmPasswordVerification from './component/Shared/ConfirmPasswordVerification.jsx';
+import PrivateRoute from './Root/PrivetRoute.jsx';
+import NewPasswordRoute from './Root/NewPasswordRoute.jsx';
+import VerificationRoute from './Root/VerificationRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -61,7 +66,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/pricing",
-        element: <Pricing />,
+        element: <Pricing /> ,
       },
       {
         path: "/browse_projects",
@@ -98,11 +103,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/confirm_password',
-    element: <ConfirmPassword />
+    element: <NewPasswordRoute><ConfirmPassword /></NewPasswordRoute>
   },
   {
     path: '/password_change_succesfull',
     element: <PasswordChangeSuccesfully />
+  },
+  {
+    path: "/confirm_password_verification",
+    element: <VerificationRoute><ConfirmPasswordVerification /></VerificationRoute> 
   },
 
   // ----------user dashboard---------
@@ -131,15 +140,15 @@ const router = createBrowserRouter([
       },
       {
         path: "userSupport",
-        element: <UserSupport></UserSupport>
+        element: <UserSupport/>
       },
       {
         path: "sellerDashboardPages",
-        element: <BuyerDashboardPages></BuyerDashboardPages>
+        element: <BuyerDashboardPages/>
       },
       {
         path: "createBuyerOrder",
-        element: <CreateOrder></CreateOrder>
+        element: <CreateOrder/>
       },
 
       {
@@ -225,6 +234,7 @@ const router = createBrowserRouter([
         path: "/Admin_Dashboard/withdrawal",
         element: <AdminDashboardWithdrawal />
       },
+      
     ]
   }
 
