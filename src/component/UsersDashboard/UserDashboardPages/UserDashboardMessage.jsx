@@ -104,6 +104,7 @@ const UserDashboardMessage = () => {
 
                 {/* Right Panel: Default Message or Outlet */}
                 <div className="w-3/4 bg-white  rounded-r-lg">
+                
                     {isBaseRoute ? (
                         <div className="h-full flex items-center justify-center">
                             <div className="text-center">
