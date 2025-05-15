@@ -92,6 +92,7 @@ function Verification() {
             showToast('error', 'Please enter a valid 4-digit OTP.');
             return;
         }
+        
 
         try {
             const res = await registerVerification({ email, otp: otpString }).unwrap();
