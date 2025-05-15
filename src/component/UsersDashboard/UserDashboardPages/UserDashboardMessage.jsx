@@ -49,7 +49,7 @@ const UserDashboardMessage = () => {
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-3">Messages</h1>
             <div className="flex" style={{ height: "80vh" }}>
                 {/* User List Sidebar */}
-                <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">
+                <div className="w-1/4 rounded-l-lg bg-gray-50  border-r border-gray-200  flex flex-col">
                     <div className="m-3">
                         <input
                             type="text"
@@ -81,7 +81,7 @@ const UserDashboardMessage = () => {
                             <div
                                 key={user.id}
                                 onClick={() => handleUserClick(user)}
-                                className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#252c3b] text-gray-700 dark:text-gray-200 transition-colors border-b border-gray-200 ${selectedUserId === user.id ? "bg-blue-100 dark:bg-[#2F80A9]" : ""
+                                className={`flex items-center p-3 cursor-pointer hover:bg-gray-100  text-gray-700  transition-colors border-b border-gray-200 ${selectedUserId === user.id ? "bg-blue-100 dark:bg-[#2F80A9]" : ""
                                     }`}
                             >
                                 <img
@@ -103,11 +103,12 @@ const UserDashboardMessage = () => {
                 </div>
 
                 {/* Right Panel: Default Message or Outlet */}
-                <div className="w-3/4 bg-white dark:bg-[#252c3b] rounded-r-lg">
+                <div className="w-3/4 bg-white  rounded-r-lg">
+                
                     {isBaseRoute ? (
                         <div className="h-full flex items-center justify-center">
                             <div className="text-center">
-                                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
+                                <h2 className="text-xl font-semibold text-gray-600 ">
                                     Select a Chat to Start Messaging
                                 </h2>
                                 <p className="text-gray-500 dark:text-gray-400 mt-2">

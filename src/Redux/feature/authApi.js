@@ -42,10 +42,10 @@ export const authApi = createApi({
         }),
 
         forgetPassword: builder.mutation({
-            query: (data) => ({
+            query: (email) => ({
                 url: "/users/password-reset-request/",
                 method: "POST",
-                body: data,
+                body: email,
             })
         }),
         forgetPasswordVerification: builder.mutation({

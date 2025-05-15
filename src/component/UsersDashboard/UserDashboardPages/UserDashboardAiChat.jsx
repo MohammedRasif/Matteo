@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState, useRef, useEffect } from "react"
 import { PaperclipIcon, SendIcon } from "lucide-react"
@@ -145,7 +145,7 @@ const UserDashboardAiChat = () => {
                                 <VscRobot className="h-5 w-5" />
                             </div>
                             <div
-                                className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm max-w-[70%]"
+                                className="px-5 py-4 rounded-lg bg-gray-200  text-black  lg:text-[16px] shadow-sm max-w-[70%]"
                             >
                                 <ReactMarkdown>
                                     Hello! I'm your AI assistant. How can I help you today?
@@ -197,7 +197,7 @@ const UserDashboardAiChat = () => {
                                         <VscRobot className="h-5 w-5 text-white" />
                                     </div>
                                     <div
-                                        className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 lg:text-[16px] shadow-sm max-w-[70%]"
+                                        className="px-5 py-4 rounded-lg bg-gray-200  text-black lg:text-[16px] shadow-sm max-w-[70%]"
                                     >
                                         <ReactMarkdown>{message.text}</ReactMarkdown>
                                     </div>
@@ -213,7 +213,7 @@ const UserDashboardAiChat = () => {
                                 <div className="h-10 w-10 rounded-full bg-[#2F80A9] flex items-center justify-center">
                                     <VscRobot className="h-5 w-5 text-white" />
                                 </div>
-                                <div className="px-5 py-4 rounded-lg bg-gray-200 dark:bg-[#1E232E] text-black dark:text-gray-200 shadow-sm">
+                                <div className="px-5 py-4 rounded-lg bg-gray-200  text-black shadow-sm">
                                     <div className="flex space-x-1">
                                         <div
                                             className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"

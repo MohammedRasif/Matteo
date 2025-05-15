@@ -35,6 +35,7 @@ function Login() {
           background: "#ff4d4f",
           color: "#fff",
           fontWeight: "semibold",
+          
           borderRadius: "8px",
         },
       });

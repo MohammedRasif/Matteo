@@ -79,22 +79,22 @@ const UserDashboardChats = () => {
 
     if (!user || !user.user) {
         return (
-            <div className="rounded-r-lg bg-[#F5F7FB] dark:bg-[#252c3b] h-full flex flex-col items-center justify-center">
+            <div className="rounded-r-lg bg-[#F5F7FB]  h-full flex flex-col items-center justify-center">
                 <h1 className="text-lg text-gray-800 dark:text-gray-100">Select a user to start chatting</h1>
             </div>
         )
     }
 
     return (
-        <div className="rounded-r-lg bg-[#F5F7FB] dark:bg-[#252c3b] h-full flex flex-col">
+        <div className="rounded-r-lg bg-[#F5F7FB]  h-full flex flex-col">
             {/* Header Section */}
-            <div className="flex items-center space-x-4 p-3 border-b border-gray-200 rounded-tr-lg bg-white dark:bg-[#252c3b]">
+            <div className="flex items-center space-x-4 p-3 border-b border-gray-200 rounded-tr-lg bg-white ">
                 <img
                     src={user.user.image}
                     className="h-[46px] w-[46px] rounded-full object-cover"
                     alt={user.user.name}
                 />
-                <h1 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                <h1 className="text-lg font-semibold text-gray-400 ">
                     {user.user.name}
                 </h1>
             </div>
@@ -131,7 +131,7 @@ const UserDashboardChats = () => {
                                     className="h-8 w-8 rounded-full object-cover"
                                     alt={user.user.name}
                                 />
-                                <div className="max-w-xs bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-md font-medium shadow-sm">
+                                <div className="max-w-xs bg-white  text-gray-800  rounded-lg p-3 text-md font-medium shadow-sm">
                                     <h1>{message.text}</h1>
                                 </div>
                             </div>
