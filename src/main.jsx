@@ -212,7 +212,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin_Dashboard/order",
-        element: <AdminDashboardOrder />
+        element: <AdminDashboardOrders />
       },
       {
         path: "/Admin_Dashboard/blog",
@@ -228,7 +228,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/Admin_Dashboard/orders",
-        element: <AdminDashboardOrders />
+        element:  <AdminDashboardOrder />
       },
       {
         path: "/Admin_Dashboard/withdrawal",
