@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { VscRobot } from "react-icons/vsc";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useGetChatListQuery } from "../../../Redux/feature/ChatSlice";
@@ -82,7 +82,23 @@ const AdminDashboardMessage = () => {
         "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529168/samples/people/kitchen-bar.jpg",
     },
   ];
+  const ws = useRef(null);
+  const token = localStorage.getItem("access_token");
+  useEffect(() => {
+    ws.current = new WebSocket(
+      `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
+    );
 
+    ws.current.onopen = () => console.log("✅ WebSocket connected");
+    ws.current.onclose = () => console.log("🔌 WebSocket closed");
+    ws.current.onerror = (err) => console.error("❌ WebSocket error", err);
+
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+  }, []);
   useEffect(() => {
     if (data) {
       console.log("User chat list:", data);
@@ -168,7 +184,7 @@ const AdminDashboardMessage = () => {
                 }`}
               >
                 <img
-                  src={user.image}
+                  src={user.image || user.user_image}
                   alt={user.name}
                   className="w-8 h-8 rounded-full mr-3 object-cover"
                 />

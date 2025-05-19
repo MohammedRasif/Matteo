@@ -1,8 +1,26 @@
 import { Outlet } from "react-router-dom";
 import AdminDashboardNavbar from "../AdminDashboardNavbar.jsx/AdminDashboardNavbar";
 import AdminDashboardSidebar from "../AdminDashboardSidebar/AdminDashboardSidebar";
+import { useEffect, useRef } from "react";
 
 const AdminDashboardLayout = () => {
+  const ws = useRef(null);
+  const token = localStorage.getItem("access_token");
+  useEffect(() => {
+    ws.current = new WebSocket(
+      `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
+    );
+
+    ws.current.onopen = () => console.log("✅ WebSocket connected");
+    ws.current.onclose = () => console.log("🔌 WebSocket closed");
+    ws.current.onerror = (err) => console.error("❌ WebSocket error", err);
+
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+  }, []);
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -33,6 +51,6 @@ const AdminDashboardLayout = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AdminDashboardLayout;
