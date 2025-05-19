@@ -6,7 +6,7 @@ const useSocket = () => {
   useEffect(() => {
     // Connect to your WebSocket URL
     ws.current = new WebSocket(
-      "ws://192.168.10.35:8000/ws/api/v1/notification/subscribe/"
+      `http://192.168.10.35:8000/ws/api/v1/notification/subscribe/`
     );
 
     ws.current.onopen = () => {
