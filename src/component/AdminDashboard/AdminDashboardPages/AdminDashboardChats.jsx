@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from "react";
 import { PaperclipIcon, SendIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { useGetChatHistoryQuery } from "../../../Redux/feature/ChatSlice";
 
 const AdminDashboardChats = () => {
   const location = useLocation();
   const user = location.state;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -17,10 +18,49 @@ const AdminDashboardChats = () => {
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
 
-  useEffect(() => {
-    if (!user || !user.user?.id) return;
+  // Fetch chat history
+  const {
+    data: chatHistory,
+    isLoading,
+    isSuccess,
+    error,
+  } = useGetChatHistoryQuery(user?.user?.id, {
+    skip: !user?.user?.id, // Avoid calling before user is ready
+  });
 
-    // WebSocket connection
+  // Set initial messages from chat history
+  useEffect(() => {
+    if (isSuccess && chatHistory) {
+      console.log("📚 Chat history fetched:", chatHistory);
+      const normalizedHistory = chatHistory.map((msg) => ({
+        id: msg.id || null,
+        sender: msg.sender || null,
+        receiver: msg.receiver || null,
+        message: msg.message || "",
+        timestamp: msg.timestamp || "",
+        reply_to: msg.reply_to || null,
+        attachment_name: msg.attachment_name || "",
+        is_read: msg.is_read || false,
+        is_deleted: msg.is_deleted || false,
+        is_edited: msg.is_edited || false,
+        is_reported: msg.is_reported || false,
+        attachment_data: msg.attachment_data || "",
+        isUser: msg.sender === user.user.id,
+      }));
+      setMessages(normalizedHistory);
+    }
+    if (error) {
+      console.error("❌ Error fetching chat history:", error);
+    }
+  }, [isSuccess, chatHistory, error, user?.user?.id]);
+
+  // WebSocket setup
+  useEffect(() => {
+    if (!user || !user.user?.id) {
+      console.log("🚫 No user or user ID found");
+      return;
+    }
+
     ws.current = new WebSocket(
       `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
     );
@@ -30,48 +70,50 @@ const AdminDashboardChats = () => {
     ws.current.onmessage = (event) => {
       try {
         const raw = JSON.parse(event.data);
-        const incoming = raw.message ?? raw;
+        console.log("📥 Raw WebSocket data:", raw);
+        const incoming = raw.message || raw;
+        console.log("📩 Received message:", incoming);
 
         const normalizedMessage = {
-          id: incoming.id ?? null,
-          sender: incoming.sender ?? null,
-          receiver: incoming.receiver ?? null,
-          message: incoming.message ?? "",
-          timestamp: incoming.timestamp ?? "",
-          reply_to: incoming.reply_to ?? null,
-          attachment_name: incoming.attachment_name ?? "",
-          is_read: incoming.is_read ?? false,
-          is_deleted: incoming.is_deleted ?? false,
-          is_edited: incoming.is_edited ?? false,
-          is_reported: incoming.is_reported ?? false,
-          attachment: incoming.attachment ?? "",
-          isUser: incoming.sender !== user.user.id,
+          id: incoming.id || null,
+          sender: incoming.sender || null,
+          receiver: incoming.receiver || null,
+          message: incoming.message || "",
+          timestamp: incoming.timestamp || "",
+          reply_to: incoming.reply_to || null,
+          attachment_name: incoming.attachment_name || "",
+          is_read: incoming.is_read || false,
+          is_deleted: incoming.is_deleted || false,
+          is_edited: incoming.is_edited || false,
+          is_reported: incoming.is_reported || false,
+          attachment_data: incoming.attachment_data || "",
+          isUser: !(incoming.sender === user.user.id), // Fixed sender comparison
         };
 
         setMessages((prev) => [...prev, normalizedMessage]);
       } catch (error) {
-        console.error("❌ Error parsing message", error);
+        console.error("❌ Error parsing message:", error);
       }
     };
 
-    ws.current.onerror = (err) => console.error("❌ WebSocket error", err);
+    ws.current.onerror = (err) => console.error("❌ WebSocket error:", err);
     ws.current.onclose = () => console.log("🔌 WebSocket closed");
 
     return () => ws.current?.close();
   }, [user?.user?.id]);
 
   useEffect(() => {
-    console.log(messages);
-
+    console.log("📜 Updated messages state:", messages);
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleImageUpload = (e) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
+      const fileUrl = URL.createObjectURL(file);
+      setSelectedFile(fileUrl);
       setSelectedFileName(file.name);
+      console.log("📎 File selected:", file.name);
     }
   };
 
@@ -79,62 +121,90 @@ const AdminDashboardChats = () => {
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (error) => reject(error);
+      reader.onload = () => {
+        const base64 = reader.result.split(",")[1]; // Raw Base64 without prefix
+        console.log("📄 File converted to Base64, length:", base64.length);
+        resolve(base64);
+      };
+      reader.onerror = (error) => {
+        console.error("❌ Error converting file to Base64:", error);
+        reject(error);
+      };
     });
 
   const handleSendMessage = async () => {
-    if (newMessage.trim() === "" && !selectedImage) return;
+    if (newMessage.trim() === "" && !selectedFile) {
+      console.log("⚠️ No message or file to send");
+      return;
+    }
 
     const messagePayload = {
       user_id: user?.user?.id,
-      message: newMessage.trim(),
-      attachment_name: "",
-      attachment: "",
+      message: newMessage.trim() || "",
+      attachment_name: selectedFileName || "",
+      attachment_data: "",
+      receiver_id: user?.user?.id, // TODO: Replace with actual receiver ID
     };
 
-    if (selectedImage && fileInputRef.current?.files[0]) {
+    if (selectedFile && fileInputRef.current?.files[0]) {
       const file = fileInputRef.current.files[0];
 
       if (file.size > 20 * 1024 * 1024) {
+        console.log("⚠️ File size exceeds 20MB:", file.size);
         alert("File must be less than 20MB.");
         return;
       }
 
-      const base64 = await toBase64(file);
-      messagePayload.attachment_name = file.name;
-      messagePayload.attachment = base64;
+      try {
+        const base64 = await toBase64(file);
+        messagePayload.attachment_name = file.name;
+        messagePayload.attachment_data = base64;
+      } catch (error) {
+        console.error("❌ Failed to convert file to Base64:", error);
+        return;
+      }
     }
 
-    // Send message
+    console.log("📤 Sending message payload:", messagePayload);
+
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      ws.current.send(JSON.stringify(messagePayload));
+      try {
+        ws.current.send(JSON.stringify(messagePayload));
+        console.log("✅ Message sent successfully");
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: null,
+            sender: user?.user?.id,
+            receiver: user?.user?.id, // TODO: Replace with actual receiver ID
+            message: newMessage.trim() || "",
+            timestamp: new Date().toISOString(),
+            reply_to: null,
+            attachment_name: selectedFileName || "",
+            is_read: false,
+            is_deleted: false,
+            is_edited: false,
+            is_reported: false,
+            attachment_data: messagePayload.attachment_data || "",
+            isUser: true,
+          },
+        ]);
+
+        setNewMessage("");
+        setSelectedFile(null);
+        setSelectedFileName("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        inputRef.current?.focus();
+      } catch (error) {
+        console.error("❌ Error sending message:", error);
+      }
+    } else {
+      console.error(
+        "❌ WebSocket not open. readyState:",
+        ws.current?.readyState
+      );
     }
-
-    // Show immediately on UI
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: null,
-        sender: null,
-        receiver: user?.user?.id,
-        message: newMessage.trim(),
-        timestamp: new Date().toISOString(),
-        reply_to: null,
-        attachment_name: selectedFileName || "",
-        is_read: false,
-        is_deleted: false,
-        is_edited: false,
-        is_reported: false,
-        attachment: selectedImage ? selectedImage.split(",")[1] : "",
-        isUser: true,
-      },
-    ]);
-
-    setNewMessage("");
-    setSelectedImage(null);
-    setSelectedFileName("");
-    inputRef.current?.focus();
   };
 
   const handleKeyPress = (e) => {
@@ -142,6 +212,14 @@ const AdminDashboardChats = () => {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const isImage = (filename) => {
+    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(filename);
+  };
+
+  const createDownloadLink = (base64, filename) => {
+    return `data:application/octet-stream;base64,${base64}`;
   };
 
   if (!user || !user.user) {
@@ -156,7 +234,6 @@ const AdminDashboardChats = () => {
 
   return (
     <div className="rounded-r-lg bg-[#F5F7FB] dark:bg-[#252c3b] h-full flex flex-col">
-      {/* Header */}
       <div className="flex items-center space-x-4 p-3 border-b border-gray-200 bg-white dark:bg-[#252c3b]">
         <img
           src={user.user.image}
@@ -168,28 +245,43 @@ const AdminDashboardChats = () => {
         </h1>
       </div>
 
-      {/* Chat messages */}
+      {isLoading && (
+        <div className="p-4 text-center text-gray-600 dark:text-gray-400">
+          Loading chat history...
+        </div>
+      )}
+
       <div className="flex-1 p-4 space-y-4 overflow-y-auto">
         {messages.map((message, index) => (
           <div key={index}>
             {message.isUser ? (
               <div className="flex justify-end space-x-2">
                 <div className="max-w-xs bg-[#2F80A9] text-white rounded-lg p-3 text-md font-medium">
-                  {message.image && (
+                  {message.attachment_data && message.attachment_name && (
                     <div className="mb-2">
-                      <img
-                        src={message.image}
-                        alt="Uploaded"
-                        className="rounded-lg w-24 h-12 object-cover"
-                      />
-                      {message.fileName && (
-                        <p className="text-xs text-gray-300 mt-1">
-                          {message.fileName}
-                        </p>
+                      {isImage(message.attachment_name) ? (
+                        <img
+                          src={`data:image/${message.attachment_name
+                            .split(".")
+                            .pop()};base64,${message.attachment_data}`}
+                          alt={message.attachment_name}
+                          className="rounded-lg w-24 h-12 object-cover"
+                        />
+                      ) : (
+                        <a
+                          href={createDownloadLink(
+                            message.attachment_data,
+                            message.attachment_name
+                          )}
+                          download={message.attachment_name}
+                          className="text-xs text-gray-300 underline"
+                        >
+                          {message.attachment_name}
+                        </a>
                       )}
                     </div>
                   )}
-                  {message.message && <h1>{message.message}</h1>}
+                  {message.message && <p>{message.message}</p>}
                 </div>
                 <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
                   <span className="text-xs text-gray-600">You</span>
@@ -203,21 +295,31 @@ const AdminDashboardChats = () => {
                   alt={user.user.name}
                 />
                 <div className="max-w-xs bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-md font-medium shadow-sm">
-                  {message.image && (
+                  {message.attachment_data && message.attachment_name && (
                     <div className="mb-2">
-                      <img
-                        src={message.image}
-                        alt="Uploaded"
-                        className="rounded-lg w-24 h-12 object-cover"
-                      />
-                      {message.fileName && (
-                        <p className="text-xs text-gray-400 mt-1">
-                          {message.fileName}
-                        </p>
+                      {isImage(message.attachment_name) ? (
+                        <img
+                          src={`data:image/${message.attachment_name
+                            .split(".")
+                            .pop()};base64,${message.attachment_data}`}
+                          alt={message.attachment_name}
+                          className="rounded-lg w-24 h-12 object-cover"
+                        />
+                      ) : (
+                        <a
+                          href={createDownloadLink(
+                            message.attachment_data,
+                            message.attachment_name
+                          )}
+                          download={message.attachment_name}
+                          className="text-xs text-gray-400 underline"
+                        >
+                          {message.attachment_name}
+                        </a>
                       )}
                     </div>
                   )}
-                  {message.message && <h1>{message.message}</h1>}
+                  {message.message && <p>{message.message}</p>}
                 </div>
               </div>
             )}
@@ -226,19 +328,23 @@ const AdminDashboardChats = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Image preview */}
-      {selectedImage && (
+      {selectedFile && (
         <div className="mb-3 ml-3 flex items-center space-x-3">
           <div className="relative">
-            <img
-              src={selectedImage}
-              alt="Selected"
-              className="rounded-lg shadow-md w-24 h-10 object-cover"
-            />
+            {isImage(selectedFileName) ? (
+              <img
+                src={selectedFile}
+                alt="Selected"
+                className="rounded-lg shadow-md w-24 h-10 object-cover"
+              />
+            ) : (
+              <p className="text-sm text-gray-600">{selectedFileName}</p>
+            )}
             <button
               onClick={() => {
-                setSelectedImage(null);
+                setSelectedFile(null);
                 setSelectedFileName("");
+                if (fileInputRef.current) fileInputRef.current.value = "";
               }}
               className="absolute top-1 right-1 bg-[#E2E8F0] text-gray-800 rounded-full p-[2px] hover:bg-[#d1d7df]"
             >
@@ -258,20 +364,21 @@ const AdminDashboardChats = () => {
               </svg>
             </button>
           </div>
-          <p className="text-sm text-gray-600 truncate max-w-[150px]">
-            {selectedFileName}
-          </p>
+          {isImage(selectedFileName) && (
+            <p className="text-sm text-gray-600 truncate max-w-[150px]">
+              {selectedFileName}
+            </p>
+          )}
         </div>
       )}
 
-      {/* Input area */}
       <div className="border-t border-gray-200 p-3 bg-white">
         <div className="flex items-center bg-gray-100 rounded-full px-4 py-3">
           <input
             type="file"
-            accept="image/*"
+            accept="*/*"
             ref={fileInputRef}
-            onChange={handleImageUpload}
+            onChange={handleFileUpload}
             className="hidden"
           />
           <button
