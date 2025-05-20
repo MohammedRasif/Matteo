@@ -87,7 +87,7 @@ const AdminDashboardChats = () => {
     if (newMessage.trim() === "" && !selectedImage) return;
 
     const messagePayload = {
-      receiver: user?.user?.id,
+      user_id: user?.user?.id,
       message: newMessage.trim(),
       attachment_name: "",
       attachment: "",
@@ -217,7 +217,7 @@ const AdminDashboardChats = () => {
                       )}
                     </div>
                   )}
-                  {message.text && <h1>{message.text}</h1>}
+                  {message.message && <h1>{message.message}</h1>}
                 </div>
               </div>
             )}
