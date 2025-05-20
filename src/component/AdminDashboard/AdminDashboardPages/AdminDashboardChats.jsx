@@ -44,7 +44,7 @@ const AdminDashboardChats = () => {
         is_deleted: msg.is_deleted || false,
         is_edited: msg.is_edited || false,
         is_reported: msg.is_reported || false,
-        attachment_data: msg.attachment_data || "",
+        attachment_data: msg.attachment_data || msg.attachment || "",
         isUser: msg.sender === user.user.id,
       }));
       setMessages(normalizedHistory);
@@ -86,7 +86,8 @@ const AdminDashboardChats = () => {
           is_deleted: incoming.is_deleted || false,
           is_edited: incoming.is_edited || false,
           is_reported: incoming.is_reported || false,
-          attachment_data: incoming.attachment_data || "",
+          attachment_data:
+            incoming.attachment_data || incoming.attachment || "",
           isUser: !(incoming.sender === user.user.id), // Fixed sender comparison
         };
 
@@ -122,7 +123,7 @@ const AdminDashboardChats = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        const base64 = reader.result.split(",")[1]; // Raw Base64 without prefix
+        const base64 = reader.result;
         console.log("📄 File converted to Base64, length:", base64.length);
         resolve(base64);
       };
@@ -159,6 +160,7 @@ const AdminDashboardChats = () => {
         const base64 = await toBase64(file);
         messagePayload.attachment_name = file.name;
         messagePayload.attachment_data = base64;
+        console.log(messagePayload.attachment_data);
       } catch (error) {
         console.error("❌ Failed to convert file to Base64:", error);
         return;
@@ -256,16 +258,14 @@ const AdminDashboardChats = () => {
           <div key={index}>
             {message.isUser ? (
               <div className="flex justify-end space-x-2">
-                <div className="max-w-xs bg-[#2F80A9] text-white rounded-lg p-3 text-md font-medium">
+                <div className="max-w-full w-fit bg-[#2F80A9] text-white rounded-lg p-3 text-md font-medium">
                   {message.attachment_data && message.attachment_name && (
                     <div className="mb-2">
                       {isImage(message.attachment_name) ? (
                         <img
-                          src={`data:image/${message.attachment_name
-                            .split(".")
-                            .pop()};base64,${message.attachment_data}`}
+                          src={`${message.attachment_data}`}
                           alt={message.attachment_name}
-                          className="rounded-lg w-24 h-12 object-cover"
+                          className="rounded-lg w-full object-cover"
                         />
                       ) : (
                         <a
@@ -294,16 +294,14 @@ const AdminDashboardChats = () => {
                   className="h-8 w-8 rounded-full object-cover"
                   alt={user.user.name}
                 />
-                <div className="max-w-xs bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-md font-medium shadow-sm">
+                <div className="max-w-full w-fit bg-white dark:bg-[#1E232E] text-gray-800 dark:text-gray-200 rounded-lg p-3 text-md font-medium shadow-sm">
                   {message.attachment_data && message.attachment_name && (
                     <div className="mb-2">
                       {isImage(message.attachment_name) ? (
                         <img
-                          src={`data:image/${message.attachment_name
-                            .split(".")
-                            .pop()};base64,${message.attachment_data}`}
+                          src={`${message.attachment_data}`}
                           alt={message.attachment_name}
-                          className="rounded-lg w-24 h-12 object-cover"
+                          className="rounded-lg w-full object-cover"
                         />
                       ) : (
                         <a
@@ -319,7 +317,9 @@ const AdminDashboardChats = () => {
                       )}
                     </div>
                   )}
-                  {message.message && <p>{message.message}</p>}
+                  {message.message && (
+                    <p className="w-fit">{message.message}</p>
+                  )}
                 </div>
               </div>
             )}
