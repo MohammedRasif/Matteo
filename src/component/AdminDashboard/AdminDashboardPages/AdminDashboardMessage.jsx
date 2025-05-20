@@ -58,7 +58,7 @@ const AdminDashboardMessage = () => {
         ws.current.close();
       }
     };
-  }, []);
+  }, [users]);
 
   useEffect(() => {
     if (data) {
