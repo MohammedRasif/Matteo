@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 const AdminDashboardLayout = () => {
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
+  // setting socket
   useEffect(() => {
     ws.current = new WebSocket(
       `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
