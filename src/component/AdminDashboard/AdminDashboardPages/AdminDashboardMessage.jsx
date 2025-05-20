@@ -6,82 +6,84 @@ import { useGetChatListQuery } from "../../../Redux/feature/ChatSlice";
 const AdminDashboardMessage = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get the current route
+  const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const { data, error, isLoading } = useGetChatListQuery();
-  const users = data || [
-    {
-      id: "U001",
-      name: "Alice",
-      number: "3",
-      message: "hello",
-      bot: "hello",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
-    },
-    {
-      id: "U002",
-      name: "Bob",
-      number: "2",
-      message: "how are you",
-      bot: "how are you",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg",
-    },
-    {
-      id: "U003",
-      name: "Charlie",
-      number: "3",
-      message: "are you ok",
-      bot: "are you ok",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg",
-    },
-    {
-      id: "U008",
-      name: "Ramis",
-      number: "",
-      message: "are you know me",
-      bot: "are you know me",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
-    },
-    {
-      id: "U004",
-      name: "Bijoy",
-      number: "5",
-      message: "are you know me",
-      bot: "are you know me",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529173/samples/two-ladies.jpg",
-    },
-    {
-      id: "U005",
-      name: "Pappu",
-      number: "",
-      message: "show this",
-      bot: "show this",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg",
-    },
-    {
-      id: "U006",
-      name: "Rasif",
-      number: "",
-      message: "are you crazy",
-      bot: "are you crazy",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/smiling-man.jpg",
-    },
-    {
-      id: "U007",
-      name: "Sojib",
-      number: "",
-      message: "do you know me",
-      bot: "do you know me",
-      image:
-        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529168/samples/people/kitchen-bar.jpg",
-    },
-  ];
+  // const users = data
+  // || [
+  //   {
+  //     id: "U001",
+  //     name: "Alice",
+  //     number: "3",
+  //     message: "hello",
+  //     bot: "hello",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
+  //   },
+  //   {
+  //     id: "U002",
+  //     name: "Bob",
+  //     number: "2",
+  //     message: "how are you",
+  //     bot: "how are you",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg",
+  //   },
+  //   {
+  //     id: "U003",
+  //     name: "Charlie",
+  //     number: "3",
+  //     message: "are you ok",
+  //     bot: "are you ok",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg",
+  //   },
+  //   {
+  //     id: "U008",
+  //     name: "Ramis",
+  //     number: "",
+  //     message: "are you know me",
+  //     bot: "are you know me",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
+  //   },
+  //   {
+  //     id: "U004",
+  //     name: "Bijoy",
+  //     number: "5",
+  //     message: "are you know me",
+  //     bot: "are you know me",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529173/samples/two-ladies.jpg",
+  //   },
+  //   {
+  //     id: "U005",
+  //     name: "Pappu",
+  //     number: "",
+  //     message: "show this",
+  //     bot: "show this",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg",
+  //   },
+  //   {
+  //     id: "U006",
+  //     name: "Rasif",
+  //     number: "",
+  //     message: "are you crazy",
+  //     bot: "are you crazy",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/smiling-man.jpg",
+  //   },
+  //   {
+  //     id: "U007",
+  //     name: "Sojib",
+  //     number: "",
+  //     message: "do you know me",
+  //     bot: "do you know me",
+  //     image:
+  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529168/samples/people/kitchen-bar.jpg",
+  //   },
+  // ];
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
   useEffect(() => {
@@ -90,6 +92,9 @@ const AdminDashboardMessage = () => {
     );
 
     ws.current.onopen = () => console.log("✅ WebSocket connected");
+    ws.current.onmessage = (message) => {
+      console.log(JSON.parse(message.data));
+    };
     ws.current.onclose = () => console.log("🔌 WebSocket closed");
     ws.current.onerror = (err) => console.error("❌ WebSocket error", err);
 
@@ -102,6 +107,8 @@ const AdminDashboardMessage = () => {
   useEffect(() => {
     if (data) {
       console.log("User chat list:", data);
+      setUsers(data);
+      console.log("user in state", users);
     }
     if (error) {
       console.error("Error fetching chat list:", error);

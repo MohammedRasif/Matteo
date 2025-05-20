@@ -45,7 +45,7 @@ const AdminDashboardChats = () => {
         is_edited: msg.is_edited || false,
         is_reported: msg.is_reported || false,
         attachment_data: msg.attachment_data || msg.attachment || "",
-        isUser: msg.sender === user.user.id,
+        isUser: !(msg.sender === user.user.id),
       }));
       setMessages(normalizedHistory);
     }
