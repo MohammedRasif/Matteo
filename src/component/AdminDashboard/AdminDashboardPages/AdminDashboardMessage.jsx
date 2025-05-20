@@ -1,102 +1,57 @@
 import { useState, useEffect, useRef } from "react";
 import { VscRobot } from "react-icons/vsc";
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useGetChatListQuery } from "../../../Redux/feature/ChatSlice";
 
 const AdminDashboardMessage = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const { data, error, isLoading } = useGetChatListQuery();
-  // const users = data
-  // || [
-  //   {
-  //     id: "U001",
-  //     name: "Alice",
-  //     number: "3",
-  //     message: "hello",
-  //     bot: "hello",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
-  //   },
-  //   {
-  //     id: "U002",
-  //     name: "Bob",
-  //     number: "2",
-  //     message: "how are you",
-  //     bot: "how are you",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529178/samples/man-portrait.jpg",
-  //   },
-  //   {
-  //     id: "U003",
-  //     name: "Charlie",
-  //     number: "3",
-  //     message: "are you ok",
-  //     bot: "are you ok",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529177/samples/smile.jpg",
-  //   },
-  //   {
-  //     id: "U008",
-  //     name: "Ramis",
-  //     number: "",
-  //     message: "are you know me",
-  //     bot: "are you know me",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529179/cld-sample.jpg",
-  //   },
-  //   {
-  //     id: "U004",
-  //     name: "Bijoy",
-  //     number: "5",
-  //     message: "are you know me",
-  //     bot: "are you know me",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529173/samples/two-ladies.jpg",
-  //   },
-  //   {
-  //     id: "U005",
-  //     name: "Pappu",
-  //     number: "",
-  //     message: "show this",
-  //     bot: "show this",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/boy-snow-hoodie.jpg",
-  //   },
-  //   {
-  //     id: "U006",
-  //     name: "Rasif",
-  //     number: "",
-  //     message: "are you crazy",
-  //     bot: "are you crazy",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529169/samples/people/smiling-man.jpg",
-  //   },
-  //   {
-  //     id: "U007",
-  //     name: "Sojib",
-  //     number: "",
-  //     message: "do you know me",
-  //     bot: "do you know me",
-  //     image:
-  //       "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529168/samples/people/kitchen-bar.jpg",
-  //   },
-  // ];
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
+
   useEffect(() => {
     ws.current = new WebSocket(
       `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
     );
 
     ws.current.onopen = () => console.log("✅ WebSocket connected");
-    ws.current.onmessage = (message) => {
-      console.log(JSON.parse(message.data));
+
+    ws.current.onmessage = (event) => {
+      try {
+        const raw = JSON.parse(event.data);
+        const message = raw.message || raw;
+        console.log("📩 Received WebSocket message:", message);
+
+        const senderId = String(message.sender || message.sender_id || "");
+
+        if (senderId && users.some((user) => String(user.id) === senderId)) {
+          setUsers((prevUsers) => {
+            const updatedUsers = prevUsers.map((user) =>
+              String(user.id) === senderId
+                ? {
+                    ...user,
+                    number: (Number(user.number) || 0) + 1,
+                  }
+                : user
+            );
+            console.log("📈 Updated users state:", updatedUsers);
+            return [...updatedUsers];
+          });
+          console.log("📈 Updated user number for sender:", senderId);
+        } else {
+          console.log("ℹ️ Sender not in users list:", senderId);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing WebSocket message:", error);
+        console.log("📥 Raw WebSocket data:", event.data);
+      }
     };
+
     ws.current.onclose = () => console.log("🔌 WebSocket closed");
-    ws.current.onerror = (err) => console.error("❌ WebSocket error", err);
+    ws.current.onerror = (err) => console.error("❌ WebSocket error:", err);
 
     return () => {
       if (ws.current) {
@@ -104,44 +59,56 @@ const AdminDashboardMessage = () => {
       }
     };
   }, []);
+
   useEffect(() => {
     if (data) {
-      console.log("User chat list:", data);
+      console.log("📋 User chat list fetched:", data);
       setUsers(data);
-      console.log("user in state", users);
     }
     if (error) {
-      console.error("Error fetching chat list:", error);
+      console.error("❌ Error fetching chat list:", error);
     }
   }, [data, error]);
 
-  // Update selectedUserId based on the current route
   useEffect(() => {
     const pathParts = location.pathname.split("/");
     const userIdFromPath = pathParts[pathParts.length - 1];
 
-    // Check if the route is for a user (not chatbot)
     if (
       pathParts.includes("Message") &&
-      users.some((user) => user.id === userIdFromPath)
+      users.some((user) => String(user.id) === userIdFromPath)
     ) {
       setSelectedUserId(userIdFromPath);
     } else {
-      setSelectedUserId(null); // Reset when on chatbot or other routes
+      setSelectedUserId(null);
     }
-  }, [location.pathname]);
+  }, [location.pathname, users]);
 
   const handleUserClick = (user) => {
     setSelectedUserId(user.id);
+    // Reset the number for the clicked user
+    setUsers((prevUsers) => {
+      const updatedUsers = prevUsers.map((u) =>
+        String(u.id) === String(user.id)
+          ? { ...u, number: 0 } // Reset number to 0
+          : u
+      );
+      console.log(
+        "🔔 Cleared number for user:",
+        user.id,
+        "Updated users:",
+        updatedUsers
+      );
+      return [...updatedUsers]; // Ensure new array for React to detect change
+    });
     navigate(`/Admin_Dashboard/Message/${user.id}`, { state: { user } });
   };
 
   const handleChatbotClick = () => {
-    setSelectedUserId(null); // Ensure no user is selected
+    setSelectedUserId(null);
     navigate("/Admin_Dashboard/Message/chatbot");
   };
 
-  // Check if the current route is the base route (/Admin_Dashboard/Message)
   const isBaseRoute = location.pathname === "/Admin_Dashboard/Message";
 
   return (
@@ -150,15 +117,12 @@ const AdminDashboardMessage = () => {
         Messages
       </h1>
       <div className="flex" style={{ height: "80vh" }}>
-        {/* User List Sidebar */}
         <div className="w-1/4 rounded-l-lg bg-gray-50 dark:bg-[#1E232E] border-r border-gray-200 dark:border-gray-700 flex flex-col">
           <div className="m-3">
             <input
               type="text"
-              name=""
               placeholder="Search"
               className="border border-gray-300 rounded-md w-full pl-2 py-[10px]"
-              id=""
             />
           </div>
 
@@ -178,8 +142,12 @@ const AdminDashboardMessage = () => {
             </div>
           </div>
 
-          {/* User list container */}
           <div className="overflow-y-auto flex-1">
+            {isLoading && (
+              <div className="p-3 text-gray-600 dark:text-gray-400">
+                Loading users...
+              </div>
+            )}
             {users.map((user) => (
               <div
                 key={user.id}
@@ -197,7 +165,7 @@ const AdminDashboardMessage = () => {
                 />
                 <div className="relative">
                   <span className="font-medium text-[15px]">{user.name}</span>
-                  {user.number && (
+                  {Number(user.number) > 0 && (
                     <h1 className="absolute top-1 left-[28vh] text-[12px] bg-[#0B7EBB] text-white px-[5px] rounded-full">
                       {user.number}
                     </h1>
@@ -208,7 +176,6 @@ const AdminDashboardMessage = () => {
           </div>
         </div>
 
-        {/* Right Panel: Default Message or Outlet */}
         <div className="w-3/4 bg-white dark:bg-[#252c3b] rounded-r-lg">
           {isBaseRoute ? (
             <div className="h-full flex items-center justify-center">
