@@ -10,6 +10,7 @@ import { BiEdit } from "react-icons/bi";
 import { IoEyeOutline } from "react-icons/io5";
 import { CiDollar } from "react-icons/ci";
 import { GoArrowLeft } from "react-icons/go";
+import { BaseUrl } from "../../../Shared/baseUrls";
 import {
   IoCloudUploadOutline,
   IoSearchOutline,
@@ -24,7 +25,6 @@ import { RxCrossCircled } from "react-icons/rx";
 import { TbFileLike } from "react-icons/tb";
 import { VscEye } from "react-icons/vsc";
 import GiveAReviewRating from "../../GiveAReviewRating"; // Assuming this component is available
-import baseUrls from "../../../Shared/baseUrls";
 
 function CreatedOrderedTable() {
   const navigate = useNavigate();
@@ -246,7 +246,7 @@ function CreatedOrderedTable() {
     const token = localStorage.getItem("access_token");
     // console.log("Token used:", token); // <-- for debugging
 
-    fetch(`http://192.168.10.124:2000/api/v1/order-post/list/`, {
+    fetch(`${BaseUrl}/api/v1/order-post/list/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

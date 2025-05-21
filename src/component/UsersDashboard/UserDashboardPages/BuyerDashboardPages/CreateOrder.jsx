@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GoArrowLeft } from "react-icons/go";
 import { GrSearch } from "react-icons/gr";
 import { Link, useNavigate } from "react-router-dom";
+import { BaseUrl } from "../../../Shared/baseUrls";
 
 function CreateOrder() {
   // State for form fields
@@ -59,17 +60,14 @@ function CreateOrder() {
     const token = localStorage.getItem("access_token");
 
     try {
-      const response = await fetch(
-        "http://192.168.10.124:2000/api/v1/order-post/create/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${BaseUrl}/api/v1/order-post/create/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
