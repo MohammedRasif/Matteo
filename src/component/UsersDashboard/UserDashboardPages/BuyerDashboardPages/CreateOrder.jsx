@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { GoArrowLeft } from "react-icons/go";
 import { GrSearch } from "react-icons/gr";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function CreateOrder() {
   // State for form fields
@@ -19,6 +19,7 @@ function CreateOrder() {
   const [searchLocation, setSearchLocation] = useState("");
   const [duration, setDuration] = useState("");
   const [amount, setAmount] = useState("");
+  const navigate = useNavigate();
 
   // Form submission handler
   const handleSubmit = async (e) => {
@@ -59,7 +60,7 @@ function CreateOrder() {
 
     try {
       const response = await fetch(
-        "http://192.168.10.35:8000/api/v1/order-post/create/",
+        "https://2755-115-127-156-9.ngrok-free.app/api/v1/order-post/create/",
         {
           method: "POST",
           headers: {
@@ -93,6 +94,7 @@ function CreateOrder() {
       setAmount("");
       setHourlyRate(false);
       setFixedPrice(false);
+      navigate("/dashboard/buyer_order_create");
     } catch (error) {
       console.error("❌ Error submitting order:", error);
       alert("There was an error submitting your order.");
@@ -296,7 +298,7 @@ function CreateOrder() {
         <div className="pt-10 text-center">
           <button
             type="submit"
-            className="w-[231px] bg-[#2E9DE0] text-[#F8FCFF] text-[20px] text-center py-2 rounded transition-colors"
+            className="w-[231px] hover:cursor-pointer bg-[#2E9DE0] text-[#F8FCFF] text-[20px] text-center py-2 rounded transition-colors"
           >
             Submit
           </button>
