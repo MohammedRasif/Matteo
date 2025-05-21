@@ -433,7 +433,7 @@ function CreatedOrderedTable() {
           </div>
         </div>
       ) : (
-        <div className="overflow-x-auto mx-6 mt-2">
+        <div className="mx-6 mt-2">
           <table className="min-w-full rounded-xl cursor-pointer shadow-sm">
             <thead className="text-[#012939] border-b border-gray-300">
               <tr>
