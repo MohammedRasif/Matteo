@@ -110,15 +110,15 @@ const UserDashboardMessage = () => {
       );
       return [...updatedUsers]; // Ensure new array for React to detect change
     });
-    navigate(`/Admin_Dashboard/Message/${user.id}`, { state: { user } });
+    navigate(`/dashboard/Messages/${user.id}`, { state: { user } });
   };
 
   const handleChatbotClick = () => {
     setSelectedUserId(null);
-    navigate("/Admin_Dashboard/Message/chatbot");
+    navigate("/dashboard/Messages/chatbot");
   };
 
-  const isBaseRoute = location.pathname === "/Admin_Dashboard/Message";
+  const isBaseRoute = location.pathname === "/dashboard/Messages";
 
   return (
     <div className="mt-10 m-4 roboto">
@@ -138,7 +138,7 @@ const UserDashboardMessage = () => {
           <div
             onClick={handleChatbotClick}
             className={`flex items-center space-x-2 px-[10px] py-[8px] mt-2 cursor-pointer ${
-              location.pathname === "/Admin_Dashboard/Message/chatbot"
+              location.pathname === "/dashboard/Messages/chatbot"
                 ? "bg-[#B6E3FC]"
                 : "hover:bg-[#B6E3FC]"
             }`}

@@ -4,8 +4,6 @@ import useSocket from "../../../sockit/useSockit";
 import { useEffect } from "react";
 import { useGetChatListQuery } from "../../../Redux/feature/ChatSlice";
 const AdminDashboardNavbar = () => {
-  // useSocket();
-
   return (
     <div>
       <div className="bg-[#848239] w-full py-[10px] "></div>
