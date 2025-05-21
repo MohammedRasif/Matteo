@@ -16,7 +16,9 @@ const AdminDashboardUser = () => {
   const dropdownRefs = useRef([])
   const popupRef = useRef(null)
   const { data: management, isLoading } = useManagementUserListQuery()
+  console.log(management);
   const [deleteUser] = useDeleteManagementUserMutation()
+
   const [submiteData] = useManagementSubmitWarningMutation()
   console.log(submiteData, "submited data");
   const { data: managementDetails, isLoading: isDetailsLoading } = useManagementUserDetailsQuery(selectedUserId, {

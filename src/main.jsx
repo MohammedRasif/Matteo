@@ -223,7 +223,7 @@ const router = createBrowserRouter([
         element: <AdminDashboardSupport />
       },
       {
-        path: "/Admin_Dashboard/order_Assessment",
+        path: "/Admin_Dashboard/order_Assessment/:id",
         element: <AdminDashboardOrderAsses />
       },
       {
