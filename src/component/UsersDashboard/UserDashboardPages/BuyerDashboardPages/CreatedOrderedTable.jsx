@@ -95,63 +95,6 @@ function CreatedOrderedTable() {
     setOpenModal(false);
   };
 
-  // const projectData = [
-  //   {
-  //     date: "19 Apr 2021, 00:00",
-  //     duration: "2 day/1 hour",
-  //     projectId: "34034474",
-  //     amount: "$26,000",
-  //   },
-  //   {
-  //     date: "22 May 2021, 10:30",
-  //     duration: "3 day/5 hour",
-  //     projectId: "34034475",
-  //     amount: "$18,500",
-  //   },
-  //   {
-  //     date: "15 Jun 2021, 14:00",
-  //     duration: "1 day/3 hour",
-  //     projectId: "34034476",
-  //     amount: "$12,000",
-  //   },
-  //   {
-  //     date: "01 Jul 2021, 09:15",
-  //     duration: "4 day/2 hour",
-  //     projectId: "34034477",
-  //     amount: "$30,000",
-  //   },
-  //   {
-  //     date: "18 Aug 2021, 16:45",
-  //     duration: "2 day/4 hour",
-  //     projectId: "34034478",
-  //     amount: "$22,750",
-  //   },
-  //   {
-  //     date: "03 Sep 2021, 11:00",
-  //     duration: "5 day/0 hour",
-  //     projectId: "34034479",
-  //     amount: "$27,300",
-  //   },
-  //   {
-  //     date: "27 Oct 2021, 08:20",
-  //     duration: "3 day/6 hour",
-  //     projectId: "34034480",
-  //     amount: "$19,800",
-  //   },
-  //   {
-  //     date: "11 Nov 2021, 13:10",
-  //     duration: "2 day/7 hour",
-  //     projectId: "34034481",
-  //     amount: "$21,000",
-  //   },
-  // {
-  //   date: "29 Dec 2021, 17:50",
-  //   duration: "1 day/5 hour",
-  //   projectId: "34034482",
-  //   amount: "$15,600",
-  // },
-  // ];
-
   const [orderManagementData, setOrderManagementData] = useState([
     {
       user_id: "U12345",
@@ -412,6 +355,8 @@ function CreatedOrderedTable() {
                     </td>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
                       {project.amount} <span className="font-bold">$</span>
+                      {" / "}
+                      {project?.payment_type}
                     </td>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm w-[195px]">
                       <div
