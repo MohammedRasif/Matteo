@@ -1,6 +1,6 @@
 import { Bell } from "lucide-react";
 import { NavLink } from "react-router-dom";
-const UserDashboardNavbar = () => {
+const UserDashboardNavbar = ({ notificationCount, setNotificationCount }) => {
   return (
     <div>
       <div className="bg-[#848239] w-full py-[10px] "></div>
@@ -30,13 +30,18 @@ const UserDashboardNavbar = () => {
             <NavLink
               to="/dashboard/user_notifications"
               className="cursor-pointer"
+              onClick={() => setNotificationCount(0)}
             >
               <div className="relative ">
                 <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 cursor-pointer ">
                   <Bell className="h-7 w-7 text-gray-600" />{" "}
                   {/* Increased base size */}
                 </button>
-                <div className="absolute text-[10px] p-[5px] top-[6px] right-[10px] bg-red-400 rounded-full"></div>
+                {notificationCount > 0 && (
+                  <div className="absolute text-[12px] p-[5px] -top-[3px] right-[3px] bg-red-400 rounded-full text-white w-5 h-5 max-w-8 flex items-center justify-center">
+                    {notificationCount > 9 ? "9+" : notificationCount}
+                  </div>
+                )}
               </div>
             </NavLink>
             <div className="flex items-center space-x-2">
