@@ -8,7 +8,7 @@ const AdminDashboardMessage = () => {
   const location = useLocation();
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const { data, error, isLoading } = useGetChatListQuery();
+  const { data, error, isLoading, refetch } = useGetChatListQuery();
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
 
@@ -59,7 +59,16 @@ const AdminDashboardMessage = () => {
       }
     };
   }, [users]);
+  // refetch chat list
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("🔁 Refetching chat list...");
+      refetch();
+    }, 60000);
 
+    return () => clearInterval(interval);
+  }, [refetch]);
+  //
   useEffect(() => {
     if (data) {
       console.log("📋 User chat list fetched:", data);
