@@ -24,6 +24,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { TbFileLike } from "react-icons/tb";
 import { VscEye } from "react-icons/vsc";
 import GiveAReviewRating from "../../GiveAReviewRating"; // Assuming this component is available
+import baseUrls from "../../../Shared/baseUrls";
 
 function CreatedOrderedTable() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function CreatedOrderedTable() {
   const dropdownRefs = useRef({});
   const dropdownRef = useRef(null); // For status filter dropdown
   const actionDropdownRef = useRef(null); // For action dropdown
+  const [projectData, setProjectData] = useState([]);
 
   const description = `Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dum my text of the printing and type setting industry. Lorem standard dummy text ever since the. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`;
 
@@ -93,62 +95,62 @@ function CreatedOrderedTable() {
     setOpenModal(false);
   };
 
-  const projectData = [
-    {
-      date: "19 Apr 2021, 00:00",
-      duration: "2 day/1 hour",
-      projectId: "34034474",
-      amount: "$26,000",
-    },
-    {
-      date: "22 May 2021, 10:30",
-      duration: "3 day/5 hour",
-      projectId: "34034475",
-      amount: "$18,500",
-    },
-    {
-      date: "15 Jun 2021, 14:00",
-      duration: "1 day/3 hour",
-      projectId: "34034476",
-      amount: "$12,000",
-    },
-    {
-      date: "01 Jul 2021, 09:15",
-      duration: "4 day/2 hour",
-      projectId: "34034477",
-      amount: "$30,000",
-    },
-    {
-      date: "18 Aug 2021, 16:45",
-      duration: "2 day/4 hour",
-      projectId: "34034478",
-      amount: "$22,750",
-    },
-    {
-      date: "03 Sep 2021, 11:00",
-      duration: "5 day/0 hour",
-      projectId: "34034479",
-      amount: "$27,300",
-    },
-    {
-      date: "27 Oct 2021, 08:20",
-      duration: "3 day/6 hour",
-      projectId: "34034480",
-      amount: "$19,800",
-    },
-    {
-      date: "11 Nov 2021, 13:10",
-      duration: "2 day/7 hour",
-      projectId: "34034481",
-      amount: "$21,000",
-    },
-    {
-      date: "29 Dec 2021, 17:50",
-      duration: "1 day/5 hour",
-      projectId: "34034482",
-      amount: "$15,600",
-    },
-  ];
+  // const projectData = [
+  //   {
+  //     date: "19 Apr 2021, 00:00",
+  //     duration: "2 day/1 hour",
+  //     projectId: "34034474",
+  //     amount: "$26,000",
+  //   },
+  //   {
+  //     date: "22 May 2021, 10:30",
+  //     duration: "3 day/5 hour",
+  //     projectId: "34034475",
+  //     amount: "$18,500",
+  //   },
+  //   {
+  //     date: "15 Jun 2021, 14:00",
+  //     duration: "1 day/3 hour",
+  //     projectId: "34034476",
+  //     amount: "$12,000",
+  //   },
+  //   {
+  //     date: "01 Jul 2021, 09:15",
+  //     duration: "4 day/2 hour",
+  //     projectId: "34034477",
+  //     amount: "$30,000",
+  //   },
+  //   {
+  //     date: "18 Aug 2021, 16:45",
+  //     duration: "2 day/4 hour",
+  //     projectId: "34034478",
+  //     amount: "$22,750",
+  //   },
+  //   {
+  //     date: "03 Sep 2021, 11:00",
+  //     duration: "5 day/0 hour",
+  //     projectId: "34034479",
+  //     amount: "$27,300",
+  //   },
+  //   {
+  //     date: "27 Oct 2021, 08:20",
+  //     duration: "3 day/6 hour",
+  //     projectId: "34034480",
+  //     amount: "$19,800",
+  //   },
+  //   {
+  //     date: "11 Nov 2021, 13:10",
+  //     duration: "2 day/7 hour",
+  //     projectId: "34034481",
+  //     amount: "$21,000",
+  //   },
+  // {
+  //   date: "29 Dec 2021, 17:50",
+  //   duration: "1 day/5 hour",
+  //   projectId: "34034482",
+  //   amount: "$15,600",
+  // },
+  // ];
 
   const [orderManagementData, setOrderManagementData] = useState([
     {
@@ -233,10 +235,6 @@ function CreatedOrderedTable() {
     },
   ]);
 
-  const filteredProjects = projectData.filter((project) =>
-    project.projectId.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const filteredOrders = orderManagementData.filter(
     (order) =>
       order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -244,6 +242,40 @@ function CreatedOrderedTable() {
         statusFilter === "All Orders" ||
         order.status === statusFilter)
   );
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    // console.log("Token used:", token); // <-- for debugging
+
+    fetch(`http://192.168.10.124:2000/api/v1/order-post/list/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        const contentType = res.headers.get("content-type");
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
+        }
+
+        if (!contentType || !contentType.includes("application/json")) {
+          const text = await res.text();
+          throw new Error(
+            `Unexpected content type: ${contentType}\nResponse: ${text}`
+          );
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        console.dir(data);
+        setProjectData(data);
+      })
+      .catch((err) => console.log("Error fetching data:", err.message));
+  }, []);
 
   return (
     <div className="my-10 nunito">
@@ -341,8 +373,8 @@ function CreatedOrderedTable() {
 
       {/* Conditional rendering based on statusFilter */}
       {statusFilter === "Created" ? (
-        <div className="w-full overflow-hidden rounded">
-          <div className="overflow-x-auto">
+        <div className="w-full rounded">
+          <div className="">
             <table className="w-full">
               <thead className="border-[#C1DDEF] text-left">
                 <tr>
@@ -364,7 +396,7 @@ function CreatedOrderedTable() {
                 </tr>
               </thead>
               <tbody>
-                {filteredProjects.map((project, index) => (
+                {projectData.map((project, index) => (
                   <tr key={index}>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
                       {project.date}
@@ -372,14 +404,14 @@ function CreatedOrderedTable() {
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
                       <div className="flex items-center">
                         <ClockIcon className="mr-2 h-4 w-4 text-[#718096]" />
-                        {project.duration}
+                        {project.duration} / days
                       </div>
                     </td>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
                       {project.projectId}
                     </td>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
-                      {project.amount}
+                      {project.amount} <span className="font-bold">$</span>
                     </td>
                     <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm w-[195px]">
                       <div

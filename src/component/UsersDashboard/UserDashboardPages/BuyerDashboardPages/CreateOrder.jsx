@@ -60,7 +60,7 @@ function CreateOrder() {
 
     try {
       const response = await fetch(
-        "https://2755-115-127-156-9.ngrok-free.app/api/v1/order-post/create/",
+        "http://192.168.10.124:2000/api/v1/order-post/create/",
         {
           method: "POST",
           headers: {
