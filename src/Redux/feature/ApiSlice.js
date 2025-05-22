@@ -33,6 +33,42 @@ export const ApiSlice = createApi({
             providesTags: ["Profile"],
         }),
 
+        // use Support
+        supportTicket: builder.query({
+            query: () => "/api/v1/tickets/"
+        }),
+
+        supportTicketDelete: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/tickets/ticket/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+        supporTicketPost: builder.mutation({
+            query: ({ warning }) => ({
+                url: `/api/v1/tickets/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
+        }),
+
+        supportTikectEdit: builder.mutation({
+            query: ({ id, question }) => ({
+                url: `/api/v1/tickets/ticket/${id}/`,
+                method: "PUT",
+                body: question
+            }),
+            invalidatesTags: ["question"]
+        }),
+
+        serviceCommunityData: builder.query({
+            query:() => "api/v1/order-post/list/all/"
+        }),
+
+        
+
 
 
 
@@ -236,17 +272,17 @@ export const ApiSlice = createApi({
             query: () => "/api/v1/admin/withdraw/request-list/"
         }),
         // give warning
-       withdrawalWarning: builder.mutation({
+        withdrawalWarning: builder.mutation({
             query: ({ warning, id }) => ({
                 url: `/api/v1/admin/withdraw/give-warning/${id}/`,
                 method: 'POST',
-                body: { warning }, 
+                body: { warning },
                 providesTags: ['Comment'],
             }),
         }),
 
-        // cancel request
-        withdrawalCancel: builder
+
+
 
     }),
 });
@@ -254,7 +290,11 @@ export const ApiSlice = createApi({
 // Export hooks for usage in components
 export const {
     useGetProfileQuery,
-
+    useSupportTicketQuery,
+    useSupportTicketDeleteMutation,
+    useSupporTicketPostMutation,
+    useSupportTikectEditMutation,
+    useServiceCommunityDataQuery,
 
 
 
@@ -292,6 +332,7 @@ export const {
     useSupporTicketsQuery,
     useWithdrawalQuery,
     useWithdrawalWarningMutation,
+
 
 
 

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { FiChevronRight, FiSearch, FiMoreHorizontal, FiEye, FiArrowLeft, FiDollarSign, FiEyeOff } from "react-icons/fi"
+import { useServiceCommunityDataQuery } from "../../Redux/feature/ApiSlice"
 
 const AllProjects = () => {
     // State for sorting and filtering
@@ -28,6 +29,9 @@ const AllProjects = () => {
     const [bidAmount, setBidAmount] = useState("")
     const [currentProject, setCurrentProject] = useState(null)
     const [expandedDescriptions, setExpandedDescriptions] = useState({})
+
+    const {data: showServiceData} = useServiceCommunityDataQuery()
+    console.log(showServiceData);
 
     // Refs for dropdowns
     const sortDropdownRef = useRef(null)
