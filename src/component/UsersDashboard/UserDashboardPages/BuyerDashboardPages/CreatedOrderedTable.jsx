@@ -343,6 +343,7 @@ function CreatedOrderedTable() {
                               <ul className="text-sm text-[#2c3e50]">
                                 <Link
                                   to="/dashboard/buyer_candidate_list"
+                                  state={{ id: project.projectId }}
                                   className="px-4 py-2 cursor-pointer flex items-center gap-2"
                                 >
                                   <IoEyeOutline /> Show all bids
