@@ -9,8 +9,8 @@ const AllProjects = () => {
     const [sortBy, setSortBy] = useState("Most recent")
     const [showSortOptions, setShowSortOptions] = useState(false)
     const [selectedFilters, setSelectedFilters] = useState({
-        projectType: [], // No default project type filters
-        skills: [], // No default skills filters
+        projectType: [], 
+        skills: [],
     })
     const [priceRange, setPriceRange] = useState({
         fixedMin: "",
