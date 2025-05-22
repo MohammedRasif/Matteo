@@ -218,6 +218,20 @@ function CreatedOrderedTable() {
         setProjectData(data);
       })
       .catch((err) => console.log("Error fetching data:", err.message));
+
+    fetch(`${BaseUrl}/api/v1/orders/active-orders/seller/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrderManagementData(data);
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
