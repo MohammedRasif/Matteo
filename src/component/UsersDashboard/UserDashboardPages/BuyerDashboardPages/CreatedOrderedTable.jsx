@@ -41,6 +41,7 @@ function CreatedOrderedTable() {
   const actionDropdownRef = useRef(null); // For action dropdown
   const [projectData, setProjectData] = useState([]);
   const token = localStorage.getItem("access_token");
+  const [detailsId, setDetailsId] = useState("");
 
   const description = `Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dum my text of the printing and type setting industry. Lorem standard dummy text ever since the. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`;
 
@@ -76,6 +77,7 @@ function CreatedOrderedTable() {
   };
 
   const handleDropdownToggleAction = (id) => {
+    setDetailsId(id);
     setOpenDropdownAction((prev) => (prev === id ? null : id));
   };
 
@@ -356,7 +358,12 @@ function CreatedOrderedTable() {
                                 <BsPersonCheckFill />
                                 Assign
                               </li>
-                              <li className="px-4 py-2 cursor-pointer flex items-center gap-2">
+                              <li
+                                onClick={() => {
+                                  handleOpenModal("details");
+                                }}
+                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                              >
                                 <TbListDetails />
                                 Details
                               </li>
@@ -1177,119 +1184,11 @@ function CreatedOrderedTable() {
               </div>
             )}
             {modalContent === "details" && (
-              <div className="w-[40%] h-full mx-auto">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
-                  <button
-                    className="btn btn-sm btn-circle hover:cursor-pointer"
-                    onClick={handleCloseModal}
-                  >
-                    <div className="flex items-center gap-2 my-2">
-                      <GoArrowLeft /> <span>Back</span>
-                    </div>
-                  </button>
-                  <div className="flex justify-between items-start mb-2">
-                    <h2 className="text-lg font-medium text-gray-800">
-                      Manual Data Entry From Text Documents
-                    </h2>
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <PiDotsThreeBold />
-                    </button>
-                  </div>
-                  <div className="flex justify-between items-center mb-4">
-                    <p className="text-gray-700">
-                      Budget 20USD/Per Hour (4 Person Required)
-                    </p>
-                    <p className="text-gray-700">
-                      Time: <span className="font-medium">6 Hours</span>
-                    </p>
-                  </div>
-                  <div className="mb-4">
-                    <div className="relative">
-                      <p className="text-gray-600 leading-relaxed">
-                        {description.substring(0, 220)}
-                        {!showFullText && (
-                          <>
-                            <span className="transition-opacity duration-300 opacity-100">
-                              ...
-                            </span>
-                            <button
-                              className="text-blue-500 hover:underline focus:outline-none ml-1"
-                              onClick={() => setShowFullText(true)}
-                            >
-                              see more
-                            </button>
-                          </>
-                        )}
-                      </p>
-                      <div
-                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                          showFullText
-                            ? "max-h-96 opacity-100 mt-2"
-                            : "max-h-0 opacity-0"
-                        }`}
-                      >
-                        <p className="text-gray-600 leading-relaxed">
-                          {description.substring(220)}
-                        </p>
-                        {showFullText && (
-                          <button
-                            className="text-blue-500 hover:underline focus:outline-none mt-1 block"
-                            onClick={() => setShowFullText(false)}
-                          >
-                            see less
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap justify-between items-center mb-4">
-                    <div>
-                      <span className="text-gray-700 mr-2">
-                        Skill Required:
-                      </span>
-                      <a
-                        href="#"
-                        className="text-blue-500 hover:underline mr-1"
-                      >
-                        Data Processing,
-                      </a>
-                      <a
-                        href="#"
-                        className="text-blue-500 hover:underline mr-1"
-                      >
-                        Data Entry,
-                      </a>
-                      <a
-                        href="#"
-                        className="text-blue-500 hover:underline mr-1"
-                      >
-                        Microsoft Access,
-                      </a>
-                      <a href="#" className="text-blue-500 hover:underline">
-                        Web Research
-                      </a>
-                    </div>
-                    <span className="text-gray-400 text-sm">10 min ago</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
-                      <span className="text-sm text-gray-600">
-                        Attachment 1
-                      </span>
-                    </div>
-                    <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
-                      <span className="text-sm text-gray-600">
-                        Attachment 2
-                      </span>
-                    </div>
-                    <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
-                      <span className="text-sm text-gray-600">
-                        Attachment 3
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <DetailsModal
+                handleCloseModal={handleCloseModal}
+                id={detailsId}
+                key={detailsId}
+              />
             )}
           </div>
         </div>
@@ -1299,3 +1198,122 @@ function CreatedOrderedTable() {
 }
 
 export default CreatedOrderedTable;
+
+const DetailsModal = ({ id, handleCloseModal }) => {
+  const [project, setProject] = useState({});
+  const token = localStorage.getItem("access_token");
+  useEffect(() => {
+    fetch(`${BaseUrl}/api/v1/order-post/details/${id}/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setProject(data))
+      .catch((err) => console.log(err));
+  }, [id]);
+  return (
+    <div className="w-full h-full mx-auto">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
+        <button
+          className="btn btn-sm btn-circle hover:cursor-pointer"
+          onClick={handleCloseModal}
+        >
+          <div className="flex items-center gap-2 my-2">
+            <GoArrowLeft /> <span>Back</span>
+          </div>
+        </button>
+        <div className="flex justify-between items-start mb-2">
+          <h2 className="text-lg font-medium text-gray-800">{project.title}</h2>
+          <button className="text-gray-400 hover:text-gray-600">
+            <PiDotsThreeBold />
+          </button>
+        </div>
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-gray-700">
+            Budget ${project.price}USD/{project.payment_type} (
+            {project?.required_person} Person Required)
+          </p>
+          <p className="text-gray-700">
+            Time: <span className="font-medium">{project.duration} day</span>
+          </p>
+        </div>
+        <div className="mb-4">
+          <div className="relative">
+            <p className="text-gray-600 leading-relaxed">
+              {project?.details
+                ? project.details.length > 220
+                  ? project.details.substring(0, 220)
+                  : project.details
+                : "No details available."}
+
+              {/* Show "see more" only if text is longer than 220 chars and not fully expanded */}
+              {project?.details &&
+                project.details.length > 220 &&
+                !showFullText && (
+                  <>
+                    <span className="transition-opacity duration-300 opacity-100">
+                      ...
+                    </span>
+                    <button
+                      className="text-blue-500 hover:underline focus:outline-none ml-1"
+                      onClick={() => setShowFullText(true)}
+                    >
+                      see more
+                    </button>
+                  </>
+                )}
+            </p>
+
+            {/* Expanded hidden text */}
+            {project?.details && project.details.length > 220 && (
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  showFullText
+                    ? "max-h-96 opacity-100 mt-2"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <p className="text-gray-600 leading-relaxed">
+                  {project.details.substring(220)}
+                </p>
+                <button
+                  className="text-blue-500 hover:underline focus:outline-none mt-1 block"
+                  onClick={() => setShowFullText(false)}
+                >
+                  see less
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap justify-between items-center mb-4">
+          <div>
+            <span className="text-gray-700 mr-2">Skill Required:</span>
+            {project.skills &&
+              project?.skills.map((skil) => (
+                <a href="#" className="text-blue-500 hover:underline mr-1">
+                  {skil}
+                </a>
+              ))}
+          </div>
+          <span className="text-gray-400 text-sm">10 min ago</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
+            <span className="text-sm text-gray-600">Attachment 1</span>
+          </div>
+          <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
+            <span className="text-sm text-gray-600">Attachment 2</span>
+          </div>
+          <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
+            <span className="text-sm text-gray-600">Attachment 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
