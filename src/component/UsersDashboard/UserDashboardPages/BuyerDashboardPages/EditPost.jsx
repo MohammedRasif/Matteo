@@ -124,7 +124,7 @@ function EditPost() {
         return;
       }
 
-      alert("Post updated successfully!");
+      //   alert("Post updated successfully!");
       navigate("/dashboard/buyer_order_create");
     } catch (err) {
       console.error("❌ Error submitting update:", err);

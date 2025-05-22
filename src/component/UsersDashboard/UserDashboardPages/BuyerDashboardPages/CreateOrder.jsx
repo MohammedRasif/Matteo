@@ -103,7 +103,7 @@ function CreateOrder() {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <Link to="/dashboard">
+        <Link to="/dashboard/createBuyerOrder">
           <button className="flex items-center text-[#154153] cursor-pointer gap-1">
             <GoArrowLeft />
             <span>Back</span>
