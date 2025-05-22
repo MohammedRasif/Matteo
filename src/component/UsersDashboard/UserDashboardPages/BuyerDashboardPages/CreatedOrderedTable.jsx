@@ -219,7 +219,7 @@ function CreatedOrderedTable() {
       })
       .catch((err) => console.log("Error fetching data:", err.message));
 
-    fetch(`${BaseUrl}/api/v1/orders/active-orders/seller/`, {
+    fetch(`${BaseUrl}/api/v1/orders/active-orders/buyer/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
