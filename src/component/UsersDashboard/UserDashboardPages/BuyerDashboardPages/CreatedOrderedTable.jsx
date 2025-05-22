@@ -25,6 +25,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { TbFileLike } from "react-icons/tb";
 import { VscEye } from "react-icons/vsc";
 import GiveAReviewRating from "../../GiveAReviewRating"; // Assuming this component is available
+import FormatDateTime from "./FormatDateTime";
 
 function CreatedOrderedTable() {
   const navigate = useNavigate();
@@ -341,10 +342,14 @@ function CreatedOrderedTable() {
                               >
                                 <IoEyeOutline /> Show all bids
                               </Link>
-                              <li className="px-4 py-2 cursor-pointer flex items-center gap-2">
+                              <Link
+                                to={`/dashboard/edit_created_order`}
+                                state={{ id: project.projectId }}
+                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                              >
                                 <BiEdit />
                                 Edit
-                              </li>
+                              </Link>
                               <li
                                 onClick={() =>
                                   handleDeleteProject(project.projectId)
@@ -1204,9 +1209,12 @@ function CreatedOrderedTable() {
 
 export default CreatedOrderedTable;
 
+// outer component
 const DetailsModal = ({ id, handleCloseModal, url }) => {
   const [project, setProject] = useState({});
+  const [showFullText, setShowFullText] = useState(false);
   const token = localStorage.getItem("access_token");
+
   useEffect(() => {
     fetch(`${BaseUrl}/api/v1/${url}${id}/`, {
       method: "GET",
@@ -1219,8 +1227,9 @@ const DetailsModal = ({ id, handleCloseModal, url }) => {
       .then((data) => setProject(data))
       .catch((err) => console.log(err));
   }, [id]);
+
   return (
-    <div className="w-full h-full mx-auto">
+    <div className="w-[600px]">
       <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5">
         <button
           className="btn btn-sm btn-circle hover:cursor-pointer"
@@ -1230,68 +1239,58 @@ const DetailsModal = ({ id, handleCloseModal, url }) => {
             <GoArrowLeft /> <span>Back</span>
           </div>
         </button>
+
         <div className="flex justify-between items-start mb-2">
           <h2 className="text-lg font-medium text-gray-800">{project.title}</h2>
           <button className="text-gray-400 hover:text-gray-600">
             <PiDotsThreeBold />
           </button>
         </div>
+
         <div className="flex justify-between flex-col items-start mb-4">
           <p className="text-gray-700">
-            Budget ${project.price}USD/{project.payment_type} (
+            Budget ${project.price} USD / {project.payment_type} (
             {project?.required_person} Person Required)
           </p>
           <p className="text-gray-700">
             Time: <span className="font-medium">{project.duration} day</span>
           </p>
         </div>
+
         <div className="mb-4">
           <div className="relative">
             <p className="text-gray-600 leading-relaxed">
               {project?.details
-                ? project.details.length > 220
-                  ? project.details.substring(0, 220)
-                  : project.details
+                ? showFullText
+                  ? project.details
+                  : project.details.substring(0, 220)
                 : "No details available."}
 
-              {/* Show "see more" only if text is longer than 220 chars and not fully expanded */}
-              {project?.details &&
-                project.details.length > 220 &&
-                !showFullText && (
-                  <>
-                    <span className="transition-opacity duration-300 opacity-100">
-                      ...
-                    </span>
+              {project?.details && project.details.length > 220 && (
+                <>
+                  {!showFullText ? (
+                    <>
+                      <span className="transition-opacity duration-300 opacity-100">
+                        ...
+                      </span>
+                      <button
+                        className="text-blue-500 hover:underline hover:cursor-pointer focus:outline-none ml-1"
+                        onClick={() => setShowFullText(true)}
+                      >
+                        see more
+                      </button>
+                    </>
+                  ) : (
                     <button
-                      className="text-blue-500 hover:underline focus:outline-none ml-1"
-                      onClick={() => setShowFullText(true)}
+                      className="text-blue-500 hover:underline hover:cursor-pointer focus:outline-none ml-1"
+                      onClick={() => setShowFullText(false)}
                     >
-                      see more
+                      see less
                     </button>
-                  </>
-                )}
+                  )}
+                </>
+              )}
             </p>
-
-            {/* Expanded hidden text */}
-            {project?.details && project.details.length > 220 && (
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  showFullText
-                    ? "max-h-96 opacity-100 mt-2"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <p className="text-gray-600 leading-relaxed">
-                  {project.details.substring(220)}
-                </p>
-                <button
-                  className="text-blue-500 hover:underline focus:outline-none mt-1 block"
-                  onClick={() => setShowFullText(false)}
-                >
-                  see less
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
@@ -1299,14 +1298,22 @@ const DetailsModal = ({ id, handleCloseModal, url }) => {
           <div>
             <span className="text-gray-700 mr-2">Skill Required:</span>
             {project.skills &&
-              project?.skills.map((skil) => (
-                <a href="#" className="text-blue-500 hover:underline mr-1">
-                  {skil},
+              project.skills.map((skil, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="text-blue-500 hover:underline mr-1"
+                >
+                  {skil}
+                  {index < project.skills.length - 1 ? "," : ""}
                 </a>
               ))}
           </div>
-          <span className="text-gray-400 text-sm">10 min ago</span>
+          <span className="text-gray-400 text-sm">
+            {FormatDateTime(project?.created_at)}
+          </span>
         </div>
+
         <div className="flex flex-wrap gap-2">
           <div className="bg-gray-100 rounded-md px-3 py-1.5 cursor-pointer">
             <span className="text-sm text-gray-600">Attachment 1</span>
