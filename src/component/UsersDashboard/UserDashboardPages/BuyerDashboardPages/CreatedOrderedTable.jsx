@@ -26,6 +26,7 @@ import { TbFileLike } from "react-icons/tb";
 import { VscEye } from "react-icons/vsc";
 import GiveAReviewRating from "../../GiveAReviewRating"; // Assuming this component is available
 import FormatDateTime from "./FormatDateTime";
+import toast, { Toaster } from "react-hot-toast";
 
 function CreatedOrderedTable() {
   const navigate = useNavigate();
@@ -117,10 +118,12 @@ function CreatedOrderedTable() {
         );
         setOpenDropdownAction(null);
         setOpenModal(false);
+        toast.error("Deleted successfully!!");
       })
       .catch((err) => {
         console.log("Error deleting order:", err.message);
         alert("Delete failed: " + err.message);
+        toast.error(`Delete failed `);
       });
   };
 
@@ -181,1029 +184,1043 @@ function CreatedOrderedTable() {
       .catch((err) => console.log(err));
   }, []);
   return (
-    <div className="my-10 nunito">
-      <h1 className="text-[24.8px] font-bold text-center mb-10 nunito">
-        Order Management
-      </h1>
+    <>
+      <Toaster />
+      <div className="my-10 nunito">
+        <h1 className="text-[24.8px] font-bold text-center mb-10 nunito">
+          Order Management
+        </h1>
 
-      <div className="flex mb-4 justify-center">
-        <div className="bg-[#acaeaf23] rounded-full">
-          <button
-            className={`px-6 py-2 rounded-full hover:cursor-pointer ${
-              activeTab === "seller"
-                ? "bg-[#1B97D8] text-white"
-                : "text-[#012939]"
-            }`}
-            onClick={() => handleTabChange("seller")}
-          >
-            Seller
-          </button>
-          <button
-            className={`px-6 py-2 rounded-full hover:cursor-pointer ${
-              activeTab === "buyer"
-                ? "bg-[#1B97D8] text-white"
-                : "text-[#012939]"
-            }`}
-            onClick={() => handleTabChange("buyer")}
-          >
-            Buyer
-          </button>
-        </div>
-      </div>
-
-      {/* Filters and search */}
-      <div className="flex justify-between mx-6 my-3">
-        <div className="relative inline-block text-left" ref={dropdownRef}>
-          <div
-            className="text-[#012939] flex items-center gap-1 bg-[#F6F8FA] px-2 py-1 rounded cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <p>{statusFilter || "All Orders"}</p>
-            <IoIosArrowForward
-              className={`transition-transform ${isOpen ? "rotate-90" : ""}`}
-            />
+        <div className="flex mb-4 justify-center">
+          <div className="bg-[#acaeaf23] rounded-full">
+            <button
+              className={`px-6 py-2 rounded-full hover:cursor-pointer ${
+                activeTab === "seller"
+                  ? "bg-[#1B97D8] text-white"
+                  : "text-[#012939]"
+              }`}
+              onClick={() => handleTabChange("seller")}
+            >
+              Seller
+            </button>
+            <button
+              className={`px-6 py-2 rounded-full hover:cursor-pointer ${
+                activeTab === "buyer"
+                  ? "bg-[#1B97D8] text-white"
+                  : "text-[#012939]"
+              }`}
+              onClick={() => handleTabChange("buyer")}
+            >
+              Buyer
+            </button>
           </div>
-          {isOpen && (
-            <div className="absolute mt-2 w-40 text-[#012939] bg-white shadow-md rounded p-2 z-10 space-y-2">
-              {[
-                "Created",
-                "Cancel request",
-                "Delivered",
-                "Late",
-                "Cancelled",
-                "In-Progress",
-                "",
-              ].map((status, index) => (
-                <p
-                  key={index}
-                  onClick={() => {
-                    setStatusFilter(status);
-                    setIsOpen(false);
-                    if (status === "Created") {
-                      navigate("/dashboard/buyer_order_create");
-                    }
-                  }}
-                  className="hover:bg-gray-100 p-1 rounded cursor-pointer flex items-center gap-1 text-[15px]"
-                >
-                  {status === "" ? "All Orders" : status}
-                  <IoIosArrowForward />
-                </p>
-              ))}
+        </div>
+
+        {/* Filters and search */}
+        <div className="flex justify-between mx-6 my-3">
+          <div className="relative inline-block text-left" ref={dropdownRef}>
+            <div
+              className="text-[#012939] flex items-center gap-1 bg-[#F6F8FA] px-2 py-1 rounded cursor-pointer"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <p>{statusFilter || "All Orders"}</p>
+              <IoIosArrowForward
+                className={`transition-transform ${isOpen ? "rotate-90" : ""}`}
+              />
             </div>
-          )}
-        </div>
+            {isOpen && (
+              <div className="absolute mt-2 w-40 text-[#012939] bg-white shadow-md rounded p-2 z-10 space-y-2">
+                {[
+                  "Created",
+                  "Cancel request",
+                  "Delivered",
+                  "Late",
+                  "Cancelled",
+                  "In-Progress",
+                  "",
+                ].map((status, index) => (
+                  <p
+                    key={index}
+                    onClick={() => {
+                      setStatusFilter(status);
+                      setIsOpen(false);
+                      if (status === "Created") {
+                        navigate("/dashboard/buyer_order_create");
+                      }
+                    }}
+                    className="hover:bg-gray-100 p-1 rounded cursor-pointer flex items-center gap-1 text-[15px]"
+                  >
+                    {status === "" ? "All Orders" : status}
+                    <IoIosArrowForward />
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="flex gap-4">
-          <Link to="/dashboard/createBuyerOrder">
-            <p className="text-[#38A3DC] border border-[#38A3DC] p-1 rounded cursor-pointer">
-              Create Order +
-            </p>
-          </Link>
-          <div className="flex items-center">
-            <input
-              className="bg-[#F6F8FA] rounded-l p-2"
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-            <IoIosSearch className="bg-[#acaeaf23] p-3 size-10 text-[#B9C0C7]" />
+          <div className="flex gap-4">
+            <Link to="/dashboard/createBuyerOrder">
+              <p className="text-[#38A3DC] border border-[#38A3DC] p-1 rounded cursor-pointer">
+                Create Order +
+              </p>
+            </Link>
+            <div className="flex items-center">
+              <input
+                className="bg-[#F6F8FA] rounded-l p-2"
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <IoIosSearch className="bg-[#acaeaf23] p-3 size-10 text-[#B9C0C7]" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr className="mx-6 text-[#D8DBDD] mb-3" />
+        <hr className="mx-6 text-[#D8DBDD] mb-3" />
 
-      {/* Conditional rendering based on statusFilter */}
-      {statusFilter === "Created" ? (
-        <div className="w-full rounded">
-          <div className="">
-            <table className="w-full">
-              <thead className="border-[#C1DDEF] text-left">
+        {/* Conditional rendering based on statusFilter */}
+        {statusFilter === "Created" ? (
+          <div className="w-full rounded">
+            <div className="">
+              <table className="w-full">
+                <thead className="border-[#C1DDEF] text-left">
+                  <tr>
+                    <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+                      Date of creation
+                    </th>
+                    <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+                      Duration
+                    </th>
+                    <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+                      Project ID
+                    </th>
+                    <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+                      Amount
+                    </th>
+                    <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectData.map((project, index) => (
+                    <tr key={index}>
+                      <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
+                        {project.date}
+                      </td>
+                      <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
+                        <div className="flex items-center">
+                          <ClockIcon className="mr-2 h-4 w-4 text-[#718096]" />
+                          {project.duration} / days
+                        </div>
+                      </td>
+                      <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
+                        {project.projectId}
+                      </td>
+                      <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
+                        {project.amount} <span className="font-bold">$</span>
+                        {" / "}
+                        {project?.payment_type}
+                      </td>
+                      <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm w-[195px]">
+                        <div
+                          className="relative"
+                          ref={(el) =>
+                            (dropdownRefs.current[project.projectId] = el)
+                          }
+                        >
+                          <button
+                            onClick={() =>
+                              handleDropdownToggleAction(project.projectId)
+                            }
+                            className="text-[#718096] cursor-pointer"
+                          >
+                            <PiDotsThree className="h-5 w-5" />
+                          </button>
+                          {openDropdownAction === project.projectId && (
+                            <div className="absolute right-0 mt-1 w-[195px] bg-[#FAFDFF] rounded z-10">
+                              <ul className="text-sm text-[#2c3e50]">
+                                <Link
+                                  to="/dashboard/buyer_candidate_list"
+                                  className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                                >
+                                  <IoEyeOutline /> Show all bids
+                                </Link>
+                                <Link
+                                  to={`/dashboard/edit_created_order`}
+                                  state={{ id: project.projectId }}
+                                  className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                                >
+                                  <BiEdit />
+                                  Edit
+                                </Link>
+                                <li
+                                  onClick={() =>
+                                    handleDeleteProject(project.projectId)
+                                  }
+                                  className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                                >
+                                  <RiDeleteBinLine />
+                                  Delete
+                                </li>
+                                <li className="px-4 py-2 cursor-pointer flex items-center gap-2">
+                                  <BsPersonCheckFill />
+                                  Assign
+                                </li>
+                                <li
+                                  onClick={() => {
+                                    handleOpenModal("details");
+                                  }}
+                                  className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                                >
+                                  <TbListDetails />
+                                  Details
+                                </li>
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <div className="mx-6 mt-2">
+            <table className="min-w-full rounded-xl cursor-pointer shadow-sm">
+              <thead className="text-[#012939] border-b border-gray-300">
                 <tr>
-                  <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
-                    Date of creation
-                  </th>
-                  <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
-                    Duration
-                  </th>
-                  <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
-                    Project ID
-                  </th>
-                  <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
-                    Amount
-                  </th>
-                  <th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
-                    Action
-                  </th>
+                  <th className="px-4 py-2 text-left">Username</th>
+                  <th className="px-4 py-2 text-left">Delivery time</th>
+                  <th className="px-4 py-2 text-left">Order ID</th>
+                  <th className="px-4 py-2 text-left">Amount</th>
+                  <th className="px-4 py-2 text-left">Status</th>
+                  <th className="px-4 py-2 text-left">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {projectData.map((project, index) => (
-                  <tr key={index}>
-                    <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
-                      {project.date}
+                {filteredOrders.map((order) => (
+                  <tr
+                    key={order.order_id}
+                    className="border-b border-[#C1DDEF] transition text-[#012939] text-[15px]"
+                  >
+                    <td className="px-4 py-3 flex items-center gap-2">
+                      <img
+                        src={order.image}
+                        alt={order.username}
+                        className="w-[35px] h-[35px] rounded-full"
+                      />
+                      <span>{order.username}</span>
                     </td>
-                    <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
-                      <div className="flex items-center">
-                        <ClockIcon className="mr-2 h-4 w-4 text-[#718096]" />
-                        {project.duration} / days
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <IoTimeOutline />
+                        {new Date(order.delivery_time).toLocaleString()}
                       </div>
                     </td>
-                    <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
-                      {project.projectId}
-                    </td>
-                    <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
-                      {project.amount} <span className="font-bold">$</span>
-                      {" / "}
-                      {project?.payment_type}
-                    </td>
-                    <td className="border-b border-[#C1DDEF] px-6 py-4 text-sm w-[195px]">
-                      <div
-                        className="relative"
-                        ref={(el) =>
-                          (dropdownRefs.current[project.projectId] = el)
-                        }
-                      >
-                        <button
-                          onClick={() =>
-                            handleDropdownToggleAction(project.projectId)
+                    <td className="px-4 py-3">{order.order_id}</td>
+                    <td className="px-4 py-3">${order.amount.toFixed(2)}</td>
+                    <td
+                      className={`px-4 py-2 text-sm font-semibold ${
+                        order.status === "In-Progress"
+                          ? "text-[#6055C2]"
+                          : order.status === "Delivered"
+                          ? "text-[#268F39] flex items-center cursor-pointer"
+                          : order.status === "Late"
+                          ? "text-[#E35A5A]"
+                          : order.status === "Cancelled"
+                          ? "text-[#5D7595]"
+                          : order.status === "Cancel request"
+                          ? "text-[#E35A5A] flex items-center cursor-pointer"
+                          : order.status === "Complete"
+                          ? "text-[#088ED5] flex items-center cursor-pointer"
+                          : ""
+                      }`}
+                    >
+                      <span
+                        className="inline-flex items-center"
+                        onClick={() => {
+                          if (order.status === "Delivered") {
+                            document
+                              .getElementById("modal_delivered")
+                              .showModal();
+                          } else if (order.status === "Complete") {
+                            document
+                              .getElementById("modal_complete")
+                              .showModal();
+                          } else if (order.status === "Cancel request") {
+                            document
+                              .getElementById("modal_cancel_request")
+                              .showModal();
                           }
-                          className="text-[#718096] cursor-pointer"
-                        >
-                          <PiDotsThree className="h-5 w-5" />
-                        </button>
-                        {openDropdownAction === project.projectId && (
-                          <div className="absolute right-0 mt-1 w-[195px] bg-[#FAFDFF] rounded z-10">
-                            <ul className="text-sm text-[#2c3e50]">
-                              <Link
-                                to="/dashboard/buyer_candidate_list"
-                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
-                              >
-                                <IoEyeOutline /> Show all bids
-                              </Link>
-                              <Link
-                                to={`/dashboard/edit_created_order`}
-                                state={{ id: project.projectId }}
-                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
-                              >
-                                <BiEdit />
-                                Edit
-                              </Link>
-                              <li
-                                onClick={() =>
-                                  handleDeleteProject(project.projectId)
-                                }
-                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
-                              >
-                                <RiDeleteBinLine />
-                                Delete
-                              </li>
-                              <li className="px-4 py-2 cursor-pointer flex items-center gap-2">
-                                <BsPersonCheckFill />
-                                Assign
-                              </li>
-                              <li
-                                onClick={() => {
-                                  handleOpenModal("details");
-                                }}
-                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
-                              >
-                                <TbListDetails />
-                                Details
-                              </li>
-                            </ul>
-                          </div>
+                        }}
+                      >
+                        {order.status}
+                        {(order.status === "Delivered" ||
+                          order.status === "Complete" ||
+                          order.status === "Cancel request") && (
+                          <VscEye className="ml-1 text-[16px] cursor-pointer" />
                         )}
-                      </div>
+                      </span>
                     </td>
+                    <td className="px-4 py-3 relative text-[#012939]">
+                      <div
+                        onClick={() =>
+                          handleDropdownToggleAction(order.order_id)
+                        }
+                        className="cursor-pointer"
+                      >
+                        {order.action}
+                      </div>
+                      {openDropdownAction === order.order_id && (
+                        <div
+                          ref={actionDropdownRef}
+                          className="absolute right-0 w-[195px] text-[16px] text-[#012939] bg-[#FAFDFF] border border-gray-200 rounded shadow-md z-20 p-2 space-y-2"
+                        >
+                          {(() => {
+                            const status = order.status
+                              ? order.status
+                                  .toLowerCase()
+                                  .replace(/[-_\s]/g, "")
+                              : "";
+                            if (["inprogress", "late"].includes(status)) {
+                              return (
+                                <>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("cancel")}
+                                  >
+                                    <RxCrossCircled />
+                                    <p>Request to cancel</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("extend")}
+                                  >
+                                    <MdMoreTime />
+                                    <p>Extend time</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("support")}
+                                  >
+                                    <MdOutlineHeadsetMic />
+                                    <p>Admin support</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("details")}
+                                  >
+                                    <TbListDetails />
+                                    <p>View project details</p>
+                                  </div>
+                                </>
+                              );
+                            }
+                            if (["complete", "completed"].includes(status)) {
+                              return (
+                                <>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("cancel")}
+                                  >
+                                    <RxCrossCircled />
+                                    <p>Request to cancel</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("extend")}
+                                  >
+                                    <MdMoreTime />
+                                    <p>Extend time</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("tip")}
+                                  >
+                                    <CiDollar />
+                                    <p>Give a tip</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("review")}
+                                  >
+                                    <TbFileLike />
+                                    <p>Give a review</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("delivery")}
+                                  >
+                                    <MdOutlineCleanHands />
+                                    <p>View delivery</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("support")}
+                                  >
+                                    <MdOutlineHeadsetMic />
+                                    <p>Admin support</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("details")}
+                                  >
+                                    <TbListDetails />
+                                    <p>View project details</p>
+                                  </div>
+                                </>
+                              );
+                            }
+                            if (status === "cancelled") {
+                              return (
+                                <>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() =>
+                                      handleDeleteOrder(order.order_id)
+                                    }
+                                  >
+                                    <RiDeleteBin6Line />
+                                    <p>Delete</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("support")}
+                                  >
+                                    <MdOutlineHeadsetMic />
+                                    <p>Admin support</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("details")}
+                                  >
+                                    <TbListDetails />
+                                    <p>View project details</p>
+                                  </div>
+                                </>
+                              );
+                            }
+                            if (status === "delivered") {
+                              return (
+                                <>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("cancel")}
+                                  >
+                                    <RxCrossCircled />
+                                    <p>Request to cancel</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("extend")}
+                                  >
+                                    <MdMoreTime />
+                                    <p>Extend time</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("delivery")}
+                                  >
+                                    <MdOutlineCleanHands />
+                                    <p>View delivery</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("support")}
+                                  >
+                                    <MdOutlineHeadsetMic />
+                                    <p>Admin support</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("details")}
+                                  >
+                                    <TbListDetails />
+                                    <p>View project details</p>
+                                  </div>
+                                </>
+                              );
+                            }
+                            if (status === "cancelrequest") {
+                              return (
+                                <>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("extend")}
+                                  >
+                                    <MdMoreTime />
+                                    <p>Extend time</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() =>
+                                      handleOpenModal("viewCancel")
+                                    }
+                                  >
+                                    <MdOutlineCleanHands />
+                                    <p>View cancel request</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("support")}
+                                  >
+                                    <MdOutlineHeadsetMic />
+                                    <p>Admin support</p>
+                                  </div>
+                                  <div
+                                    className="flex items-center gap-2 cursor-pointer"
+                                    onClick={() => handleOpenModal("details")}
+                                  >
+                                    <TbListDetails />
+                                    <p>View project details</p>
+                                  </div>
+                                </>
+                              );
+                            }
+                            console.log(
+                              `Unexpected order status: ${order.status}`
+                            );
+                            return null;
+                          })()}
+                        </div>
+                      )}
+                    </td>
+
+                    {/* Status Modals */}
+                    <dialog
+                      id="modal_delivered"
+                      className="modal modal-middle ml-[40%] mt-[300px] rounded backdrop-blur"
+                    >
+                      <div className="modal-box bg-[#EFF2F6] text-[#154153] pt-4 pb-6 px-6 w-[470px] py-10">
+                        <form method="dialog">
+                          <button className="btn btn-sm absolute flex items-center gap-2">
+                            <GoArrowLeft /> <span>Back</span>
+                          </button>
+                        </form>
+                        <div>
+                          <h1 className="text-xl font-medium my-6 text-center">
+                            Delivery request
+                          </h1>
+                          <div className="mb-6">
+                            <h2 className="text-[16px] font-medium mb-2">
+                              Delivery message
+                            </h2>
+                            <p className="text-sm text-slate-600">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry. Lorem Ipsum has been the
+                              industrys standard dummy text ever since the
+                              1500s, when an unknown printer took a galley of
+                              type and scrambled it to make a type specimen
+                              book.
+                            </p>
+                          </div>
+                          <div className="mb-12">
+                            <h2 className="text-[16px] font-medium text-slate-700 mb-2">
+                              Uploaded files
+                            </h2>
+                            <div className="flex flex-wrap gap-2">
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 1
+                                </span>
+                              </div>
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 2
+                                </span>
+                              </div>
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 3
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
+                              Edit
+                            </button>
+                            <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </dialog>
+
+                    <dialog
+                      id="modal_complete"
+                      className="modal modal-middle ml-[40%] mt-[300px] rounded"
+                    >
+                      <div className="modal-box bg-[#EFF2F6] text-[#154153] px-6 py-10 rounded-lg w-[470px]">
+                        <form method="dialog">
+                          <button className="btn btn-sm absolute top-4 flex items-center gap-2">
+                            <GoArrowLeft /> <span>Back</span>
+                          </button>
+                        </form>
+                        <div>
+                          <div className="flex-grow text-center">
+                            <h1 className="text-base font-medium text-[20px]">
+                              Completed
+                            </h1>
+                          </div>
+                          <div className="mb-6">
+                            <h2 className="text-[16px] font-medium text-slate-700 mb-2">
+                              Delivery message
+                            </h2>
+                            <p className="text-sm text-slate-600">
+                              Lorem Ipsum is simply dummy text of the printing
+                              and typesetting industry. Lorem Ipsum has been the
+                              industrys standard dummy text ever since the
+                              1500s, when an unknown printer took a galley of
+                              type and scrambled it to make a type specimen
+                              book.
+                            </p>
+                          </div>
+                          <div>
+                            <div className="flex flex-wrap gap-2">
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 1
+                                </span>
+                              </div>
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 2
+                                </span>
+                              </div>
+                              <div className="bg-slate-200 rounded-md px-3 py-1">
+                                <span className="text-xs text-slate-700">
+                                  Attachment 3
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </dialog>
+
+                    <dialog
+                      id="modal_cancel_request"
+                      className="modal modal-middle ml-[40%] mt-[300px] rounded"
+                    >
+                      <div className="modal-box bg-[#EFF2F6] text-[#154153] pt-4 pb-6 px-6 w-[470px] py-10">
+                        <form method="dialog">
+                          <button className="btn btn-sm absolute flex items-center gap-2">
+                            <GoArrowLeft /> <span>Back</span>
+                          </button>
+                        </form>
+                        <div>
+                          <h1 className="text-xl font-medium my-6 text-center">
+                            Cancel request
+                          </h1>
+                          <div className="my-14">
+                            <h2 className="text-[16px] font-medium mb-2">
+                              Reason of cancellation
+                            </h2>
+                            <p className="text-sm text-slate-600">
+                              Lorem Ipsumis simply dummy text of the printing
+                              and typesetting industry. Lorem Ipsum has been the
+                              industrys standard dummy text ever since the
+                              1500s, when an unknown printer took a galley of
+                              type and scrambled it to make a type specimen
+                              book.
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
+                              Decline
+                            </button>
+                            <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
+                              Accept
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </dialog>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-      ) : (
-        <div className="mx-6 mt-2">
-          <table className="min-w-full rounded-xl cursor-pointer shadow-sm">
-            <thead className="text-[#012939] border-b border-gray-300">
-              <tr>
-                <th className="px-4 py-2 text-left">Username</th>
-                <th className="px-4 py-2 text-left">Delivery time</th>
-                <th className="px-4 py-2 text-left">Order ID</th>
-                <th className="px-4 py-2 text-left">Amount</th>
-                <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredOrders.map((order) => (
-                <tr
-                  key={order.order_id}
-                  className="border-b border-[#C1DDEF] transition text-[#012939] text-[15px]"
-                >
-                  <td className="px-4 py-3 flex items-center gap-2">
-                    <img
-                      src={order.image}
-                      alt={order.username}
-                      className="w-[35px] h-[35px] rounded-full"
-                    />
-                    <span>{order.username}</span>
-                  </td>
-                  <td className="px-4 py-3">
+        )}
+
+        {/* DaisyUI Modal for action dropdown */}
+        {openModal && (
+          <div className="fixed inset-0 flex items-center justify-center backdrop-blur z-50">
+            <div className="modal modal-open">
+              {modalContent === "cancel" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] h-[370px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
                     <div className="flex items-center gap-2">
-                      <IoTimeOutline />
-                      {new Date(order.delivery_time).toLocaleString()}
+                      <GoArrowLeft /> <span>Back</span>
                     </div>
-                  </td>
-                  <td className="px-4 py-3">{order.order_id}</td>
-                  <td className="px-4 py-3">${order.amount.toFixed(2)}</td>
-                  <td
-                    className={`px-4 py-2 text-sm font-semibold ${
-                      order.status === "In-Progress"
-                        ? "text-[#6055C2]"
-                        : order.status === "Delivered"
-                        ? "text-[#268F39] flex items-center cursor-pointer"
-                        : order.status === "Late"
-                        ? "text-[#E35A5A]"
-                        : order.status === "Cancelled"
-                        ? "text-[#5D7595]"
-                        : order.status === "Cancel request"
-                        ? "text-[#E35A5A] flex items-center cursor-pointer"
-                        : order.status === "Complete"
-                        ? "text-[#088ED5] flex items-center cursor-pointer"
-                        : ""
-                    }`}
-                  >
-                    <span
-                      className="inline-flex items-center"
-                      onClick={() => {
-                        if (order.status === "Delivered") {
-                          document
-                            .getElementById("modal_delivered")
-                            .showModal();
-                        } else if (order.status === "Complete") {
-                          document.getElementById("modal_complete").showModal();
-                        } else if (order.status === "Cancel request") {
-                          document
-                            .getElementById("modal_cancel_request")
-                            .showModal();
-                        }
-                      }}
-                    >
-                      {order.status}
-                      {(order.status === "Delivered" ||
-                        order.status === "Complete" ||
-                        order.status === "Cancel request") && (
-                        <VscEye className="ml-1 text-[16px] cursor-pointer" />
-                      )}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 relative text-[#012939]">
-                    <div
-                      onClick={() => handleDropdownToggleAction(order.order_id)}
-                      className="cursor-pointer"
-                    >
-                      {order.action}
-                    </div>
-                    {openDropdownAction === order.order_id && (
-                      <div
-                        ref={actionDropdownRef}
-                        className="absolute right-0 w-[195px] text-[16px] text-[#012939] bg-[#FAFDFF] border border-gray-200 rounded shadow-md z-20 p-2 space-y-2"
-                      >
-                        {(() => {
-                          const status = order.status
-                            ? order.status.toLowerCase().replace(/[-_\s]/g, "")
-                            : "";
-                          if (["inprogress", "late"].includes(status)) {
-                            return (
-                              <>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("cancel")}
-                                >
-                                  <RxCrossCircled />
-                                  <p>Request to cancel</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("extend")}
-                                >
-                                  <MdMoreTime />
-                                  <p>Extend time</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("support")}
-                                >
-                                  <MdOutlineHeadsetMic />
-                                  <p>Admin support</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("details")}
-                                >
-                                  <TbListDetails />
-                                  <p>View project details</p>
-                                </div>
-                              </>
-                            );
-                          }
-                          if (["complete", "completed"].includes(status)) {
-                            return (
-                              <>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("cancel")}
-                                >
-                                  <RxCrossCircled />
-                                  <p>Request to cancel</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("extend")}
-                                >
-                                  <MdMoreTime />
-                                  <p>Extend time</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("tip")}
-                                >
-                                  <CiDollar />
-                                  <p>Give a tip</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("review")}
-                                >
-                                  <TbFileLike />
-                                  <p>Give a review</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("delivery")}
-                                >
-                                  <MdOutlineCleanHands />
-                                  <p>View delivery</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("support")}
-                                >
-                                  <MdOutlineHeadsetMic />
-                                  <p>Admin support</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("details")}
-                                >
-                                  <TbListDetails />
-                                  <p>View project details</p>
-                                </div>
-                              </>
-                            );
-                          }
-                          if (status === "cancelled") {
-                            return (
-                              <>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() =>
-                                    handleDeleteOrder(order.order_id)
-                                  }
-                                >
-                                  <RiDeleteBin6Line />
-                                  <p>Delete</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("support")}
-                                >
-                                  <MdOutlineHeadsetMic />
-                                  <p>Admin support</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("details")}
-                                >
-                                  <TbListDetails />
-                                  <p>View project details</p>
-                                </div>
-                              </>
-                            );
-                          }
-                          if (status === "delivered") {
-                            return (
-                              <>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("cancel")}
-                                >
-                                  <RxCrossCircled />
-                                  <p>Request to cancel</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("extend")}
-                                >
-                                  <MdMoreTime />
-                                  <p>Extend time</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("delivery")}
-                                >
-                                  <MdOutlineCleanHands />
-                                  <p>View delivery</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("support")}
-                                >
-                                  <MdOutlineHeadsetMic />
-                                  <p>Admin support</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("details")}
-                                >
-                                  <TbListDetails />
-                                  <p>View project details</p>
-                                </div>
-                              </>
-                            );
-                          }
-                          if (status === "cancelrequest") {
-                            return (
-                              <>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("extend")}
-                                >
-                                  <MdMoreTime />
-                                  <p>Extend time</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("viewCancel")}
-                                >
-                                  <MdOutlineCleanHands />
-                                  <p>View cancel request</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("support")}
-                                >
-                                  <MdOutlineHeadsetMic />
-                                  <p>Admin support</p>
-                                </div>
-                                <div
-                                  className="flex items-center gap-2 cursor-pointer"
-                                  onClick={() => handleOpenModal("details")}
-                                >
-                                  <TbListDetails />
-                                  <p>View project details</p>
-                                </div>
-                              </>
-                            );
-                          }
-                          console.log(
-                            `Unexpected order status: ${order.status}`
-                          );
-                          return null;
-                        })()}
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Status Modals */}
-                  <dialog
-                    id="modal_delivered"
-                    className="modal modal-middle ml-[40%] mt-[300px] rounded backdrop-blur"
-                  >
-                    <div className="modal-box bg-[#EFF2F6] text-[#154153] pt-4 pb-6 px-6 w-[470px] py-10">
-                      <form method="dialog">
-                        <button className="btn btn-sm absolute flex items-center gap-2">
-                          <GoArrowLeft /> <span>Back</span>
-                        </button>
-                      </form>
-                      <div>
-                        <h1 className="text-xl font-medium my-6 text-center">
-                          Delivery request
-                        </h1>
-                        <div className="mb-6">
-                          <h2 className="text-[16px] font-medium mb-2">
-                            Delivery message
-                          </h2>
-                          <p className="text-sm text-slate-600">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the
-                            industrys standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and
-                            scrambled it to make a type specimen book.
-                          </p>
-                        </div>
-                        <div className="mb-12">
-                          <h2 className="text-[16px] font-medium text-slate-700 mb-2">
-                            Uploaded files
-                          </h2>
-                          <div className="flex flex-wrap gap-2">
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 1
-                              </span>
-                            </div>
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 2
-                              </span>
-                            </div>
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 3
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
-                            Edit
-                          </button>
-                          <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </dialog>
-
-                  <dialog
-                    id="modal_complete"
-                    className="modal modal-middle ml-[40%] mt-[300px] rounded"
-                  >
-                    <div className="modal-box bg-[#EFF2F6] text-[#154153] px-6 py-10 rounded-lg w-[470px]">
-                      <form method="dialog">
-                        <button className="btn btn-sm absolute top-4 flex items-center gap-2">
-                          <GoArrowLeft /> <span>Back</span>
-                        </button>
-                      </form>
-                      <div>
-                        <div className="flex-grow text-center">
-                          <h1 className="text-base font-medium text-[20px]">
-                            Completed
-                          </h1>
-                        </div>
-                        <div className="mb-6">
-                          <h2 className="text-[16px] font-medium text-slate-700 mb-2">
-                            Delivery message
-                          </h2>
-                          <p className="text-sm text-slate-600">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the
-                            industrys standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and
-                            scrambled it to make a type specimen book.
-                          </p>
-                        </div>
-                        <div>
-                          <div className="flex flex-wrap gap-2">
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 1
-                              </span>
-                            </div>
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 2
-                              </span>
-                            </div>
-                            <div className="bg-slate-200 rounded-md px-3 py-1">
-                              <span className="text-xs text-slate-700">
-                                Attachment 3
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </dialog>
-
-                  <dialog
-                    id="modal_cancel_request"
-                    className="modal modal-middle ml-[40%] mt-[300px] rounded"
-                  >
-                    <div className="modal-box bg-[#EFF2F6] text-[#154153] pt-4 pb-6 px-6 w-[470px] py-10">
-                      <form method="dialog">
-                        <button className="btn btn-sm absolute flex items-center gap-2">
-                          <GoArrowLeft /> <span>Back</span>
-                        </button>
-                      </form>
-                      <div>
-                        <h1 className="text-xl font-medium my-6 text-center">
-                          Cancel request
-                        </h1>
-                        <div className="my-14">
-                          <h2 className="text-[16px] font-medium mb-2">
-                            Reason of cancellation
-                          </h2>
-                          <p className="text-sm text-slate-600">
-                            Lorem Ipsumis simply dummy text of the printing and
-                            typesetting industry. Lorem Ipsum has been the
-                            industrys standard dummy text ever since the 1500s,
-                            when an unknown printer took a galley of type and
-                            scrambled it to make a type specimen book.
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
-                            Decline
-                          </button>
-                          <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
-                            Accept
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </dialog>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {/* DaisyUI Modal for action dropdown */}
-      {openModal && (
-        <div className="fixed inset-0 flex items-center justify-center backdrop-blur z-50">
-          <div className="modal modal-open">
-            {modalContent === "cancel" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] h-[370px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <h1 className="text-center text-[20px] font-medium">
-                  Request to cancel
-                </h1>
-                <div className="py-8">
-                  <span>Describe the Reason</span>
-                  <textarea
-                    className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-4"
-                    placeholder="Enter here"
-                  ></textarea>
-                </div>
-                <div className="text-center">
-                  <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
-                    Confirm
                   </button>
-                </div>
-              </div>
-            )}
-            {modalContent === "viewCancel" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[566px] rounded px-6 py-10 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <div>
-                  <h1 className="text-xl font-medium my-6 text-center">
-                    Cancel request
+                  <h1 className="text-center text-[20px] font-medium">
+                    Request to cancel
                   </h1>
-                  <div className="my-14">
-                    <h2 className="text-[16px] font-medium mb-2">
-                      Reason of cancellation
-                    </h2>
-                    <p className="text-sm text-slate-600">
-                      Lorem Ipsumis simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industrys
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and scrambled it to make a
-                      type specimen book.
-                    </p>
+                  <div className="py-8">
+                    <span>Describe the Reason</span>
+                    <textarea
+                      className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-4"
+                      placeholder="Enter here"
+                    ></textarea>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
-                      Decline
-                    </button>
-                    <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
-                      Accept
+                  <div className="text-center">
+                    <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
+                      Confirm
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
-            {modalContent === "tip" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[566px] rounded px-6 py-10 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
+              )}
+              {modalContent === "viewCancel" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[566px] rounded px-6 py-10 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <div>
+                    <h1 className="text-xl font-medium my-6 text-center">
+                      Cancel request
+                    </h1>
+                    <div className="my-14">
+                      <h2 className="text-[16px] font-medium mb-2">
+                        Reason of cancellation
+                      </h2>
+                      <p className="text-sm text-slate-600">
+                        Lorem Ipsumis simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the industrys
+                        standard dummy text ever since the 1500s, when an
+                        unknown printer took a galley of type and scrambled it
+                        to make a type specimen book.
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
+                        Decline
+                      </button>
+                      <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
+                        Accept
+                      </button>
+                    </div>
                   </div>
-                </button>
-                <div>
-                  <h2 className="text-lg font-medium text-[#154153] mb-4 text-center">
-                    Give a tip
-                  </h2>
-                  <form className="text-[#474747] space-y-6">
-                    <div className="flex justify-between gap-4">
-                      <div className="mb-4">
-                        <label
-                          htmlFor="username"
-                          className="block text-sm font-medium"
-                        >
-                          Candidate username
-                        </label>
-                        <div className="relative mt-1">
+                </div>
+              )}
+              {modalContent === "tip" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[566px] rounded px-6 py-10 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <div>
+                    <h2 className="text-lg font-medium text-[#154153] mb-4 text-center">
+                      Give a tip
+                    </h2>
+                    <form className="text-[#474747] space-y-6">
+                      <div className="flex justify-between gap-4">
+                        <div className="mb-4">
+                          <label
+                            htmlFor="username"
+                            className="block text-sm font-medium"
+                          >
+                            Candidate username
+                          </label>
+                          <div className="relative mt-1">
+                            <input
+                              type="text"
+                              id="username"
+                              placeholder="Search by username"
+                              className="w-full h-[32px] p-2 border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
+                            />
+                            <span className="absolute inset-y-0 right-0 pr-3 flex items-center border-l border-[#2E9DE0] pl-1">
+                              <IoSearchOutline className="rounded" />
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <label
+                            htmlFor="amount"
+                            className="block text-sm font-medium"
+                          >
+                            Amount
+                          </label>
                           <input
                             type="text"
-                            id="username"
-                            placeholder="Search by username"
-                            className="w-full h-[32px] p-2 border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
+                            id="amount"
+                            placeholder="Enter amount"
+                            className="mt-1 w-full px-3 p-2 h-[32px] border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
                           />
-                          <span className="absolute inset-y-0 right-0 pr-3 flex items-center border-l border-[#2E9DE0] pl-1">
-                            <IoSearchOutline className="rounded" />
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <label className="text-sm font-medium">Note</label>
+                        <input
+                          placeholder="Type here"
+                          className="w-full p-2 h-[32px] border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
+                        />
+                      </div>
+                      <div className="mb-4 flex gap-20 items-center">
+                        <div className="flex items-center mb-2">
+                          <input
+                            type="checkbox"
+                            id="chasix"
+                            className="h-4 w-4 text-blue-600 border-[#2E9DE0] rounded"
+                          />
+                          <label htmlFor="chasix" className="ml-2 text-sm">
+                            Pay with ChasixKI wallet
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="stripe"
+                            className="h-4 w-4 text-blue-600 border-[#2E9DE0] rounded"
+                          />
+                          <label htmlFor="stripe" className="ml-2 text-sm">
+                            Pay with Stripe
+                          </label>
+                        </div>
+                      </div>
+                      <div className="flex justify-between space-x-3">
+                        <button
+                          type="button"
+                          className="p-1 h-[29px] border border-[#2E9DE0] rounded-md w-full cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="p-1 h-[29px] border bg-[#2E9DE0] rounded-md w-full cursor-pointer"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+              {modalContent === "delivery" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <div>
+                    <h1 className="text-xl font-medium my-6 text-center">
+                      Delivery request
+                    </h1>
+                    <div className="mb-6">
+                      <h2 className="text-[16px] font-medium mb-2">
+                        Delivery message
+                      </h2>
+                      <p className="text-sm text-slate-600">
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the industrys
+                        standard dummy text ever since the 1500s, when an
+                        unknown printer took a galley of type and scrambled it
+                        to make a type specimen book.
+                      </p>
+                    </div>
+                    <div className="mb-12">
+                      <h2 className="text-[16px] font-medium text-slate-700 mb-2">
+                        Uploaded files
+                      </h2>
+                      <div className="flex flex-wrap gap-2">
+                        <div className="bg-slate-200 rounded-md px-3 py-1">
+                          <span className="text-xs text-slate-700">
+                            Attachment 1
+                          </span>
+                        </div>
+                        <div className="bg-slate-200 rounded-md px-3 py-1">
+                          <span className="text-xs text-slate-700">
+                            Attachment 2
+                          </span>
+                        </div>
+                        <div className="bg-slate-200 rounded-md px-3 py-1">
+                          <span className="text-xs text-slate-700">
+                            Attachment 3
                           </span>
                         </div>
                       </div>
-                      <div className="mb-4">
-                        <label
-                          htmlFor="amount"
-                          className="block text-sm font-medium"
-                        >
-                          Amount
-                        </label>
-                        <input
-                          type="text"
-                          id="amount"
-                          placeholder="Enter amount"
-                          className="mt-1 w-full px-3 p-2 h-[32px] border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
-                        />
-                      </div>
                     </div>
-                    <div className="mb-4">
-                      <label className="text-sm font-medium">Note</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
+                        Edit
+                      </button>
+                      <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {modalContent === "extend" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <h1 className="text-center text-[20px] font-medium">
+                    Time extension
+                  </h1>
+                  <div className="py-10 space-y-3">
+                    <div className="relative">
+                      <span>New deadline</span>
                       <input
-                        placeholder="Type here"
-                        className="w-full p-2 h-[32px] border border-[#2E9DE0] rounded-md placeholder-[#B4B4B4]"
+                        type="date"
+                        className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3 appearance-none pr-10"
                       />
                     </div>
-                    <div className="mb-4 flex gap-20 items-center">
-                      <div className="flex items-center mb-2">
-                        <input
-                          type="checkbox"
-                          id="chasix"
-                          className="h-4 w-4 text-blue-600 border-[#2E9DE0] rounded"
-                        />
-                        <label htmlFor="chasix" className="ml-2 text-sm">
-                          Pay with ChasixKI wallet
-                        </label>
-                      </div>
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id="stripe"
-                          className="h-4 w-4 text-blue-600 border-[#2E9DE0] rounded"
-                        />
-                        <label htmlFor="stripe" className="ml-2 text-sm">
-                          Pay with Stripe
-                        </label>
-                      </div>
+                    <div>
+                      <span>Describe the Reason</span>
+                      <textarea
+                        className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3"
+                        placeholder="Enter here"
+                      ></textarea>
                     </div>
-                    <div className="flex justify-between space-x-3">
-                      <button
-                        type="button"
-                        className="p-1 h-[29px] border border-[#2E9DE0] rounded-md w-full cursor-pointer"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="p-1 h-[29px] border bg-[#2E9DE0] rounded-md w-full cursor-pointer"
-                      >
-                        Confirm
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            )}
-            {modalContent === "delivery" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
                   </div>
-                </button>
-                <div>
-                  <h1 className="text-xl font-medium my-6 text-center">
-                    Delivery request
+                  <div className="text-center">
+                    <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              )}
+              {modalContent === "review" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <h1 className="text-center text-[20px] font-medium">
+                    Give a review
                   </h1>
-                  <div className="mb-6">
-                    <h2 className="text-[16px] font-medium mb-2">
-                      Delivery message
-                    </h2>
-                    <p className="text-sm text-slate-600">
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry. Lorem Ipsum has been the industrys
-                      standard dummy text ever since the 1500s, when an unknown
-                      printer took a galley of type and scrambled it to make a
-                      type specimen book.
-                    </p>
-                  </div>
-                  <div className="mb-12">
-                    <h2 className="text-[16px] font-medium text-slate-700 mb-2">
-                      Uploaded files
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      <div className="bg-slate-200 rounded-md px-3 py-1">
-                        <span className="text-xs text-slate-700">
-                          Attachment 1
-                        </span>
-                      </div>
-                      <div className="bg-slate-200 rounded-md px-3 py-1">
-                        <span className="text-xs text-slate-700">
-                          Attachment 2
-                        </span>
-                      </div>
-                      <div className="bg-slate-200 rounded-md px-3 py-1">
-                        <span className="text-xs text-slate-700">
-                          Attachment 3
-                        </span>
+                  <GiveAReviewRating />
+                </div>
+              )}
+              {modalContent === "deliver" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
+                  </button>
+                  <h1 className="text-center text-[20px] font-medium">
+                    Delivery
+                  </h1>
+                  <div className="py-10 space-y-3">
+                    <div>
+                      <span>Delivery message</span>
+                      <input
+                        type="text"
+                        placeholder="Enter here"
+                        className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3 placeholder-[#939597]"
+                      />
+                    </div>
+                    <div className="relative">
+                      <span>Upload files</span>
+                      <textarea className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3 text-black"></textarea>
+                      <div className="absolute right-30 bottom-34 text-center">
+                        <IoCloudUploadOutline className="text-[#5C91B1] text-xl pointer-events-none w-[33px] mx-auto" />
+                        <p className="text-[#939597]">
+                          Upload a File
+                          <br />
+                          Drag and drop files or browse
+                        </p>
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button className="py-2 px-4 border border-[#0D95DD] rounded-md text-[#0D95DD]">
-                      Edit
-                    </button>
-                    <button className="py-2 px-4 bg-[#0D95DD] text-[#FFFFFF] rounded-md">
-                      Delete
+                  <div className="text-center">
+                    <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
+                      Deliver
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
-            {modalContent === "extend" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <h1 className="text-center text-[20px] font-medium">
-                  Time extension
-                </h1>
-                <div className="py-10 space-y-3">
-                  <div className="relative">
-                    <span>New deadline</span>
-                    <input
-                      type="date"
-                      className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3 appearance-none pr-10"
-                    />
-                  </div>
-                  <div>
-                    <span>Describe the Reason</span>
-                    <textarea
-                      className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3"
-                      placeholder="Enter here"
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
-                    Confirm
+              )}
+              {modalContent === "support" && (
+                <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+                  <button
+                    className="btn btn-sm btn-circle hover:cursor-pointer"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="flex items-center gap-2">
+                      <GoArrowLeft /> <span>Back</span>
+                    </div>
                   </button>
-                </div>
-              </div>
-            )}
-            {modalContent === "review" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <h1 className="text-center text-[20px] font-medium">
-                  Give a review
-                </h1>
-                <GiveAReviewRating />
-              </div>
-            )}
-            {modalContent === "deliver" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <h1 className="text-center text-[20px] font-medium">
-                  Delivery
-                </h1>
-                <div className="py-10 space-y-3">
-                  <div>
-                    <span>Delivery message</span>
-                    <input
-                      type="text"
-                      placeholder="Enter here"
-                      className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3 placeholder-[#939597]"
-                    />
-                  </div>
-                  <div className="relative">
-                    <span>Upload files</span>
-                    <textarea className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3 text-black"></textarea>
-                    <div className="absolute right-30 bottom-34 text-center">
-                      <IoCloudUploadOutline className="text-[#5C91B1] text-xl pointer-events-none w-[33px] mx-auto" />
-                      <p className="text-[#939597]">
-                        Upload a File
-                        <br />
-                        Drag and drop files or browse
-                      </p>
+                  <h1 className="text-center text-[20px] font-medium">
+                    Admin support
+                  </h1>
+                  <div className="py-10 space-y-3">
+                    <div>
+                      <span>Delivery message</span>
+                      <input
+                        type="text"
+                        placeholder="Enter here"
+                        className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3"
+                      />
+                    </div>
+                    <div>
+                      <span>Give a subject</span>
+                      <textarea
+                        className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3"
+                        placeholder="Enter here"
+                      ></textarea>
                     </div>
                   </div>
-                </div>
-                <div className="text-center">
-                  <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
-                    Deliver
-                  </button>
-                </div>
-              </div>
-            )}
-            {modalContent === "support" && (
-              <div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
-                <button
-                  className="btn btn-sm btn-circle hover:cursor-pointer"
-                  onClick={handleCloseModal}
-                >
-                  <div className="flex items-center gap-2">
-                    <GoArrowLeft /> <span>Back</span>
-                  </div>
-                </button>
-                <h1 className="text-center text-[20px] font-medium">
-                  Admin support
-                </h1>
-                <div className="py-10 space-y-3">
-                  <div>
-                    <span>Delivery message</span>
-                    <input
-                      type="text"
-                      placeholder="Enter here"
-                      className="border border-[#5C91B1] p-2 w-full rounded h-[54px] mt-3"
-                    />
-                  </div>
-                  <div>
-                    <span>Give a subject</span>
-                    <textarea
-                      className="border border-[#5C91B1] p-2 w-full rounded h-[111px] mt-3"
-                      placeholder="Enter here"
-                    ></textarea>
+                  <div className="text-center">
+                    <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
+                      Submit
+                    </button>
                   </div>
                 </div>
-                <div className="text-center">
-                  <button className="btn btn-active bg-[#0D95DD] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
-                    Submit
-                  </button>
-                </div>
-              </div>
-            )}
-            {modalContent === "details" && (
-              <DetailsModal
-                handleCloseModal={handleCloseModal}
-                id={detailsId}
-                key={detailsId}
-                url={
-                  statusFilter == "Created"
-                    ? "order-post/details/"
-                    : "orders/project/"
-                }
-              />
-            )}
+              )}
+              {modalContent === "details" && (
+                <DetailsModal
+                  handleCloseModal={handleCloseModal}
+                  id={detailsId}
+                  key={detailsId}
+                  url={
+                    statusFilter == "Created"
+                      ? "order-post/details/"
+                      : "orders/project/"
+                  }
+                />
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
 
