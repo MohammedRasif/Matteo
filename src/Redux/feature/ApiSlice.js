@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-     baseUrl: "http://192.168.10.124:2000",
+    baseUrl: "http://192.168.10.124:2000",
     //baseUrl: "http://192.168.10.35:8000",
     prepareHeaders: (headers, { getState }) => {
         const accessToken = localStorage.getItem("access_token");
@@ -175,7 +175,7 @@ export const ApiSlice = createApi({
         // showNewUpdate
 
         showNewUpdate: builder.query({
-             query: () => "/api/v1/posts/new_updates/"
+            query: () => "/api/v1/posts/new_updates/"
         }),
 
         //admin management oder Cancel
@@ -197,19 +197,56 @@ export const ApiSlice = createApi({
             }),
         }),
         //admin management view delivary
-        managementOderView : builder.mutation({
-            query:(id) => `/api/v1/admin/management/order/view-delivery/${id}/`
+        managementOderView: builder.mutation({
+            query: (id) => `/api/v1/admin/management/order/view-delivery/${id}/`
         }),
         // admin management view order details
-        managementViewProjectDetails : builder.mutation({
-            query:(id) => `/api/v1/admin/management/user/info/${id}/`
+        managementViewProjectDetails: builder.mutation({
+            query: (id) => `/api/v1/admin/management/user/info/${id}/`
         }),
         // admin management view order details
-        managementAssessOrderDetails : builder.mutation({
-            query:(id) => `/api/v1/admin/management/order/order-assessment/${id}/`
+        managementAssessOrderDetails: builder.mutation({
+            query: (id) => `/api/v1/admin/management/order/order-assessment/${id}/`
         }),
 
-        //
+        // support report
+        supporBlockReports: builder.query({
+            query: () => "/api/v1/admin/support/blog/report-list/"
+        }),
+        // support blog
+        supporReport: builder.query({
+            query: () => "/api/v1/admin/support/blog/post-list/"
+        }),
+        //support post delete
+        supporPostdelete: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/admin/support/blog/post/delete/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+
+        supportOrder: builder.query({
+            query: () => "/api/v1/admin/support/order/list/"
+        }),
+        supporTickets: builder.query({
+            query: () => "/api/v1/admin/support/ticket/view/"
+        }),
+        withdrawal: builder.query({
+            query: () => "/api/v1/admin/withdraw/request-list/"
+        }),
+        // give warning
+       withdrawalWarning: builder.mutation({
+            query: ({ warning, id }) => ({
+                url: `/api/v1/admin/withdraw/give-warning/${id}/`,
+                method: 'POST',
+                body: { warning }, 
+                providesTags: ['Comment'],
+            }),
+        }),
+
+        // cancel request
+        withdrawalCancel: builder
 
     }),
 });
@@ -248,6 +285,18 @@ export const {
     useShowContributotQuery,
     useShowAllCommentQuery,
     useShowNewUpdateQuery,
+    useSupporBlockReportsQuery,
+    useSupporReportQuery,
+    useSupporPostdeleteMutation,
+    useSupportOrderQuery,
+    useSupporTicketsQuery,
+    useWithdrawalQuery,
+    useWithdrawalWarningMutation,
+
+
+
+
+
 
 
 

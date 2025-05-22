@@ -1,12 +1,12 @@
-"use client"
 
 import { useState, useEffect, useRef } from "react"
-import { ChevronRight, CheckCircle, Trash2, X, Filter, Search, AlertCircle } from "lucide-react"
+import { ChevronRight, CheckCircle, Trash2, X, Search, AlertCircle } from "lucide-react"
 import { GoArrowLeft } from "react-icons/go"
+import { useSupporTicketsQuery } from "../../../Redux/feature/ApiSlice"
 
 const AdminDashboardSupport = () => {
     // State for filter, search, dropdowns, and popups
-    const [activeFilter, setActiveFilter] = useState("Order related")
+    const [activeFilter, setActiveFilter] = useState("All")
     const [searchInput, setSearchInput] = useState("")
     const [showFilterDropdown, setShowFilterDropdown] = useState(false)
     const [activeStatusDropdown, setActiveStatusDropdown] = useState(null)
@@ -16,127 +16,60 @@ const AdminDashboardSupport = () => {
     const [selectedTicket, setSelectedTicket] = useState(null)
     const [pendingSolveTicket, setPendingSolveTicket] = useState(null)
     const [pendingDeleteTicket, setPendingDeleteTicket] = useState(null)
+    const [filteredTickets, setFilteredTickets] = useState([])
+
+    // Fetch tickets from API
+    const { data: supportTicket, isLoading, error } = useSupporTicketsQuery()
+    console.log("Fetched Tickets:", supportTicket)
 
     // Refs for closing dropdowns when clicking outside
     const filterDropdownRef = useRef(null)
-    const statusDropdownRefs = useRef([])
-
-    // Sample data for tickets
-    const allTickets = [
-        {
-            id: "1",
-            reason: "Order related",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-15",
-            ticketId: "46593291",
-            status: "Solved",
-            description: "Customer reported an issue with their order delivery. The package was delayed by 3 days.",
-        },
-        {
-            id: "2",
-            reason: "Order related",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-16",
-            ticketId: "46593292",
-            status: "Processing",
-            description: "Customer is requesting a refund for a damaged product received in their order.",
-        },
-        {
-            id: "3",
-            reason: "Order related",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-17",
-            ticketId: "46593293",
-            status: "Solved",
-            description:
-                "Customer reported missing items from their order. Issue has been resolved by sending the missing items.",
-        },
-        {
-            id: "4",
-            reason: "Withdrawal",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-18",
-            ticketId: "46593294",
-            status: "Processing",
-            description: "Customer is having issues with withdrawing funds from their account. Transaction is pending.",
-        },
-        {
-            id: "5",
-            reason: "Withdrawal",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-19",
-            ticketId: "46593295",
-            status: "Solved",
-            description: "Customer reported a delayed withdrawal. The funds have now been successfully transferred.",
-        },
-        {
-            id: "6",
-            reason: "Order related",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-20",
-            ticketId: "46593296",
-            status: "Processing",
-            description: "Customer is requesting to change the shipping address for their order.",
-        },
-        {
-            id: "7",
-            reason: "Withdrawal",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-21",
-            ticketId: "46593297",
-            status: "Solved",
-            description: "Customer reported an incorrect amount withdrawn. The issue has been resolved with a correction.",
-        },
-        {
-            id: "8",
-            reason: "Others",
-            reportDetails: "View",
-            dateOfCreation: "2023-05-22",
-            ticketId: "46593298",
-            status: "Processing",
-            description: "Customer reported a technical issue with the website login process.",
-        },
-    ]
+    const statusDropdownRefs = useRef({})
 
     // Filter options
-    const filterOptions = ["Order related", "Withdrawal", "Others"]
+    const filterOptions = ["All", "Order related", "Withdrawal", "Others"]
 
-    // Filtered tickets based on active filter and search
-    const [tickets, setTickets] = useState(allTickets)
-
-    // Update filtered tickets when active filter or search changes
+    // Update filtered tickets when supportTicket, activeFilter, or searchInput changes
     useEffect(() => {
-        let filteredTickets = allTickets
+        let result = supportTicket || []
 
-        // Apply filter
+        // Apply filter based on purpose
         if (activeFilter === "Order related") {
-            filteredTickets = allTickets // Show all tickets
+            result = result.filter((ticket) => ticket.purpose === "order_related")
         } else if (activeFilter === "Withdrawal") {
-            filteredTickets = allTickets.filter((ticket) => ticket.reason === "Withdrawal" || ticket.reason === "Others")
+            result = result.filter((ticket) => ticket.purpose === "withdrawal")
         } else if (activeFilter === "Others") {
-            filteredTickets = allTickets.filter((ticket) => ticket.reason !== "Order related" && ticket.reason !== "Withdrawal")
-        }
+            result = result.filter(
+                (ticket) => ticket.purpose !== "order_related" && ticket.purpose !== "withdrawal"
+            )
+        } // "All" shows all tickets, so no filtering
 
-        // Apply search
+        // Apply search by ticket ID (id)
         if (searchInput.trim() !== "") {
-            filteredTickets = filteredTickets.filter((ticket) =>
-                ticket.ticketId.toLowerCase().includes(searchInput.toLowerCase())
+            result = result.filter((ticket) =>
+                ticket.id.toString().toLowerCase().includes(searchInput.toLowerCase())
             )
         }
 
-        setTickets(filteredTickets)
-    }, [activeFilter, searchInput])
+        setFilteredTickets(result)
+        console.log("Filtered Tickets:", result)
+    }, [supportTicket, activeFilter, searchInput])
 
     // Close dropdowns when clicking outside
     useEffect(() => {
         function handleClickOutside(event) {
+            // Close filter dropdown
             if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
                 setShowFilterDropdown(false)
             }
-            const isOutsideDropdown = statusDropdownRefs.current.every(
-                (ref) => !ref || !ref.contains(event.target)
-            )
-            if (isOutsideDropdown) {
+            // Close status dropdown
+            let isOutside = true
+            Object.values(statusDropdownRefs.current).forEach((ref) => {
+                if (ref && ref.contains(event.target)) {
+                    isOutside = false
+                }
+            })
+            if (isOutside) {
                 setActiveStatusDropdown(null)
             }
         }
@@ -156,7 +89,7 @@ const AdminDashboardSupport = () => {
 
     // Handle status actions
     const handleStatusAction = (action, ticket) => {
-        console.log(`Action triggered: ${action}, Ticket ID: ${ticket.ticketId}`) // Debug
+        console.log(`Action triggered: ${action}, Ticket ID: ${ticket.id}`)
         if (action === "solve") {
             setPendingSolveTicket(ticket)
             setShowSolvePopup(true)
@@ -170,10 +103,10 @@ const AdminDashboardSupport = () => {
     // Handle solve confirmation
     const handleSolveConfirm = () => {
         if (pendingSolveTicket) {
-            const updatedTickets = tickets.map((t) =>
+            const updatedTickets = filteredTickets.map((t) =>
                 t.id === pendingSolveTicket.id ? { ...t, status: "Solved" } : t
             )
-            setTickets(updatedTickets)
+            setFilteredTickets(updatedTickets)
         }
         setShowSolvePopup(false)
         setPendingSolveTicket(null)
@@ -182,11 +115,19 @@ const AdminDashboardSupport = () => {
     // Handle delete confirmation
     const handleDeleteConfirm = () => {
         if (pendingDeleteTicket) {
-            const updatedTickets = tickets.filter((t) => t.id !== pendingDeleteTicket.id)
-            setTickets(updatedTickets)
+            const updatedTickets = filteredTickets.filter((t) => t.id !== pendingDeleteTicket.id)
+            setFilteredTickets(updatedTickets)
         }
         setShowDeletePopup(false)
         setPendingDeleteTicket(null)
+    }
+
+    // Handle loading and error states
+    if (isLoading) {
+        return <div className="p-6 roboto">Loading...</div>
+    }
+    if (error) {
+        return <div className="p-6 roboto">Error: {error.message}</div>
     }
 
     return (
@@ -250,54 +191,58 @@ const AdminDashboardSupport = () => {
                                 <th className="px-6 py-3">Report Details</th>
                                 <th className="px-6 py-3">Date of creation</th>
                                 <th className="px-6 py-3">Ticket ID</th>
-                                <th className="px-6 py-3 flex items-center">
-                                    Status
-                                    
-                                </th>
+                                <th className="px-6 py-3 flex items-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {tickets.map((ticket, index) => (
+                            {filteredTickets.map((ticket) => (
                                 <tr key={ticket.id} className="border-b border-gray-300 text-sm">
-                                    <td className="px-6 py-4 text-gray-700">{ticket.reason}</td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {ticket.purpose === "order_related"
+                                            ? "Order related"
+                                            : ticket.purpose === "blog_related"
+                                            ? "Blog related"
+                                            : "Others"}
+                                    </td>
                                     <td className="px-6 py-4">
                                         <a
                                             href="#"
-                                            className="text-blue-500 hover:underline"
+                                            className="bg-blue-500 text-white text-xs px-3 py-1 rounded-2xl cursor-pointer hover:underline"
                                             onClick={(e) => handleViewTicket(ticket, e)}
                                         >
-                                            {ticket.reportDetails}
+                                            View
                                         </a>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-700">{ticket.dateOfCreation}</td>
+                                    <td className="px-6 py-4 text-gray-700">
+                                        {new Date(ticket.created_at).toLocaleDateString()}
+                                    </td>
                                     <td className="px-6 py-4">
-                                        <a href="#" className=" hover:underline">
-                                            {ticket.ticketId}
+                                        <a href="#" className="hover:underline">
+                                            {ticket.id}
                                         </a>
                                     </td>
                                     <td className="px-6 py-4 relative">
                                         <button
                                             className="flex items-center justify-between w-full"
                                             onClick={() =>
-                                                setActiveStatusDropdown(activeStatusDropdown === index ? null : index)
+                                                setActiveStatusDropdown(
+                                                    activeStatusDropdown === ticket.id ? null : ticket.id
+                                                )
                                             }
                                         >
-                                            <span
-                                                className={ticket.status === "Solved" ? "" : ""}
-                                            >
-                                                {ticket.status}
+                                            <span>
+                                                {ticket.status === "In-progress" ? "Processing" : ticket.status}
                                             </span>
-                                            
                                         </button>
 
                                         {/* Status Dropdown */}
-                                        {activeStatusDropdown === index && (
+                                        {activeStatusDropdown === ticket.id && (
                                             <div
-                                                ref={(el) => (statusDropdownRefs.current[index] = el)}
+                                                ref={(el) => (statusDropdownRefs.current[ticket.id] = el)}
                                                 className="absolute right-0 top-full z-20 mt-1 w-48 rounded-md bg-white shadow-lg"
                                             >
                                                 <div className="py-1">
-                                                    {ticket.status === "Processing" && (
+                                                    {ticket.status === "In-progress" && (
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation()
@@ -315,7 +260,7 @@ const AdminDashboardSupport = () => {
                                                             handleStatusAction("delete", ticket)
                                                         }}
                                                         className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
-                                                    >
+                                                        >
                                                         <Trash2 className="h-4 w-4" />
                                                         Delete
                                                     </button>
@@ -343,26 +288,18 @@ const AdminDashboardSupport = () => {
                                 back
                             </button>
                         </div>
-
                         <div className="flex items-center justify-center my-2">
                             <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-5 py-2 w-56 rounded-md flex items-center justify-center">
                                 Description
                             </h1>
                         </div>
-
-                        <p className="px-10 text-[14px] text-gray-500">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum recusandae vitae dolorum quam
-                            modi quae ab placeat magni porro. Ducimus temporibus dicta qui sapiente illo? Quo impedit
-                            quidem nisi voluptatibus laboriosam eaque, praesentium omnis facilis commodi delectus odio ex,
-                            iusto, repudiandae eius deleniti molestiae. Hic unde doloremque consequatur rerum et?
-                        </p>
-
+                        <p className="px-10 text-[14px] text-gray-500">{selectedTicket.details}</p>
                         <div className="flex justify-center gap-2 mt-5">
                             <button
                                 onClick={() => setShowViewPopup(false)}
                                 className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
                             >
-                                Okey
+                                Okay
                             </button>
                         </div>
                     </div>
@@ -371,7 +308,7 @@ const AdminDashboardSupport = () => {
 
             {/* Solve Confirmation Popup */}
             {showSolvePopup && pendingSolveTicket && (
-                <div className="fixed inset-0 flex items-center justify-center z-50  backdrop-blur-[3px]">
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
                     <div className="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
@@ -390,12 +327,10 @@ const AdminDashboardSupport = () => {
                                 <X className="h-5 w-5" />
                             </button>
                         </div>
-
                         <p className="text-gray-600 mb-4">
                             Are you sure you want to mark ticket ID:{" "}
-                            <span className="font-medium">{pendingSolveTicket?.ticketId}</span> as Solved?
+                            <span className="font-medium">{pendingSolveTicket?.id}</span> as Solved?
                         </p>
-
                         <div className="flex justify-end gap-2">
                             <button
                                 onClick={() => {
@@ -419,7 +354,7 @@ const AdminDashboardSupport = () => {
 
             {/* Delete Confirmation Popup */}
             {showDeletePopup && pendingDeleteTicket && (
-                <div className="fixed inset-0 flex items-center justify-center z-50  backdrop-blur-[3px]">
+                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
                     <div className="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
@@ -438,13 +373,10 @@ const AdminDashboardSupport = () => {
                                 <X className="h-5 w-5 cursor-pointer" />
                             </button>
                         </div>
-
                         <p className="text-gray-600 mb-4">
                             Are you sure you want to delete ticket ID:{" "}
-                            <span className="font-medium">{pendingDeleteTicket?.ticketId}</span>? This action cannot be
-                            undone.
+                            <span className="font-medium">{pendingDeleteTicket?.id}</span>? This action cannot be undone.
                         </p>
-
                         <div className="flex justify-end gap-2">
                             <button
                                 onClick={() => {

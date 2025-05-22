@@ -1,8 +1,8 @@
-"use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Search, ChevronRight, MoreHorizontal, AlertTriangle, Trash2, X, AlertCircle, Flag } from "lucide-react"
+import { MoreHorizontal, AlertTriangle, Trash2, X, AlertCircle } from "lucide-react"
 import { GoArrowLeft } from "react-icons/go"
+import { useSupporBlockReportsQuery, useSupporPostdeleteMutation, useSupporReportQuery } from "../../../Redux/feature/ApiSlice"
 
 const AdminDashboardBlog = () => {
     // State for active tab
@@ -16,179 +16,36 @@ const AdminDashboardBlog = () => {
     const [showViewReportPopup, setShowViewReportPopup] = useState(false)
     const [selectedPost, setSelectedPost] = useState(null)
     const [selectedReport, setSelectedReport] = useState(null)
+    const [deleteError, setDeleteError] = useState(null)
+
+    // Fetch data from API
+    const { data: blogReport, isLoading: reportsLoading, error: reportsError } = useSupporBlockReportsQuery()
+    const { data: blogPost, isLoading: postsLoading, error: postsError } = useSupporReportQuery()
+    // Post delete mutation
+    const [supporPostdelete] = useSupporPostdeleteMutation()
+
+    // Log fetched data for debugging
+    useEffect(() => {
+        if (blogReport) console.log("Fetched Reports:", blogReport)
+        if (blogPost) console.log("Fetched Posts:", blogPost)
+    }, [blogReport, blogPost])
 
     // Ref for dropdowns
     const dropdownRefs = useRef({})
 
-    // Sample data for reports
-    const allReports = [
-        {
-            id: "1",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Solved",
-            reportReason: "Inappropriate content",
-            reportDescription:
-                "This post contains content that violates community guidelines. The user has posted offensive material that should be removed.",
-            reportedDate: "2023-05-15",
-        },
-        {
-            id: "2",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Processing",
-            reportReason: "Spam",
-            reportDescription:
-                "This user is repeatedly posting the same content across multiple threads to promote their product.",
-            reportedDate: "2023-05-16",
-        },
-        {
-            id: "3",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Solved",
-            reportReason: "Harassment",
-            reportDescription: "The user is targeting another community member with repeated negative comments.",
-            reportedDate: "2023-05-17",
-        },
-        {
-            id: "4",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Processing",
-            reportReason: "Misinformation",
-            reportDescription: "This post contains factually incorrect information that could mislead others.",
-            reportedDate: "2023-05-18",
-        },
-        {
-            id: "5",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Solved",
-            reportReason: "Copyright violation",
-            reportDescription: "The user has posted content that infringes on copyrighted material without permission.",
-            reportedDate: "2023-05-19",
-        },
-        {
-            id: "6",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Processing",
-            reportReason: "Violent content",
-            reportDescription: "This post contains violent imagery that is not appropriate for the community.",
-            reportedDate: "2023-05-20",
-        },
-        {
-            id: "7",
-            reportedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            reportDetails: "View",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            status: "Solved",
-            reportReason: "Other",
-            reportDescription: "This post doesn't fit into other categories but violates community standards.",
-            reportedDate: "2023-05-21",
-        },
-    ]
-
-    // Sample data for posts
-    const allPosts = [
-        {
-            id: "1",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "This is a sample post content for demonstration purposes.",
-            title: "Sample Post 1",
-        },
-        {
-            id: "2",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Another sample post with different content.",
-            title: "Sample Post 2",
-        },
-        {
-            id: "3",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "This is the third sample post with unique content.",
-            title: "Sample Post 3",
-        },
-        {
-            id: "4",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Fourth sample post with different text for testing.",
-            title: "Sample Post 4",
-        },
-        {
-            id: "5",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Fifth post in the sample data set for the blog reports interface.",
-            title: "Sample Post 5",
-        },
-        {
-            id: "6",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Sixth sample post with more example content.",
-            title: "Sample Post 6",
-        },
-        {
-            id: "7",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Seventh post in our sample data collection.",
-            title: "Sample Post 7",
-        },
-        {
-            id: "8",
-            postedBy: "username1335",
-            avatar: "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1737529180/cld-sample-3.jpg",
-            dateOfCreation: "46593292",
-            postId: "46593292",
-            content: "Eighth and final post in our sample data set.",
-            title: "Sample Post 8",
-        },
-    ]
-
     // Filtered data based on search
-    const [reports, setReports] = useState(allReports)
-    const [posts, setPosts] = useState(allPosts)
+    const [reports, setReports] = useState([])
+    const [posts, setPosts] = useState([])
+
+    // Update reports and posts when API data changes
+    useEffect(() => {
+        if (blogReport) {
+            setReports(blogReport)
+        }
+        if (blogPost) {
+            setPosts(blogPost)
+        }
+    }, [blogReport, blogPost])
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -213,19 +70,19 @@ const AdminDashboardBlog = () => {
     // Handle search by ID
     useEffect(() => {
         if (searchInput.trim() === "") {
-            setReports(allReports)
-            setPosts(allPosts)
+            setReports(blogReport || [])
+            setPosts(blogPost || [])
         } else {
-            const filteredReports = allReports.filter((report) =>
-                report.postId.toLowerCase().includes(searchInput.toLowerCase())
+            const filteredReports = (blogReport || []).filter((report) =>
+                report.blog_id.toString().toLowerCase().includes(searchInput.toLowerCase())
             )
-            const filteredPosts = allPosts.filter((post) =>
-                post.postId.toLowerCase().includes(searchInput.toLowerCase())
+            const filteredPosts = (blogPost || []).filter((post) =>
+                post.id.toString().toLowerCase().includes(searchInput.toLowerCase())
             )
             setReports(filteredReports)
             setPosts(filteredPosts)
         }
-    }, [searchInput])
+    }, [searchInput, blogReport, blogPost])
 
     // Handle view report click
     const handleViewReport = (report, e) => {
@@ -237,7 +94,7 @@ const AdminDashboardBlog = () => {
     // Handle action click
     const handleActionClick = (action, post) => {
         setSelectedPost(post)
-        console.log(`Action: ${action}, Post: ${post.id}`) // Debug log
+        console.log(`Action: ${action}, Post: ${post.id}`)
         if (action === "warning") {
             setShowWarningPopup(true)
         } else if (action === "delete") {
@@ -248,16 +105,31 @@ const AdminDashboardBlog = () => {
 
     // Handle warning submission
     const handleWarningSubmit = () => {
-        console.log(`Warning sent to post ${selectedPost?.postId}`)
+        console.log(`Warning sent to post ${selectedPost?.id}`)
         setShowWarningPopup(false)
     }
 
     // Handle delete confirmation
-    const handleDeleteConfirm = () => {
-        console.log(`Deleted post ${selectedPost?.postId}`)
-        const updatedPosts = posts.filter((post) => post.id !== selectedPost?.id)
-        setPosts(updatedPosts)
+    const handleDeleteConfirm = async () => {
+        try {
+            await supporPostdelete(selectedPost.id).unwrap()
+            console.log(`Deleted post ${selectedPost?.id}`)
+            const updatedPosts = posts.filter((post) => post.id !== selectedPost?.id)
+            setPosts(updatedPosts)
+            setDeleteError(null)
+        } catch (error) {
+            console.error("Failed to delete post:", error)
+            setDeleteError("Failed to delete post. Please try again.")
+        }
         setShowDeletePopup(false)
+    }
+
+    // Handle loading and error states
+    if (reportsLoading || postsLoading) {
+        return <div>Loading...</div>
+    }
+    if (reportsError || postsError) {
+        return <div>Error: {reportsError?.message || postsError?.message}</div>
     }
 
     return (
@@ -296,8 +168,8 @@ const AdminDashboardBlog = () => {
                             type="text"
                             placeholder="Search by post ID"
                             className="pl-7 pr-3 py-1.5 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 w-56 text-[14px]"
-                            value={searchInput} // Updated to use searchInput
-                            onChange={(e) => setSearchInput(e.target.value)} // Updated to use setSearchInput
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
                         />
                         <svg
                             className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-400"
@@ -316,9 +188,16 @@ const AdminDashboardBlog = () => {
                     </div>
                 </div>
 
+                {/* Delete Error Message */}
+                {deleteError && (
+                    <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+                        {deleteError}
+                    </div>
+                )}
+
                 {/* Reports Table */}
                 {activeTab === "Reports" && (
-                    <div className="">
+                    <div className="overflow-x-auto">
                         <table className="w-full table-auto">
                             <thead>
                                 <tr className="bg-gray-300 rounded-lg text-left text-sm font-medium text-gray-700">
@@ -326,7 +205,7 @@ const AdminDashboardBlog = () => {
                                     <th className="px-6 py-3">Report details</th>
                                     <th className="px-6 py-3">Date of creation</th>
                                     <th className="px-6 py-3">Post ID</th>
-                                    <th className="px-6 py-3 flex items-center">Status</th>
+                                    <th className="px-6 py-3">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -335,32 +214,30 @@ const AdminDashboardBlog = () => {
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <img
-                                                    src={report.avatar || "/placeholder.svg"}
-                                                    alt={report.reportedBy}
+                                                    src="/placeholder.svg"
+                                                    alt={report.reporter_name}
                                                     className="h-8 w-8 rounded-full object-cover"
                                                 />
-                                                <span className="text-gray-700">{report.reportedBy}</span>
+                                                <span className="text-gray-700">{report.reporter_name}</span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <a
                                                 href="#"
-                                                className="text-blue-500 hover:underline"
+                                                className="bg-blue-500 text-white text-xs px-3 py-1 rounded-2xl cursor-pointer hover:underline"
                                                 onClick={(e) => handleViewReport(report, e)}
                                             >
-                                                {report.reportDetails}
+                                                View
                                             </a>
                                         </td>
-                                        <td className="px-6 py-4 text-gray-700">{report.dateOfCreation}</td>
+                                        <td className="px-6 py-4 text-gray-700">{report.created_at}</td>
                                         <td className="px-6 py-4">
-                                            <a href="#" className=" hover:underline">
-                                                {report.postId}
+                                            <a href="#" className="text-blue-500 hover:underline">
+                                                {report.blog_id}
                                             </a>
                                         </td>
-                                        <td className="px-6 py-4 flex items-center justify-between">
-                                            <span className={report.status === "Solved" ? "" : ""}>
-                                                {report.status}
-                                            </span>
+                                        <td className="px-6 py-4">
+                                            <span>{report.status}</span>
                                         </td>
                                     </tr>
                                 ))}
@@ -382,41 +259,51 @@ const AdminDashboardBlog = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {posts.map((post, index) => (
+                                {posts.map((post) => (
                                     <tr key={post.id} className="border-b border-gray-300 text-sm">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <img
-                                                    src={post.avatar || "/placeholder.svg"}
-                                                    alt={post.postedBy}
+                                                    src="/placeholder.svg"
+                                                    alt={post.author}
                                                     className="h-8 w-8 rounded-full object-cover"
                                                 />
-                                                <span className="text-gray-700">{post.postedBy}</span>
+                                                <span className="text-gray-700">{post.author}</span>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-gray-700">{post.dateOfCreation}</td>
+                                        <td className="px-6 py-4 text-gray-700">{post.posted_on}</td>
                                         <td className="px-6 py-4">
                                             <a href="#" className="text-blue-500 hover:underline">
-                                                {post.postId}
+                                                {post.id}
                                             </a>
                                         </td>
                                         <td className="px-6 py-4 relative">
                                             <button
                                                 className="text-gray-400 hover:text-gray-600"
-                                                onClick={() =>
+                                                onClick={(e) => {
                                                     setActiveActionDropdown(
                                                         activeActionDropdown === post.id ? null : post.id
                                                     )
-                                                }
+                                                    const rect = e.currentTarget.getBoundingClientRect()
+                                                    dropdownRefs.current[post.id] = { rect }
+                                                }}
                                             >
                                                 <MoreHorizontal className="h-5 w-5" />
                                             </button>
-
-                                            {/* Action Dropdown */}
                                             {activeActionDropdown === post.id && (
                                                 <div
-                                                    ref={(el) => (dropdownRefs.current[post.id] = el)}
-                                                    className="absolute right-0 top-full z-20 mt-1 w-48 rounded-md bg-white shadow-lg"
+                                                    className="fixed z-30 w-48 rounded-md bg-white shadow-lg"
+                                                    style={{
+                                                        top: `${
+                                                            dropdownRefs.current[post.id]?.rect.bottom + window.scrollY
+                                                        }px`,
+                                                        left: `${
+                                                            Math.min(
+                                                                dropdownRefs.current[post.id]?.rect.left,
+                                                                window.innerWidth - 200
+                                                            )
+                                                        }px`,
+                                                    }}
                                                 >
                                                     <div className="py-1">
                                                         <button
@@ -443,132 +330,123 @@ const AdminDashboardBlog = () => {
                         </table>
                     </div>
                 )}
-            </div>
 
-            {/* View Report Popup */}
-            {showViewReportPopup && selectedReport && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
-                    <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
-                        <div className="flex items-center justify-between mb-4">
-                            <button
-                                onClick={() => setShowViewReportPopup(false)}
-                                className="text-gray-400 text-[15px] hover:text-gray-600 flex cursor-pointer"
-                            >
-                                <GoArrowLeft className="h-4 w-4 mt-[4px]" />
-                                back
-                            </button>
-                        </div>
-
-                        <div className="flex items-center justify-center my-2">
-                            <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
-                                Description of report
-                            </h1>
-                        </div>
-
-                        <p className="px-10 text-[14px] text-gray-500">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum recusandae vitae dolorum quam
-                            modi quae ab placeat magni porro. Ducimus temporibus dicta qui sapiente illo? Quo impedit
-                            quidem nisi voluptatibus laboriosam eaque, praesentium omnis facilis commodi delectus odio ex,
-                            iusto, repudiandae eius deleniti molestiae. Hic unde doloremque consequatur rerum et?
-                        </p>
-
-                        <div className="flex justify-center gap-2 mt-5">
-                            {selectedReport.status === "Processing" && (
-                                <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-                                    Mark as Solved
+                {/* View Report Popup */}
+                {showViewReportPopup && selectedReport && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
+                        <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
+                            <div className="flex items-center justify-between mb-4">
+                                <button
+                                    onClick={() => setShowViewReportPopup(false)}
+                                    className="text-gray-400 text-[15px] hover:text-gray-600 flex cursor-pointer"
+                                >
+                                    <GoArrowLeft className="h-4 w-4 mt-[4px]" />
+                                    back
                                 </button>
-                            )}
-                            <button
-                                onClick={() => setShowViewReportPopup(false)}
-                                className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
-                            >
-                                Okey
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Warning Popup */}
-            {showWarningPopup && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
-                    <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
-                        <div className="flex items-center justify-between mb-4">
-                            <button
-                                onClick={() => setShowWarningPopup(false)}
-                                className="text-gray-400 text-[15px] hover:text-gray-600 flex cursor-pointer"
-                            >
-                                <GoArrowLeft className="h-4 w-4 mt-[4px]" />
-                                back
-                            </button>
-                        </div>
-
-                        <div className="flex items-center justify-center my-2">
-                            <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
-                                Warning
-                            </h1>
-                        </div>
-
-                        <p className="px-10 text-[14px] text-gray-500">
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum recusandae vitae dolorum quam
-                            modi quae ab placeat magni porro. Ducimus temporibus dicta qui sapiente illo? Quo impedit
-                            quidem nisi voluptatibus laboriosam eaque, praesentium omnis facilis commodi delectus odio ex,
-                            iusto, repudiandae eius deleniti molestiae. Hic unde doloremque consequatur rerum et?
-                        </p>
-
-                        <div className="flex justify-center gap-2 mt-5">
-                            <button
-                                onClick={() => setShowWarningPopup(false)}
-                                className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
-                            >
-                                Okey
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Delete Confirmation Popup */}
-            {showDeletePopup && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
-                    <div className="bg-white rounded-lg p-6  max-w-md w-full">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <div className="p-2 rounded-full bg-red-100">
-                                    <AlertCircle className="h-6 w-6 text-red-600" />
-                                </div>
-                                <h3 className="text-lg font-medium text-gray-900">Confirm Deletion</h3>
                             </div>
-                            <button
-                                onClick={() => setShowDeletePopup(false)}
-                                className="text-gray-400 hover:text-gray-600"
-                            >
-                                <X className="h-5 w-5 cursor-pointer" />
-                            </button>
-                        </div>
-
-                        <p className="text-gray-600 mb-4">
-                            Are you sure you want to delete post ID:{" "}
-                            <span className="font-medium">{selectedPost?.postId}</span>? This action cannot be undone.
-                        </p>
-
-                        <div className="flex justify-end gap-2">
-                            <button
-                                onClick={() => setShowDeletePopup(false)}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 cursor-pointer"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleDeleteConfirm}
-                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 cursor-pointer"
-                            >
-                                Delete
-                            </button>
+                            <div className="flex items-center justify-center my-2">
+                                <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+                                    Description of report
+                                </h1>
+                            </div>
+                            <p className="px-10 text-[14px] text-gray-500">{selectedReport.details}</p>
+                            <div className="flex justify-center gap-2 mt-5">
+                                {selectedReport.status === "In-progress" && (
+                                    <button className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                                        Mark as Solved
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => setShowViewReportPopup(false)}
+                                    className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+                                >
+                                    Okay
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+
+                {/* Warning Popup */}
+                {showWarningPopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
+                        <div className="bg-white rounded-lg p-6 shadow-xl max-w-2xl w-full">
+                            <div className="flex items-center justify-between mb-4">
+                                <button
+                                    onClick={() => setShowWarningPopup(false)}
+                                    className="text-gray-400 text-[15px] hover:text-gray-600 flex cursor-pointer"
+                                >
+                                    <GoArrowLeft className="h-4 w-4 mt-[4px]" />
+                                    back
+                                </button>
+                            </div>
+                            <div className="flex items-center justify-center my-2">
+                                <h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+                                    Warning
+                                </h1>
+                            </div>
+                            <p className="px-10 text-[14px] text-gray-500">
+                                Are you sure you want to issue a warning for post ID:{" "}
+                                <span className="font-medium">{selectedPost?.id}</span>? This action will notify the user.
+                            </p>
+                            <div className="flex justify-center gap-2 mt-5">
+                                <button
+                                    onClick={handleWarningSubmit}
+                                    className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+                                >
+                                    Send Warning
+                                </button>
+                                <button
+                                    onClick={() => setShowWarningPopup(false)}
+                                    className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Delete Confirmation Popup */}
+                {showDeletePopup && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[3px]">
+                        <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <div className="p-2 rounded-full bg-red-100">
+                                        <AlertCircle className="h-6 w-6 text-red-600" />
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900">Confirm Deletion</h3>
+                                </div>
+                                <button
+                                    onClick={() => setShowDeletePopup(false)}
+                                    className="text-gray-400 hover:text-gray-600"
+                                >
+                                    <X className="h-5 w-5 cursor-pointer" />
+                                </button>
+                            </div>
+                            <p className="text-gray-600 mb-4">
+                                Are you sure you want to delete post ID:{" "}
+                                <span className="font-medium">{selectedPost?.id}</span>? This action cannot be undone.
+                            </p>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    onClick={() => setShowDeletePopup(false)}
+                                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleDeleteConfirm}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 cursor-pointer"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
