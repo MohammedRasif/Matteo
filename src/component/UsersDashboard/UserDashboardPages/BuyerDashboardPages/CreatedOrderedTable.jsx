@@ -1231,7 +1231,7 @@ const DetailsModal = ({ id, handleCloseModal }) => {
             <PiDotsThreeBold />
           </button>
         </div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between flex-col items-start mb-4">
           <p className="text-gray-700">
             Budget ${project.price}USD/{project.payment_type} (
             {project?.required_person} Person Required)
@@ -1296,7 +1296,7 @@ const DetailsModal = ({ id, handleCloseModal }) => {
             {project.skills &&
               project?.skills.map((skil) => (
                 <a href="#" className="text-blue-500 hover:underline mr-1">
-                  {skil}
+                  {skil},
                 </a>
               ))}
           </div>
