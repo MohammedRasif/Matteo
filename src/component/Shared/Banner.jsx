@@ -39,7 +39,7 @@ const Banner = () => {
             <div className="max-w-[160vh] mx-auto flex flex-col md:flex-row items-center w-full px-4">
                 {/* Text Section */}
                 <div className="w-full md:w-1/2 text-white px-4 md:px-8 lg:px-12 py-16 z-10 nunito">
-                    <h1 className="text-4xl md:text-6xl font-semibold leading-tight mb-6">
+                    <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-6">
                         Win more jobs and get <br /> more jobs done right.
                     </h1>
                     <p className="text-md mb-8 max-w-lg text-gray-200">

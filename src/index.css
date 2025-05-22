@@ -1,13 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+.nunito {
+  font-family: "Nunito Sans", sans-serif;
+}
 
-.nunito{
-    font-family: "Nunito Sans", sans-serif;
-    
-  }
-
-.roboto{
-    font-family: "Roboto", sans-serif;
-    
-  }
+.roboto {
+  font-family: "Roboto", sans-serif;
+}
