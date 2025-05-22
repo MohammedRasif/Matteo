@@ -1188,6 +1188,11 @@ function CreatedOrderedTable() {
                 handleCloseModal={handleCloseModal}
                 id={detailsId}
                 key={detailsId}
+                url={
+                  statusFilter == "Created"
+                    ? "order-post/details/"
+                    : "orders/project/"
+                }
               />
             )}
           </div>
@@ -1199,11 +1204,11 @@ function CreatedOrderedTable() {
 
 export default CreatedOrderedTable;
 
-const DetailsModal = ({ id, handleCloseModal }) => {
+const DetailsModal = ({ id, handleCloseModal, url }) => {
   const [project, setProject] = useState({});
   const token = localStorage.getItem("access_token");
   useEffect(() => {
-    fetch(`${BaseUrl}/api/v1/order-post/details/${id}/`, {
+    fetch(`${BaseUrl}/api/v1/${url}${id}/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
