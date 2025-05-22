@@ -74,7 +74,7 @@ const Navbar = () => {
                 HOME
               </NavLink>
               <NavLink to="/browse_projects" className={getNavLinkClass}>
-                INSPIRATION
+                FORUM
               </NavLink>
               <NavLink to="/pricing" className={getNavLinkClass}>
                 PRICING

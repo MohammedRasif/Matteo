@@ -1,16 +1,14 @@
-
-
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { IoCheckmarkCircleSharp, IoCheckmarkDoneSharp } from "react-icons/io5"
-import img from "../image/Vector 63.png"
-import { IoMdArrowBack } from "react-icons/io"
-import { NavLink } from "react-router-dom"
-import Faq from "./Faq"
-import Footer from "../Footer/Footer"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { IoCheckmarkCircleSharp, IoCheckmarkDoneSharp } from "react-icons/io5";
+import img from "../image/Vector 63.png";
+import { IoMdArrowBack } from "react-icons/io";
+import { NavLink } from "react-router-dom";
+import Faq from "./Faq";
+import Footer from "../Footer/Footer";
 
 const Pricing = () => {
-    const [billingCycle, setBillingCycle] = useState("monthly")
+    const [billingCycle, setBillingCycle] = useState("monthly");
 
     const monthlyPlans = [
         {
@@ -43,7 +41,7 @@ const Pricing = () => {
                 "Company-Specific Personal Database",
             ],
         },
-    ]
+    ];
 
     const yearlyPlans = [
         {
@@ -78,38 +76,89 @@ const Pricing = () => {
                 "25% discount compared to monthly",
             ],
         },
-    ]
+    ];
 
-    const plans = billingCycle === "monthly" ? monthlyPlans : yearlyPlans
+    const plans = billingCycle === "monthly" ? monthlyPlans : yearlyPlans;
+
+    // Function to handle GET request
+    const handleGetRequest = async (planName) => {
+        try {
+            const response = await fetch("https://34.136.202.34/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`GET request failed with status ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(`GET response for ${planName}:`, data);
+            alert(`GET request for ${planName} successful! Check console for details.`);
+        } catch (error) {
+            console.error("GET request error:", error);
+            alert(`GET request for ${planName} failed: ${error.message}`);
+        }
+    };
+
+    // Function to handle POST request
+    const handlePostRequest = async (planName) => {
+        try {
+            const response = await fetch("https://34.136.202.34/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    plan: planName,
+                    billingCycle: billingCycle,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`POST request failed with status ${response.status}`);
+            }
+            const data = await response.json();
+            console.log(`POST response for ${planName}:`, data);
+            alert(`POST request for ${planName} successful! Check console for details.`);
+        } catch (error) {
+            console.error("POST request error:", error);
+            alert(`POST request for ${planName} failed: ${error.message}`);
+        }
+    };
+
+    // Function to handle button click
+    const handleSelectPlan = (planName) => {
+        // Perform both GET and POST requests
+        handleGetRequest(planName);
+        handlePostRequest(planName);
+    };
 
     return (
         <section className="pt-10 roboto">
             <div className="container mx-auto px-4">
-                {/* <div >
-
-                    <NavLink to="/">
-                        <button className="flex items-center space-x-1 bg-[#309ED7] text-white px-7 py-2 rounded-md cursor-pointer">
-                            <IoMdArrowBack size={22} />
-
-                            <h1 className="text-[20px]">Back</h1>
-                        </button>
-                    </NavLink>
-                </div> */}
-                <h1 className="uppercase text-center text-3xl sm:text-5xl font-medium text-gray-600 mb-3 sm:mb-5  tracking-wider">PRICING</h1>
+                <h1 className="uppercase text-center text-3xl sm:text-5xl font-medium text-gray-600 mb-3 sm:mb-5 tracking-wider">
+                    PRICING
+                </h1>
 
                 {/* Toggle */}
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-10">
-                    <div className="flex bg-white rounded-md shadow-sm ">
+                    <div className="flex bg-white rounded-md shadow-sm">
                         <button
-                            className={`px-6 py-2 rounded-l-md text-base font-medium transition-colors cursor-pointer ${billingCycle === "monthly" ? "bg-[#0077B6] text-white" : "bg-white text-slate-700 hover:bg-slate-100"
-                                }`}
+                            className={`px-6 py-2 rounded-l-md text-base font-medium transition-colors cursor-pointer ${
+                                billingCycle === "monthly"
+                                    ? "bg-[#0077B6] text-white"
+                                    : "bg-white text-slate-700 hover:bg-slate-100"
+                            }`}
                             onClick={() => setBillingCycle("monthly")}
                         >
                             Monthly
                         </button>
                         <button
-                            className={`px-6 py-2 rounded-r-md text-base font-medium transition-colors cursor-pointer ${billingCycle === "yearly" ? "bg-[#0077B6] text-white" : "bg-white text-slate-700 hover:bg-slate-100"
-                                }`}
+                            className={`px-6 py-2 rounded-r-md text-base font-medium transition-colors cursor-pointer ${
+                                billingCycle === "yearly"
+                                    ? "bg-[#0077B6] text-white"
+                                    : "bg-white text-slate-700 hover:bg-slate-100"
+                            }`}
                             onClick={() => setBillingCycle("yearly")}
                         >
                             Yearly
@@ -132,7 +181,9 @@ const Pricing = () => {
                                 <div className="relative">
                                     <div className="w-3/4 rounded-r-lg my-10 relative">
                                         <img src={img} alt="Plan background" className="w-full h-auto" />
-                                        <h3 className="absolute top-4 left-4 text-slate-700 font-bold text-xl z-10">{plan.name}</h3>
+                                        <h3 className="absolute top-4 left-4 text-slate-700 font-bold text-xl z-10">
+                                            {plan.name}
+                                        </h3>
                                     </div>
                                 </div>
 
@@ -145,7 +196,10 @@ const Pricing = () => {
                                         <p className="text-slate-500 text-base mt-1">Measurable results</p>
                                     </div>
 
-                                    <button className="w-full bg-[#309ED7] text-white py-3 rounded-md mb-4 hover:bg-[#00669e] transition-colors cursor-pointer text-lg font-semibold">
+                                    <button
+                                        className="w-full bg-[#309ED7] text-white py-3 rounded-md mb-4 hover:bg-[#00669e] transition-colors cursor-pointer text-lg font-semibold"
+                                        onClick={() => handleSelectPlan(plan.name)}
+                                    >
                                         Select
                                     </button>
 
@@ -162,7 +216,10 @@ const Pricing = () => {
                                         <ul className="space-y-3 text-base text-slate-600">
                                             {plan.features.map((feature, i) => (
                                                 <li key={i} className="flex items-start">
-                                                    <IoCheckmarkDoneSharp className="text-[#0077B6] mt-1 mr-2 flex-shrink-0" size={20} />
+                                                    <IoCheckmarkDoneSharp
+                                                        className="text-[#0077B6] mt-1 mr-2 flex-shrink-0"
+                                                        size={20}
+                                                    />
                                                     <span>{feature}</span>
                                                 </li>
                                             ))}
@@ -175,9 +232,8 @@ const Pricing = () => {
                 </div>
             </div>
             <Faq />
-            
         </section>
-    )
-}
+    );
+};
 
-export default Pricing
+export default Pricing;

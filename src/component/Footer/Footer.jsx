@@ -129,12 +129,10 @@ const Footer = () => {
             {/* Main footer section */}
             <div className="">
                 {/* Main Header Section */}
-                <div className="max-w-screen-xl mx-auto flex justify-between  py-10   ">
+                <div className=" space-x-32 flex  justify-center py-10   ">
                     <div className="mb-4">
 
-                        <h1 className="custom-heading text-8xl font-bold text-gray-600 uppercase">
-                            CHASKIX
-                        </h1>
+                       
                         <h2 className="text-xl md:text-2xl font-semibold text-gray-500 mt-2 uppercase">
                             INSPIRED BY THE SPIRIT <br /> OF THE CHASQUIS
                         </h2>

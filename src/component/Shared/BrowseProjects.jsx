@@ -1,207 +1,101 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { FiSearch, FiChevronRight, FiMoreHorizontal, FiHeart, FiMessageSquare, FiChevronDown } from "react-icons/fi"
+import { FiSearch, FiMessageSquare, FiChevronDown } from "react-icons/fi"
 import { IoIosSend } from "react-icons/io"
+import { motion, AnimatePresence } from "framer-motion"
+import { FaHeart, FaRegHeart } from "react-icons/fa"
+import { AiFillLike, AiOutlineLike } from "react-icons/ai"
+import {
+    useForumDataQuery,
+    useCreatePostMutation,
+    useCreateCommentMutation,
+    useCreateReactMutation,
+    useShowCommentQuery,
+    useShowContributotQuery,
+    useShowAllCommentQuery,
+    useShowNewUpdateQuery,
+} from "../../Redux/feature/ApiSlice.js"
+import { useForm } from "react-hook-form"
 
 const BrowseProjects = () => {
-    // Generate more sample posts for pagination
-    const generateSamplePosts = (count) => {
-        const posts = []
-        const categories = ["Use cases", "Lessons", "Inspiration", "Tips and tricks"]
-        const authors = [
-            { name: "Cameron Williamson", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-            { name: "Eleanor Pena", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-            { name: "Jerome Bell", avatar: "https://randomuser.me/api/portraits/men/36.jpg" },
-            { name: "Kathryn Murphy", avatar: "https://randomuser.me/api/portraits/women/70.jpg" },
-            { name: "Robert Johnson", avatar: "https://randomuser.me/api/portraits/men/45.jpg" },
-        ]
+    const { data: forumData, isLoading, isError } = useForumDataQuery()
+    const [createPost] = useCreatePostMutation()
+    const [createComment] = useCreateCommentMutation()
+    const [createReact] = useCreateReactMutation()
+    const { data: showComments } = useShowCommentQuery()
+    const { data: showContributor } = useShowContributotQuery()
+    const { data: showNewUpdate, isLoading: isLoadingUpdates } = useShowNewUpdateQuery()
 
-        for (let i = 1; i <= count; i++) {
-            const authorIndex = Math.floor(Math.random() * authors.length)
-            posts.push({
-                id: i,
-                author: authors[authorIndex].name,
-                avatar: authors[authorIndex].avatar,
-                time: `${Math.floor(Math.random() * 60)} min ago`,
-                content:
-                    "Lorem ipsum is simply dummy text of the printing and type setting industry. Lorem ipsum has been the industry's standard dummy text ever since the Lorem ipsum is simply dummy text of the printing and type setting industry. Lorem ipsum has been the industry's standard dummy text ever since the...",
-                likes: Math.floor(Math.random() * 50),
-                comments: Math.floor(Math.random() * 20),
-                category: categories[Math.floor(Math.random() * categories.length)],
-            })
-        }
-        return posts
-    }
-
-    // Sample initial data for posts (30 posts for pagination testing)
-    const initialPosts = generateSamplePosts(30)
-
-    // Sample data for updates
-    const updates = [
-        {
-            id: 1,
-            avatar: "https://randomuser.me/api/portraits/women/65.jpg",
-            content:
-                "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the...",
-        },
-        {
-            id: 2,
-            avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-            content:
-                "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the...",
-        },
-        {
-            id: 3,
-            avatar: "https://randomuser.me/api/portraits/men/42.jpg",
-            content:
-                "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the...",
-        },
-        {
-            id: 4,
-            avatar: "https://randomuser.me/api/portraits/women/26.jpg",
-            content:
-                "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem ipsum has been the industry's standard dummy text ever since the...",
-        },
-    ]
-
-    // Sample data for contributors
-    const contributors = [
-        {
-            id: 1,
-            name: "Cameron Williamson",
-            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-            title: "Environmental Consultant",
-        },
-        {
-            id: 2,
-            name: "Wade Warren",
-            avatar: "https://randomuser.me/api/portraits/men/40.jpg",
-            title: "Fire Protection Engineer",
-        },
-        {
-            id: 3,
-            name: "Floyd Miles",
-            avatar: "https://randomuser.me/api/portraits/men/53.jpg",
-            title: "Plumber",
-        },
-        {
-            id: 4,
-            name: "Ronald Richards",
-            avatar: "https://randomuser.me/api/portraits/men/61.jpg",
-            title: "Project Engineer",
-        },
-        {
-            id: 5,
-            name: "Cody Fisher",
-            avatar: "https://randomuser.me/api/portraits/men/37.jpg",
-            title: "Industrial Electrician",
-        },
-        {
-            id: 6,
-            name: "Jerome Bell",
-            avatar: "https://randomuser.me/api/portraits/men/36.jpg",
-            title: "Crane Mechanic",
-        },
-        {
-            id: 7,
-            name: "Arlene McCoy",
-            avatar: "https://randomuser.me/api/portraits/women/10.jpg",
-            title: "Concrete Inspector",
-        },
-        {
-            id: 8,
-            name: "Marvin McKinney",
-            avatar: "https://randomuser.me/api/portraits/men/71.jpg",
-            title: "Landscaping Supervisor",
-        },
-        {
-            id: 9,
-            name: "Theresa Webb",
-            avatar: "https://randomuser.me/api/portraits/women/67.jpg",
-            title: "Historical Restoration Specialist",
-        },
-    ]
+    // State for tracking reactions, comments, and expanded updates
+    const [activeComments, setActiveComments] = useState({})
+    const [userReactions, setUserReactions] = useState({})
+    const [expandedUpdate, setExpandedUpdate] = useState(null) // Track single expanded update
 
     // Categories for filtering
     const categories = ["Use cases", "Lessons", "Inspiration", "Tips and tricks"]
 
     // State variables
-    const [allPosts, setAllPosts] = useState(initialPosts)
-    const [filteredPosts, setFilteredPosts] = useState(initialPosts)
-    const [displayedPosts, setDisplayedPosts] = useState([])
-    const [storyText, setStoryText] = useState("")
-    const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedCategory, setSelectedCategory] = useState("")
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false)
+    const [expandedPosts, setExpandedPosts] = useState({})
+    const [currentPage, setCurrentPage] = useState(1)
     const categoryDropdownRef = useRef(null)
 
     const postsPerPage = 10
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
-
-    // Handle post submission
-    const handlePostSubmit = () => {
-        if (storyText.trim() === "") return
-
-        const newPost = {
-            id: Date.now(),
-            author: "You", // Assuming the current user
-            avatar: "https://randomuser.me/api/portraits/men/32.jpg", // Default avatar
-            time: "Just now",
-            content: storyText,
-            likes: 0,
-            comments: 0,
-            category: "Use cases", // Default category
-        }
-
-        const updatedPosts = [newPost, ...allPosts]
-        setAllPosts(updatedPosts)
-        setFilteredPosts(updatedPosts)
-        setStoryText("")
-        setCurrentPage(1) // Reset to first page when adding a new post
-    }
+    const CHARACTER_LIMIT = 700
+    const UPDATE_WORD_LIMIT = 50
 
     // Filter posts based on search query and category
-    useEffect(() => {
-        let result = allPosts
+    const filteredPosts = forumData
+        ? forumData
+              .filter((post) => (searchQuery ? post.title.toLowerCase().includes(searchQuery.toLowerCase()) : true))
+              .filter((post) => (selectedCategory ? post.category === selectedCategory : true))
+        : []
 
-        // Filter by search query
-        if (searchQuery) {
-            result = result.filter(
-                (post) =>
-                    post.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    post.content.toLowerCase().includes(searchQuery.toLowerCase()),
-            )
+    const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
+
+    // Get posts for the current page
+    const displayedPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm()
+    const commentForm = useForm()
+
+    const submitHandler = async (data) => {
+        try {
+            const response = await createPost(data).unwrap()
+            reset()
+        } catch (error) {
+            console.error("Error creating post:", error)
         }
+    }
 
-        // Filter by category
-        if (selectedCategory) {
-            result = result.filter((post) => post.category === selectedCategory)
-        }
-
-        setFilteredPosts(result)
-        setCurrentPage(1) // Reset to first page when filters change
-    }, [searchQuery, selectedCategory, allPosts])
-
-    // Update displayed posts when page or filtered posts change
-    useEffect(() => {
-        const startIndex = (currentPage - 1) * postsPerPage
-        const endIndex = startIndex + postsPerPage
-        setDisplayedPosts(filteredPosts.slice(startIndex, endIndex))
-    }, [currentPage, filteredPosts, postsPerPage])
+    // Toggle expanded state for a post
+    const toggleExpanded = (postId) => {
+        setExpandedPosts((prev) => ({
+            ...prev,
+            [postId]: !prev[postId],
+        }))
+    }
 
     // Reset filters
     const handleResetFilters = () => {
         setSearchQuery("")
         setSelectedCategory("")
-        setFilteredPosts(allPosts)
+        setCurrentPage(1)
         setShowCategoryDropdown(false)
     }
 
     // Handle category selection
     const handleCategorySelect = (category) => {
         setSelectedCategory(category)
+        setCurrentPage(1)
         setShowCategoryDropdown(false)
     }
 
@@ -212,28 +106,63 @@ const BrowseProjects = () => {
                 setShowCategoryDropdown(false)
             }
         }
-
         document.addEventListener("mousedown", handleClickOutside)
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside)
-        }
+        return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [])
 
-    // Generate pagination numbers with sliding window
+    // Generate pagination numbers
     const getPaginationNumbers = () => {
         if (totalPages <= 5) {
             return Array.from({ length: totalPages }, (_, i) => i + 1)
         }
-
         if (currentPage <= 3) {
             return [1, 2, 3, 4, 5, "...", totalPages]
         }
-
         if (currentPage >= totalPages - 2) {
             return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
         }
-
         return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages]
+    }
+
+    // Toggle comment section (only one open at a time)
+    const toggleCommentSection = (postId) => {
+        setActiveComments((prev) => ({
+            [postId]: !prev[postId],
+        }))
+    }
+
+    const { refetch } = useForumDataQuery()
+    const handleReaction = async (postId, reactionType) => {
+        try {
+            const react_type = reactionType === "heart" ? "heart" : "like"
+            await createReact({ id: postId, react_type }).unwrap()
+            refetch()
+        } catch (error) {
+            console.error("Error creating reaction:", error)
+        }
+    }
+
+    // Submit comment
+    const handleCommentSubmit = async (postId, data) => {
+        const text = data?.text
+        try {
+            await createComment({ id: postId, text: text }).unwrap()
+            commentForm.reset()
+        } catch (error) {
+            console.error("Error creating comment:", error)
+        }
+    }
+
+    // Toggle expanded update (only one open at a time)
+    const toggleUpdateExpanded = (updateId) => {
+        setExpandedUpdate((prev) => (prev === updateId ? null : updateId))
+    }
+
+    // Truncate update text to 50 words
+    const truncateText = (text) => {
+        const words = text.split(" ")
+        if (words.length <= UPDATE_WORD_LIMIT) return text
+        return words.slice(0, UPDATE_WORD_LIMIT).join(" ") + "..."
     }
 
     return (
@@ -248,20 +177,11 @@ const BrowseProjects = () => {
                                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                 <input
                                     type="text"
-                                    placeholder="Search by name"
+                                    placeholder="Search by title"
                                     className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                            </div>
-                            <div className="flex items-center">
-                                {/* <span className="text-gray-600 mr-2">View by:</span>
-                                <div className="relative">
-                                    <button className="flex items-center bg-white border border-gray-200 rounded-md px-3 py-2 text-sm">
-                                        Most recent
-                                        <FiChevronRight className="ml-2" />
-                                    </button>
-                                </div> */}
                             </div>
                         </div>
 
@@ -271,19 +191,19 @@ const BrowseProjects = () => {
                                 className="flex items-center bg-white border border-gray-200 font-medium cursor-pointer rounded-md px-4 py-2 text-sm hover:bg-gray-50"
                                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
                             >
-                                <span className="text-gray-700 ">
+                                <span className="text-gray-700">
                                     {selectedCategory ? `Category: ${selectedCategory}` : "Select Category"}
                                 </span>
                                 <FiChevronDown className="ml-2 text-gray-500" />
                             </button>
-
                             {showCategoryDropdown && (
-                                <div className="absolute z-10 mt-10 w-56 bg-white border border-gray-200 rounded-md shadow-lg py-1  ">
+                                <div className="absolute z-10 mt-10 w-56 bg-white border border-gray-200 rounded-md shadow-lg py-1">
                                     {categories.map((category) => (
                                         <button
                                             key={category}
-                                            className={`w-full text-left px-4 py-2 text-sm font-medium cursor-pointer hover:bg-gray-100 ${selectedCategory === category ? "bg-blue-50 text-blue-700" : "text-gray-700"
-                                                }`}
+                                            className={`w-full text-left px-4 py-2 text-sm font-medium cursor-pointer hover:bg-gray-100 ${
+                                                selectedCategory === category ? "bg-blue-50 text-blue-700" : "text-gray-700"
+                                            }`}
                                             onClick={() => handleCategorySelect(category)}
                                         >
                                             {category}
@@ -305,7 +225,12 @@ const BrowseProjects = () => {
                             <h3 className="text-md font-medium text-gray-700 mb-3">Post your story</h3>
                             <div className="flex items-start gap-3">
                                 <div className="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-5 w-5"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
                                         <path
                                             fillRule="evenodd"
                                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -314,69 +239,190 @@ const BrowseProjects = () => {
                                     </svg>
                                 </div>
                                 <div className="flex-1">
-                                    <textarea
-                                        placeholder="Write your story here..."
-                                        className="w-full border border-gray-200 rounded-md p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                        rows="2"
-                                        value={storyText}
-                                        onChange={(e) => setStoryText(e.target.value)}
-                                    ></textarea>
-                                    <div className="flex justify-end mt-2 ">
-                                        <button
-                                            className="bg-blue-500 text-white px-4 py-1 rounded-sm text-sm hover:bg-blue-600 transition flex cursor-pointer "
-                                            onClick={handlePostSubmit}
-                                        >
-                                            Publish
-                                            <IoIosSend size={20} className="ml-1" />
-
-                                        </button>
-                                    </div>
+                                    <form onSubmit={handleSubmit(submitHandler)}>
+                                        <textarea
+                                            {...register("text", {
+                                                required: "Story text is required",
+                                                minLength: {
+                                                    value: 1,
+                                                    message: "Story must be at least 1 character long",
+                                                },
+                                            })}
+                                            placeholder="Write your story here..."
+                                            className={`w-full border ${
+                                                errors.text ? "border-red-500" : "border-gray-200"
+                                            } rounded-md p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500`}
+                                            rows="2"
+                                        />
+                                        {errors.text && <p className="text-red-500 text-xs mt-1">{errors.text.message}</p>}
+                                        <div className="flex justify-end mt-2">
+                                            <button
+                                                type="submit"
+                                                className="bg-blue-500 text-white px-4 py-1 rounded-sm text-sm hover:bg-blue-600 transition flex items-center cursor-pointer"
+                                            >
+                                                Publish
+                                                <IoIosSend size={20} className="ml-1" />
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
 
                         {/* Posts */}
                         <div className="space-y-4">
-                            {displayedPosts.length > 0 ? (
-                                displayedPosts.map((post) => (
-                                    <div key={post.id} className="bg-white rounded-md shadow-sm p-4">
-                                        <div className="flex justify-between items-start mb-3">
-                                            <div className="flex items-center">
-                                                <img
-                                                    src={post.avatar || "/placeholder.svg"}
-                                                    alt={post.author}
-                                                    className="w-10 h-10 rounded-full mr-3"
-                                                />
-                                                <div>
-                                                    <h3 className="font-medium text-gray-800">{post.author}</h3>
-                                                    <p className="text-xs text-gray-500">{post.time}</p>
+                            {isLoading ? (
+                                <div className="text-center">Loading...</div>
+                            ) : isError ? (
+                                <div className="text-center text-red-500">Error loading posts</div>
+                            ) : displayedPosts.length > 0 ? (
+                                displayedPosts.map((post) => {
+                                    const postId = post.id || post.posted_on || Date.now()
+                                    const isLiked = userReactions[`${postId}-like`]
+                                    const isHearted = userReactions[`${postId}-heart`]
+                                    const showComments = activeComments[postId]
+
+                                    return (
+                                        <div key={postId} className="bg-white rounded-md shadow-sm p-4">
+                                            <div className="flex justify-between items-start mb-3">
+                                                <div className="flex items-center">
+                                                    <img
+                                                        src={post.profile_image || "https://randomuser.me/api/portraits/men/32.jpg"}
+                                                        alt={post.user_name || "Anonymous"}
+                                                        className="w-10 h-10 rounded-full mr-3"
+                                                    />
+                                                    <div>
+                                                        <h3 className="font-medium text-gray-800">{post.title}</h3>
+                                                        <p className="text-xs text-gray-500">
+                                                            {post.posted_on ? new Date(post.posted_on).toLocaleString() : "Just now"}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center">
-
-                                                {/* <button className="text-gray-500 hover:text-gray-700">
-                                                    <FiMoreHorizontal size={18} />
-                                                </button> */}
+                                            <div className="mb-3">
+                                                <p className="text-sm text-gray-600">
+                                                    {expandedPosts[post?.id] || post.text.length <= CHARACTER_LIMIT
+                                                        ? post.text
+                                                        : `${post.text.substring(0, CHARACTER_LIMIT)}...`}
+                                                    {post.text.length > CHARACTER_LIMIT && (
+                                                        <span
+                                                            className="text-blue-500 cursor-pointer ml-1"
+                                                            onClick={() => toggleExpanded(postId)}
+                                                        >
+                                                            {expandedPosts[post?.id] ? "See less" : "See more"}
+                                                        </span>
+                                                    )}
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div className="mb-3">
-                                            <p className="text-sm text-gray-600">
-                                                {post.content}
-                                                <span className="text-blue-500 cursor-pointer ml-1">See more</span>
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <div className="flex items-center mr-4">
-                                                <FiHeart className="mr-1" />
-                                                <span>{post.likes}</span>
+                                            <div className="flex items-center text-sm text-gray-500">
+                                                <motion.div
+                                                    className="flex items-center mr-4 cursor-pointer"
+                                                    onClick={() => handleReaction(post?.id, "like")}
+                                                    whileTap={{ scale: 1.2 }}
+                                                >
+                                                    {isLiked ? (
+                                                        <motion.div
+                                                            initial={{ scale: 0.8 }}
+                                                            animate={{ scale: 1 }}
+                                                            transition={{ type: "spring", stiffness: 300 }}
+                                                        >
+                                                            <AiFillLike className="mr-1 text-blue-500" size={18} />
+                                                        </motion.div>
+                                                    ) : (
+                                                        <AiOutlineLike className="mr-1" size={18} />
+                                                    )}
+                                                    <span>{post.like_count || 0}</span>
+                                                </motion.div>
+                                                <motion.div
+                                                    className="flex items-center mr-4 cursor-pointer"
+                                                    onClick={() => handleReaction(post?.id, "heart")}
+                                                    whileTap={{ scale: 1.2 }}
+                                                >
+                                                    {isHearted ? (
+                                                        <motion.div
+                                                            initial={{ scale: 0.8 }}
+                                                            animate={{ scale: 1 }}
+                                                            transition={{ type: "spring", stiffness: 300 }}
+                                                        >
+                                                            <FaHeart className="mr-1 text-red-500" size={16} />
+                                                        </motion.div>
+                                                    ) : (
+                                                        <FaRegHeart className="mr-1" size={16} />
+                                                    )}
+                                                    <span>{post.heart_count || 0}</span>
+                                                </motion.div>
+                                                <div className="flex items-center cursor-pointer" onClick={() => toggleCommentSection(postId)}>
+                                                    <FiMessageSquare className="mr-1" />
+                                                    <span>{post.comment_count || 0} Comments</span>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center">
-                                                <FiMessageSquare className="mr-1" />
-                                                <span>{post.comments} Comments</span>
-                                            </div>
+                                            <AnimatePresence>
+                                                {showComments && (
+                                                    <motion.div
+                                                        key={`comments-${postId}`}
+                                                        className="mt-4 pt-4 border-t border-gray-100"
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: "auto" }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    >
+                                                        {post.comments && post.comments.length > 0 ? (
+                                                            <div className="mb-4 space-y-3">
+                                                                {post.comments.map((comment, index) => (
+                                                                    <div key={index} className="flex items-start">
+                                                                        <img
+                                                                            src={
+                                                                                comment.profile_image ||
+                                                                                "https://randomuser.me/api/portraits/men/32.jpg"
+                                                                            }
+                                                                            alt="User"
+                                                                            className="w-8 h-8 rounded-full mr-2"
+                                                                        />
+                                                                        <div className="bg-gray-50 p-2 rounded-lg flex-1">
+                                                                            <p className="text-xs font-medium">
+                                                                                {comment.user_name || "Anonymous"}
+                                                                            </p>
+                                                                            <p className="text-sm">{comment.text}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <p className="text-sm text-gray-500 mb-3">
+                                                                No comments yet. Be the first to comment!
+                                                            </p>
+                                                        )}
+                                                        <form
+                                                            onSubmit={commentForm.handleSubmit((data) =>
+                                                                handleCommentSubmit(post?.id, data),
+                                                            )}
+                                                        >
+                                                            <div className="flex">
+                                                                <input
+                                                                    type="text"
+                                                                    {...commentForm.register("text", { required: true })}
+                                                                    placeholder="Write a comment..."
+                                                                    className="flex-1 border border-gray-200 rounded-l-md p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                                />
+                                                                <button
+                                                                    type="submit"
+                                                                    className="bg-blue-500 text-white px-3 rounded-r-md hover:bg-blue-600 transition cursor-pointer"
+                                                                >
+                                                                    <IoIosSend size={20} />
+                                                                </button>
+                                                            </div>
+                                                            {commentForm.formState.errors.text && (
+                                                                <p className="text-red-500 text-xs mt-1">
+                                                                    Comment text is required
+                                                                </p>
+                                                            )}
+                                                        </form>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
-                                    </div>
-                                ))
+                                    )
+                                })
                             ) : (
                                 <div className="bg-white rounded-md shadow-sm p-8 text-center">
                                     <p className="text-gray-500">No posts found matching your criteria.</p>
@@ -397,26 +443,26 @@ const BrowseProjects = () => {
                                 >
                                     Previous
                                 </button>
-
                                 {getPaginationNumbers().map((page, index) =>
                                     page === "..." ? (
-                                        <span key={`ellipsis-${index}`} className="mx-1 text-gray-500">
+                                        <span key={`ellipsis-${index}`} className="mx-1 Disagree
+                                        text-gray-500">
                                             ...
                                         </span>
                                     ) : (
                                         <button
                                             key={`page-${page}`}
-                                            className={`w-8 h-8 flex items-center justify-center rounded-md mx-1 text-sm cursor-pointer ${currentPage === page
-                                                ? "bg-blue-500 text-white"
-                                                : "border border-gray-300 text-gray-600 hover:bg-gray-100"
-                                                }`}
+                                            className={`w-8 h-8 flex items-center justify-center rounded-md mx-1 text-sm cursor-pointer ${
+                                                currentPage === page
+                                                    ? "bg-blue-500 text-white"
+                                                    : "border border-gray-300 text-gray-600 hover:bg-gray-100"
+                                            }`}
                                             onClick={() => setCurrentPage(page)}
                                         >
                                             {page}
                                         </button>
                                     ),
                                 )}
-
                                 <button
                                     className="px-3 py-1 border border-gray-300 rounded-md ml-2 text-sm text-gray-600 hover:bg-gray-100 cursor-pointer"
                                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
@@ -430,42 +476,67 @@ const BrowseProjects = () => {
 
                     {/* Sidebar */}
                     <div className="w-full md:w-1/4">
-                        {/* New Updates */}
                         <div className="mb-8 bg-gray-50 shadow-md rounded-md p-5">
                             <h2 className="text-lg font-semibold text-gray-800 mb-4">NEW UPDATES</h2>
                             <div className="space-y-4">
-                                {updates.map((update) => (
-                                    <div key={update.id} className="flex gap-3">
-                                        <img src={update.avatar || "/placeholder.svg"} alt="User" className="w-10 h-10 rounded-full" />
-                                        <div>
-                                            <p className="text-sm text-gray-600">
-                                                {update.content}
-                                                <span className="text-blue-500 cursor-pointer ml-1">See more</span>
-                                            </p>
+                                {isLoadingUpdates ? (
+                                    <p className="text-sm text-gray-500">Loading updates...</p>
+                                ) : Array.isArray(showNewUpdate) && showNewUpdate.length > 0 ? (
+                                    showNewUpdate.map((update) => (
+                                        <div key={update.id} className="flex gap-3">
+                                            <img
+                                                src={update.user_image || "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738133725/56832_cdztsw.png"}
+                                                alt="User"
+                                                className="w-10 h-10 rounded-full"
+                                            />
+                                            <div>
+                                                <p className="text-sm text-gray-600">
+                                                    {expandedUpdate === update.id ? update.text : truncateText(update.text)}
+                                                    {update.text.split(" ").length > UPDATE_WORD_LIMIT && (
+                                                        <span
+                                                            className="text-blue-500 cursor-pointer ml-1"
+                                                            onClick={() => toggleUpdateExpanded(update.id)}
+                                                        >
+                                                            {expandedUpdate === update.id ? "See less" : "See more"}
+                                                        </span>
+                                                    )}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-gray-500">No updates available.</p>
+                                )}
                             </div>
                         </div>
-
-                        {/* Top Contributors */}
                         <div className="bg-gray-50 shadow-md rounded-md p-5">
                             <h2 className="text-lg font-semibold text-gray-800 mb-2">TOP CONTRIBUTORS</h2>
                             <p className="text-xs text-gray-500 mb-4">Of The Month</p>
                             <div className="space-y-5">
-                                {contributors.map((contributor) => (
-                                    <div key={contributor.id} className="flex items-center">
-                                        <img
-                                            src={contributor.avatar || "/placeholder.svg"}
-                                            alt={contributor.name}
-                                            className="w-10 h-10 rounded-full mr-3"
-                                        />
-                                        <div>
-                                            <h3 className="font-medium text-gray-800 text-sm">{contributor.name}</h3>
-                                            <p className="text-xs text-gray-500">{contributor.title}</p>
-                                        </div>
-                                    </div>
-                                ))}
+                                {showContributor ? (
+                                    showContributor.length > 0 ? (
+                                        showContributor.map((contributor) => (
+                                            <div key={contributor.email} className="flex items-center">
+                                                <img
+                                                    src={
+                                                        contributor.user_image ||
+                                                        "https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738133725/56832_cdztsw.png"
+                                                    }
+                                                    alt={contributor.name}
+                                                    className="w-10 h-10 rounded-full mr-3"
+                                                />
+                                                <div>
+                                                    <h3 className="font-medium text-gray-800 text-sm">{contributor.name}</h3>
+                                                    <p className="text-xs text-gray-500">{contributor.profession}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-sm text-gray-500">No contributors found.</p>
+                                    )
+                                ) : (
+                                    <p className="text-sm text-gray-500">Loading contributors...</p>
+                                )}
                             </div>
                         </div>
                     </div>
