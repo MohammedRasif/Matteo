@@ -40,6 +40,7 @@ function CreatedOrderedTable() {
   const dropdownRef = useRef(null); // For status filter dropdown
   const actionDropdownRef = useRef(null); // For action dropdown
   const [projectData, setProjectData] = useState([]);
+  const token = localStorage.getItem("access_token");
 
   const description = `Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dum my text of the printing and type setting industry. Lorem standard dummy text ever since the. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`;
 
@@ -86,97 +87,41 @@ function CreatedOrderedTable() {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
-  const handleDeleteOrder = (orderId) => {
-    setOrderManagementData((prevOrders) =>
-      prevOrders.filter((order) => order.order_id !== orderId)
-    );
-    setOpenDropdownAction(null);
-    setOpenModal(false);
+  const handleDeleteOrder = () => {
+    console.log("delete order");
+  };
+  const handleDeleteProject = (projectId) => {
+    fetch(`${BaseUrl}/api/v1/order-post/delete/${projectId}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          // If response is 404, 500, etc.
+          return res.json().then((errData) => {
+            throw new Error(errData.detail || "Delete failed");
+          });
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setProjectData((prevProject) =>
+          prevProject.filter((project) => project.projectId !== projectId)
+        );
+        setOpenDropdownAction(null);
+        setOpenModal(false);
+      })
+      .catch((err) => {
+        console.log("Error deleting order:", err.message);
+        alert("Delete failed: " + err.message);
+      });
   };
 
-  const [orderManagementData, setOrderManagementData] = useState([
-    {
-      user_id: "U12345",
-      username: "john_doe",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
-      delivery_time: "2025-04-10T15:30:00Z",
-      order_id: "ORD1001",
-      amount: 59.99,
-      status: "Delivered",
-      action: "⋯",
-    },
-    {
-      user_id: "U12346",
-      username: "emma_smith",
-      image: "https://randomuser.me/api/portraits/women/46.jpg",
-      delivery_time: "2025-04-11T12:00:00Z",
-      order_id: "ORD1002",
-      amount: 89.5,
-      status: "In-Progress",
-      action: "⋯",
-    },
-    {
-      user_id: "U12347",
-      username: "michael_lee",
-      image: "https://randomuser.me/api/portraits/men/47.jpg",
-      delivery_time: "2025-04-12T09:45:00Z",
-      order_id: "ORD1003",
-      amount: 120.0,
-      status: "Late",
-      action: "⋯",
-    },
-    {
-      user_id: "U12348",
-      username: "sarah_jones",
-      image: "https://randomuser.me/api/portraits/women/48.jpg",
-      delivery_time: "2025-04-09T17:20:00Z",
-      order_id: "ORD1004",
-      amount: 42.75,
-      status: "Cancelled",
-      action: "⋯",
-    },
-    {
-      user_id: "U12349",
-      username: "david_khan",
-      image: "https://randomuser.me/api/portraits/men/49.jpg",
-      delivery_time: "2025-04-13T10:15:00Z",
-      order_id: "ORD1005",
-      amount: 75.25,
-      status: "Complete",
-      action: "⋯",
-    },
-    {
-      user_id: "U12350",
-      username: "olivia_wilson",
-      image: "https://randomuser.me/api/portraits/women/50.jpg",
-      delivery_time: "2025-04-14T13:00:00Z",
-      order_id: "ORD1006",
-      amount: 150.99,
-      status: "In-Progress",
-      action: "⋯",
-    },
-    {
-      user_id: "U12351",
-      username: "liam_brown",
-      image: "https://randomuser.me/api/portraits/men/51.jpg",
-      delivery_time: "2025-04-15T08:45:00Z",
-      order_id: "ORD1007",
-      amount: 65.0,
-      status: "Delivered",
-      action: "⋯",
-    },
-    {
-      user_id: "U12352",
-      username: "ava_davis",
-      image: "https://randomuser.me/api/portraits/women/52.jpg",
-      delivery_time: "2025-04-16T16:30:00Z",
-      order_id: "ORD1008",
-      amount: 99.0,
-      status: "Cancel request",
-      action: "⋯",
-    },
-  ]);
+  const [orderManagementData, setOrderManagementData] = useState([]);
 
   const filteredOrders = orderManagementData.filter(
     (order) =>
@@ -186,9 +131,8 @@ function CreatedOrderedTable() {
         order.status === statusFilter)
   );
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
     // console.log("Token used:", token); // <-- for debugging
-
+    // created orders
     fetch(`${BaseUrl}/api/v1/order-post/list/`, {
       method: "GET",
       headers: {
@@ -214,11 +158,11 @@ function CreatedOrderedTable() {
         return res.json();
       })
       .then((data) => {
-        console.dir(data);
+        console.log(data);
         setProjectData(data);
       })
       .catch((err) => console.log("Error fetching data:", err.message));
-
+    // orders running
     fetch(`${BaseUrl}/api/v1/orders/active-orders/buyer/`, {
       method: "GET",
       headers: {
@@ -233,7 +177,6 @@ function CreatedOrderedTable() {
       })
       .catch((err) => console.log(err));
   }, []);
-
   return (
     <div className="my-10 nunito">
       <h1 className="text-[24.8px] font-bold text-center mb-10 nunito">
@@ -400,7 +343,12 @@ function CreatedOrderedTable() {
                                 <BiEdit />
                                 Edit
                               </li>
-                              <li className="px-4 py-2 cursor-pointer flex items-center gap-2">
+                              <li
+                                onClick={() =>
+                                  handleDeleteProject(project.projectId)
+                                }
+                                className="px-4 py-2 cursor-pointer flex items-center gap-2"
+                              >
                                 <RiDeleteBinLine />
                                 Delete
                               </li>
