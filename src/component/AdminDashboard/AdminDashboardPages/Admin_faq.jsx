@@ -1,56 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { FaqQuestionAns } from "../../Shared/Faq";
 import { FaPlus } from "react-icons/fa6";
-import { useFaqDataQuery } from "../../../Redux/feature/ApiSlice";
+import {
+  useAddFaqMutation,
+  useFaqDataQuery,
+} from "../../../Redux/feature/ApiSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Admin_faq() {
   const [activeItem, setActiveItem] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newFaq, setNewFaq] = useState({ question: "", answer: "" });
-  const [faqItems, setFaqItems] = useState([
-    {
-      question: "What is field service management?",
-      answer:
-        "Field service management is a system designed to coordinate the work of distributed employees or contractors who carry out service at the client's location. It includes schedule optimization, dispatch, mobile connectivity, and performance analysis tools.",
-    },
-    {
-      question: "What are the benefits of field service management?",
-      answer:
-        "Field service management provides numerous benefits including increased efficiency, reduced operational costs, improved customer satisfaction, enhanced workforce productivity, better resource allocation, accurate billing, and real-time visibility into field operations.",
-    },
-    {
-      question: "How much does field service management cost?",
-      answer:
-        "The cost of field service management varies based on factors like the size of your organization, number of users, features required, and whether it's cloud-based or on-premises. Pricing typically ranges from $15-$300 per user per month, with enterprise solutions costing more based on customization needs.",
-    },
-    {
-      question: "What are the common features of field service management?",
-      answer:
-        "Common features include scheduling and dispatch, route optimization, mobile access, work order management, inventory management, customer portal, invoicing, reporting and analytics, GPS tracking, and integration with other business systems.",
-    },
-    {
-      question: "Factors to consider when buying field service management?",
-      answer:
-        "Consider scalability, ease of use, mobile capabilities, integration with existing systems, customization options, reporting features, customer support, security measures, offline functionality, and overall cost of ownership when selecting a field service management solution.",
-    },
-    {
-      question: "Who needs field service management?",
-      answer:
-        "Field service management is beneficial for industries like HVAC, electrical, plumbing, IT services, healthcare, telecommunications, property maintenance, pest control, landscaping, security services, and any business that manages employees working at customer locations rather than company facilities.",
-    },
-  ]);
+  const [faqItems, setFaqItems] = useState([]);
   const { data, error } = useFaqDataQuery();
+  const [addFaq] = useAddFaqMutation();
   const toggleItem = (index) => {
     setActiveItem(activeItem === index ? -1 : index);
   };
 
-  const handleAddFaq = () => {
+  const handleAddFaq = async () => {
     if (newFaq.question && newFaq.answer) {
-      setFaqItems([...faqItems, newFaq]);
-      setNewFaq({ question: "", answer: "" });
+      try {
+        await addFaq(newFaq).unwrap();
+        setFaqItems((prev) => [...prev, newFaq]);
+        setNewFaq({ question: "", answer: "" });
+        setIsModalOpen(false);
+        toast.success("New FAQ added");
+      } catch (err) {
+        console.error("Failed to add FAQ:", err);
+      }
     }
-    setIsModalOpen(false);
   };
+
   useEffect(() => {
     if (data) {
       setFaqItems(data);
@@ -59,6 +40,7 @@ export default function Admin_faq() {
   }, [data]);
   return (
     <div>
+      <Toaster />
       <div className="mb-6 px-10 mt-20">
         <div className="flex items-center justify-center">
           <h1 className="uppercase text-center text-3xl md:text-5xl font-medium text-gray-600 mb-3 sm:mb-5 py-10 tracking-wider">

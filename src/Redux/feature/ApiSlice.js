@@ -207,6 +207,14 @@ export const ApiSlice = createApi({
     faqData: builder.query({
       query: () => `/api/v1/admin/dashboard/faq/`,
     }),
+    addFaq: builder.mutation({
+      query: (faq) => ({
+        url: `/api/v1/admin/dashboard/faq/`,
+        method: "POST",
+        body: faq,
+      }),
+      invalidatesTags: ["Faq"],
+    }),
 
     // give warning
     withdrawalWarning: builder.mutation({
@@ -226,7 +234,9 @@ export const ApiSlice = createApi({
 // Export hooks for usage in components
 export const {
   useGetProfileQuery,
+  //   abdullah
   useFaqDataQuery,
+  useAddFaqMutation,
   //rasif
   useTotalSellesQuery,
   useTodaySelasQuery,
