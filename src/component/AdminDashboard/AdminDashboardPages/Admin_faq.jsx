@@ -3,6 +3,7 @@ import { FaqQuestionAns } from "../../Shared/Faq";
 import { FaPlus } from "react-icons/fa6";
 import {
   useAddFaqMutation,
+  useDeleteFaqMutation,
   useFaqDataQuery,
   useUpdateFaqMutation,
 } from "../../../Redux/feature/ApiSlice";
@@ -18,6 +19,7 @@ export default function Admin_faq() {
   const [addFaq] = useAddFaqMutation();
   const [updateFaq] = useUpdateFaqMutation();
   const location = useLocation();
+  const [deleteFaq] = useDeleteFaqMutation(); // if not already used
   const isAdminPage = location.pathname === "/Admin_Dashboard/add_FAQ";
   const toggleItem = (index) => {
     setActiveItem(activeItem === index ? -1 : index);
@@ -51,6 +53,20 @@ export default function Admin_faq() {
         toast.error("Failed to submit FAQ");
         console.error(err);
       }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteFaq({ id }).unwrap();
+
+      // ✅ Instantly update local state
+      setFaqItems((prev) => prev.filter((faq) => faq.id !== id));
+
+      toast.success("FAQ deleted");
+    } catch (err) {
+      console.error("Delete failed:", err);
+      toast.error("Failed to delete FAQ");
     }
   };
 

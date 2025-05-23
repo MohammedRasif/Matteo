@@ -204,6 +204,7 @@ export const ApiSlice = createApi({
     withdrawal: builder.query({
       query: () => "/api/v1/admin/withdraw/request-list/",
     }),
+    // faq
     faqData: builder.query({
       query: () => `/api/v1/admin/dashboard/faq/`,
     }),
@@ -222,6 +223,14 @@ export const ApiSlice = createApi({
         body: faq,
       }),
       invalidatesTags: ["UpdateFaq"],
+    }),
+    deleteFaq: builder.mutation({
+      query: (id) => ({
+        url: `/api/v1/admin/dashboard/faq/`,
+        method: "DELETE",
+        body: id,
+      }),
+      invalidatesTags: ["DELET"],
     }),
 
     // give warning
@@ -246,6 +255,7 @@ export const {
   useFaqDataQuery,
   useAddFaqMutation,
   useUpdateFaqMutation,
+  useDeleteFaqMutation,
   //rasif
   useTotalSellesQuery,
   useTodaySelasQuery,
