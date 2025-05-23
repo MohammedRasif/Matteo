@@ -25,8 +25,15 @@ const FaqQuestionAns = ({ item, index, activeItem, toggleItem }) => {
             : "max-h-0 opacity-0"
         }`}
       >
-        <div className="p-4">
-          <p className="text-gray-600 text-sm">{item.answer}</p>
+        <div className="py-4 px-10">
+          <ul>
+            {item.answer &&
+              item.answer.split(",").map((q, i) => (
+                <li className="text-gray-600 text-sm list-disc" key={i}>
+                  {q}
+                </li>
+              ))}
+          </ul>
         </div>
       </div>
     </div>

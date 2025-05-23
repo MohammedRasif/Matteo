@@ -127,16 +127,18 @@ export default function Admin_faq() {
         </div>
       )}
 
-      <div className="px-10">
-        {faqItems.map((item, index) => (
-          <FaqQuestionAns
-            key={`item-${index}`}
-            item={item}
-            index={index}
-            activeItem={activeItem}
-            toggleItem={toggleItem}
-          />
-        ))}
+      <div className="flex items-center justify-center w-full pb-10">
+        <div className="px-10 w-full max-w-6xl">
+          {faqItems.map((item, index) => (
+            <FaqQuestionAns
+              key={`item-${index}`}
+              item={item}
+              index={index}
+              activeItem={activeItem}
+              toggleItem={toggleItem}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
