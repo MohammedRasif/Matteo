@@ -215,6 +215,14 @@ export const ApiSlice = createApi({
       }),
       invalidatesTags: ["Faq"],
     }),
+    updateFaq: builder.mutation({
+      query: (faq) => ({
+        url: `/api/v1/admin/dashboard/faq/`,
+        method: "PUT",
+        body: faq,
+      }),
+      invalidatesTags: ["UpdateFaq"],
+    }),
 
     // give warning
     withdrawalWarning: builder.mutation({
@@ -237,6 +245,7 @@ export const {
   //   abdullah
   useFaqDataQuery,
   useAddFaqMutation,
+  useUpdateFaqMutation,
   //rasif
   useTotalSellesQuery,
   useTodaySelasQuery,

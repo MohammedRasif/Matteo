@@ -1,24 +1,52 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useFaqDataQuery } from "../../Redux/feature/ApiSlice";
+import { useLocation } from "react-router-dom";
 
 // FAQ Question and Answer Component
-const FaqQuestionAns = ({ item, index, activeItem, toggleItem }) => {
+const FaqQuestionAns = ({
+  item,
+  index,
+  activeItem,
+  toggleItem,
+  isAdmin,
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <div key={`item-${index}`} className="">
-      <button
+    <div className="">
+      <div
         onClick={() => toggleItem(index)}
         className={`py-4 text-[#345168] bg-white px-3 border border-gray-300 text-left text-base font-medium flex justify-between items-center w-full hover:cursor-pointer ${
           activeItem === index ? "rounded-t-xl" : "rounded-xl"
         }`}
       >
-        {item.question}
-        <ChevronDown
-          className={`transition-transform duration-300 ${
-            activeItem === index ? "rotate-180" : ""
-          }`}
-        />
-      </button>
+        <div>{item.question}</div>
+        <div className="flex items-center justify-center gap-8">
+          {isAdmin && (
+            <div className="flex gap-4">
+              <button
+                className="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500 hover:cursor-pointer"
+                onClick={onEdit}
+              >
+                Edit
+              </button>
+              <button
+                className="px-3 hover:cursor-pointer py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={onDelete}
+              >
+                Delete
+              </button>
+            </div>
+          )}
+          <ChevronDown
+            className={`transition-transform duration-300 ${
+              activeItem === index ? "rotate-180" : ""
+            }`}
+          />
+        </div>
+      </div>
+
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out bg-white ${
           activeItem === index

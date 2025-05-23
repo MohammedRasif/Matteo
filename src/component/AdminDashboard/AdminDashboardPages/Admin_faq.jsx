@@ -4,8 +4,10 @@ import { FaPlus } from "react-icons/fa6";
 import {
   useAddFaqMutation,
   useFaqDataQuery,
+  useUpdateFaqMutation,
 } from "../../../Redux/feature/ApiSlice";
 import toast, { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 export default function Admin_faq() {
   const [activeItem, setActiveItem] = useState(0);
@@ -14,20 +16,40 @@ export default function Admin_faq() {
   const [faqItems, setFaqItems] = useState([]);
   const { data, error } = useFaqDataQuery();
   const [addFaq] = useAddFaqMutation();
+  const [updateFaq] = useUpdateFaqMutation();
+  const location = useLocation();
+  const isAdminPage = location.pathname === "/Admin_Dashboard/add_FAQ";
   const toggleItem = (index) => {
     setActiveItem(activeItem === index ? -1 : index);
   };
 
-  const handleAddFaq = async () => {
+  const handleSubmitFaq = async () => {
     if (newFaq.question && newFaq.answer) {
       try {
-        await addFaq(newFaq).unwrap();
-        setFaqItems((prev) => [...prev, newFaq]);
+        if (newFaq.id) {
+          // ✅ EDIT MODE
+          const updated = await updateFaq(newFaq).unwrap();
+
+          // Replace in local state
+          setFaqItems((prev) =>
+            prev.map((faq) => (faq.id === updated.id ? updated : faq))
+          );
+
+          toast.success("FAQ updated");
+        } else {
+          // ✅ ADD MODE
+          const added = await addFaq(newFaq).unwrap();
+
+          setFaqItems((prev) => [...prev, added]);
+
+          toast.success("FAQ added");
+        }
+
         setNewFaq({ question: "", answer: "" });
         setIsModalOpen(false);
-        toast.success("New FAQ added");
       } catch (err) {
-        console.error("Failed to add FAQ:", err);
+        toast.error("Failed to submit FAQ");
+        console.error(err);
       }
     }
   };
@@ -38,6 +60,11 @@ export default function Admin_faq() {
     }
     console.log(data);
   }, [data]);
+  useEffect(() => {
+    if (!isModalOpen) {
+      setNewFaq({ question: "", answer: "" });
+    }
+  }, [isModalOpen]);
   return (
     <div>
       <Toaster />
@@ -68,7 +95,9 @@ export default function Admin_faq() {
             className="bg-white rounded-lg p-6 w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-semibold mb-4">Add New FAQ</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {newFaq.id ? "Update FAQ" : "Add New FAQ"}
+            </h2>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Question
@@ -106,9 +135,9 @@ export default function Admin_faq() {
               </button>
               <button
                 className="px-4 hover:cursor-pointer py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                onClick={handleAddFaq}
+                onClick={handleSubmitFaq}
               >
-                Add
+                {newFaq.id ? "Update" : "Add"}
               </button>
             </div>
           </div>
@@ -124,6 +153,12 @@ export default function Admin_faq() {
               index={index}
               activeItem={activeItem}
               toggleItem={toggleItem}
+              isAdmin={isAdminPage}
+              onEdit={() => {
+                setNewFaq(item); // open modal with this FAQ to edit
+                setIsModalOpen(true);
+              }}
+              onDelete={() => handleDelete(item.id)}
             />
           ))}
         </div>
