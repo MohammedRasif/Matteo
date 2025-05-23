@@ -1,11 +1,19 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Users } from "lucide-react";
 import { TbBrandWechat } from "react-icons/tb";
-import { MdManageAccounts, MdOutlineDashboard } from "react-icons/md";
+import {
+  MdManageAccounts,
+  MdOutlineDashboard,
+  MdOutlineQuestionAnswer,
+} from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 import { useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { RiAlignItemTopLine, RiBloggerLine, RiShoppingCartLine } from "react-icons/ri";
+import {
+  RiAlignItemTopLine,
+  RiBloggerLine,
+  RiShoppingCartLine,
+} from "react-icons/ri";
 import { LiaShopware } from "react-icons/lia";
 import { TiTicket } from "react-icons/ti";
 
@@ -64,7 +72,9 @@ const AdminDashboardSidebar = () => {
         </NavLink>
 
         {/* Management Section */}
-        <div className={`${isManagementActive ? "bg-[#0D95DD] rounded-md" : ""}`}>
+        <div
+          className={`${isManagementActive ? "bg-[#0D95DD] rounded-md" : ""}`}
+        >
           <div className="pl-6">
             <button
               className="flex items-center"
@@ -77,7 +87,11 @@ const AdminDashboardSidebar = () => {
               >
                 <MdManageAccounts className="h-5 w-5" />
                 <h1 className="text-[17px] font-medium">Management</h1>
-                {isOpen ? <IoChevronUp className="ml-16" /> : <IoChevronDown className="ml-16" />}
+                {isOpen ? (
+                  <IoChevronUp className="ml-16" />
+                ) : (
+                  <IoChevronDown className="ml-16" />
+                )}
               </div>
             </button>
           </div>
@@ -104,7 +118,8 @@ const AdminDashboardSidebar = () => {
             to="/Admin_Dashboard/order"
             className={({ isActive }) =>
               `py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
-                isActive || location.pathname === "/Admin_Dashboard/order_Assessment"
+                isActive ||
+                location.pathname === "/Admin_Dashboard/order_Assessment"
                   ? "bg-blue-300 text-white font-medium rounded-md"
                   : ""
               }`
@@ -193,11 +208,26 @@ const AdminDashboardSidebar = () => {
           <RiAlignItemTopLine className="h-5 w-5" />
           <h1 className="text-[17px] font-medium">Withdrawal requests</h1>
         </NavLink>
+        <NavLink
+          to="/Admin_Dashboard/add_FAQ"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
+              isActive
+                ? "bg-[#0D95DD] text-white rounded-md"
+                : "hover:bg-[#0daddd] hover:text-white rounded-md"
+            }`
+          }
+        >
+          <MdOutlineQuestionAnswer className="h-5 w-5" />
+          <h1 className="text-[17px] font-medium">FAQ</h1>
+        </NavLink>
       </div>
 
       {/* Logout */}
       <div className="text-center w-full bg-[#B8E5FF] rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
-        <button className="text-[17px] font-medium cursor-pointer">Logout</button>
+        <button className="text-[17px] font-medium cursor-pointer">
+          Logout
+        </button>
       </div>
     </div>
   );
