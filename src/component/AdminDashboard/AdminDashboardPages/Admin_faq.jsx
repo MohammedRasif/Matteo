@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaqQuestionAns } from "../../Shared/Faq";
 import { FaPlus } from "react-icons/fa6";
+import { useFaqDataQuery } from "../../../Redux/feature/ApiSlice";
 
 export default function Admin_faq() {
   const [activeItem, setActiveItem] = useState(0);
@@ -38,7 +39,7 @@ export default function Admin_faq() {
         "Field service management is beneficial for industries like HVAC, electrical, plumbing, IT services, healthcare, telecommunications, property maintenance, pest control, landscaping, security services, and any business that manages employees working at customer locations rather than company facilities.",
     },
   ]);
-
+  const { data, error } = useFaqDataQuery();
   const toggleItem = (index) => {
     setActiveItem(activeItem === index ? -1 : index);
   };
@@ -50,7 +51,12 @@ export default function Admin_faq() {
     }
     setIsModalOpen(false);
   };
-
+  useEffect(() => {
+    if (data) {
+      setFaqItems(data);
+    }
+    console.log(data);
+  }, [data]);
   return (
     <div>
       <div className="mb-6 px-10 mt-20">
