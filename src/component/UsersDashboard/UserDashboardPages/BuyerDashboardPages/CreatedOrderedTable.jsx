@@ -165,7 +165,7 @@ function CreatedOrderedTable() {
       })
       .then((data) => {
         console.log(data);
-        setProjectData(data);
+        setProjectData(data.reverse());
       })
       .catch((err) => console.log("Error fetching data:", err.message));
     // orders running

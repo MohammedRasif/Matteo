@@ -51,6 +51,7 @@ import PrivateRoute from "./Root/PrivetRoute.jsx";
 import NewPasswordRoute from "./Root/NewPasswordRoute.jsx";
 import VerificationRoute from "./Root/VerificationRoute.jsx";
 import EditPost from "./component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/EditPost.jsx";
+import Admin_faq from "./component/AdminDashboard/AdminDashboardPages/Admin_faq.jsx";
 
 const router = createBrowserRouter([
   {
@@ -240,6 +241,10 @@ const router = createBrowserRouter([
       {
         path: "/Admin_Dashboard/withdrawal",
         element: <AdminDashboardWithdrawal />,
+      },
+      {
+        path: "/Admin_Dashboard/add_FAQ",
+        element: <Admin_faq />,
       },
     ],
   },
