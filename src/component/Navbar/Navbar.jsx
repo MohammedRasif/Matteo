@@ -7,6 +7,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useGetProfileQuery } from "../../Redux/feature/ApiSlice";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { GoChevronRight } from "react-icons/go";
+import img from "../image/Vector.svg"
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,13 +57,14 @@ const Navbar = () => {
   return (
     <>
       <div className="shadow-md lg:fixed lg:top-0 lg:left-0 lg:right-0 lg:z-50 w-full bg-white">
-        <div className="bg-green-600 w-full py-[10px]"></div>
+        <div className="bg-[#848239] w-full py-[10px]"></div>
         <div className="flex items-center justify-between w-full h-16 px-4 sm:px-6 bg-white">
           <div className="flex items-center justify-between w-full max-w-[1430px] mx-auto">
             <div className="flex items-center">
-              <NavLink to="/" className="text-[28px] sm:text-[32px] font-bold text-[#0077b6]">
-                ChaskiX
+              <NavLink to="/" className=" font-bold text-[#0077b6]">
+                <img src={img} className="h-14 w-12" alt="" />
               </NavLink>
+              <h1 className="text-[#848239] text-3xl font-bold">ChaskiX</h1>
             </div>
             <div className="md:hidden flex items-center">
               <button onClick={toggleMobileMenu} aria-label="Toggle mobile menu">
@@ -133,12 +135,12 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="relative">
-                  <div className="bg-[#47BDFC] px-12 py-4 rounded-md"></div>
+                  <div className="bg-[#848239] px-12 py-4 rounded-md"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <NavLink
                       to="/login"
                       className={({ isActive }) =>
-                        `relative bg-[#0077B6] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors ${
+                        `relative bg-[#848239] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#848239] transition-colors ${
                           isActive ? "bg-black" : ""
                         }`
                       }
@@ -146,7 +148,7 @@ const Navbar = () => {
                       <span className="text-lg font-semibold">Login</span>
                       <ArrowRight className="h-5 w-5" />
                       <div
-                        className="absolute inset-0 rounded-md bg-[#00A3E0] -z-10"
+                        className="absolute inset-0 rounded-md bg-[#848239] -z-10"
                         style={{ transform: "translate(4px, 4px)" }}
                       />
                     </NavLink>
@@ -243,13 +245,13 @@ const Navbar = () => {
             ) : (
               <NavLink
                 to="/login"
-                className="relative bg-[#0077B6] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors w-fit"
+                className="relative bg-[#848239] text-white px-5 py-2 rounded-md flex items-center space-x-2 hover:bg-[#00669e] transition-colors w-fit"
                 onClick={toggleMobileMenu}
               >
                 <span className="text-lg font-semibold">Login</span>
                 <ArrowRight className="h-5 w-5" />
                 <div
-                  className="absolute inset-0 rounded-md bg-[#00A3E0] -z-10"
+                  className="absolute inset-0 rounded-md bg-[#848239] -z-10"
                   style={{ transform: "translate(4px, 4px)" }}
                 />
               </NavLink>

@@ -1,8 +1,7 @@
-
 import { useState, useEffect, useRef } from "react"
 import { ChevronRight, CheckCircle, Trash2, X, Search, AlertCircle } from "lucide-react"
 import { GoArrowLeft } from "react-icons/go"
-import { useSupporTicketsQuery } from "../../../Redux/feature/ApiSlice"
+import { useAdminSupportTicketDeleteMutation, useSupporTicketsQuery } from "../../../Redux/feature/ApiSlice"
 
 const AdminDashboardSupport = () => {
     // State for filter, search, dropdowns, and popups
@@ -17,9 +16,11 @@ const AdminDashboardSupport = () => {
     const [pendingSolveTicket, setPendingSolveTicket] = useState(null)
     const [pendingDeleteTicket, setPendingDeleteTicket] = useState(null)
     const [filteredTickets, setFilteredTickets] = useState([])
+    const [deleteError, setDeleteError] = useState("") // State for error messages
 
     // Fetch tickets from API
     const { data: supportTicket, isLoading, error } = useSupporTicketsQuery()
+    const [supportTicketDelete] = useAdminSupportTicketDeleteMutation()
     console.log("Fetched Tickets:", supportTicket)
 
     // Refs for closing dropdowns when clicking outside
@@ -96,6 +97,7 @@ const AdminDashboardSupport = () => {
         } else if (action === "delete") {
             setPendingDeleteTicket(ticket)
             setShowDeletePopup(true)
+            setDeleteError("") // Reset error message
         }
         setActiveStatusDropdown(null)
     }
@@ -113,13 +115,21 @@ const AdminDashboardSupport = () => {
     }
 
     // Handle delete confirmation
-    const handleDeleteConfirm = () => {
+    const handleDeleteConfirm = async () => {
         if (pendingDeleteTicket) {
-            const updatedTickets = filteredTickets.filter((t) => t.id !== pendingDeleteTicket.id)
-            setFilteredTickets(updatedTickets)
+            try {
+                await supportTicketDelete(pendingDeleteTicket.id).unwrap()
+                console.log(`Successfully deleted ticket ID: ${pendingDeleteTicket.id}`)
+                const updatedTickets = filteredTickets.filter((t) => t.id !== pendingDeleteTicket.id)
+                setFilteredTickets(updatedTickets)
+                setShowDeletePopup(false)
+                setPendingDeleteTicket(null)
+                setDeleteError("")
+            } catch (error) {
+                console.error("Failed to delete ticket:", error)
+                setDeleteError("Failed to delete ticket. Please try again.")
+            }
         }
-        setShowDeletePopup(false)
-        setPendingDeleteTicket(null)
     }
 
     // Handle loading and error states
@@ -201,8 +211,8 @@ const AdminDashboardSupport = () => {
                                         {ticket.purpose === "order_related"
                                             ? "Order related"
                                             : ticket.purpose === "blog_related"
-                                            ? "Blog related"
-                                            : "Others"}
+                                                ? "Blog related"
+                                                : "Others"}
                                     </td>
                                     <td className="px-6 py-4">
                                         <a
@@ -230,8 +240,8 @@ const AdminDashboardSupport = () => {
                                                 )
                                             }
                                         >
-                                            <span>
-                                                {ticket.status === "In-progress" ? "Processing" : ticket.status}
+                                            <span className="underline text-blue-400 cursor-pointer">
+                                                {ticket.status}
                                             </span>
                                         </button>
 
@@ -260,7 +270,7 @@ const AdminDashboardSupport = () => {
                                                             handleStatusAction("delete", ticket)
                                                         }}
                                                         className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-100"
-                                                        >
+                                                    >
                                                         <Trash2 className="h-4 w-4" />
                                                         Delete
                                                     </button>
@@ -367,6 +377,7 @@ const AdminDashboardSupport = () => {
                                 onClick={() => {
                                     setShowDeletePopup(false)
                                     setPendingDeleteTicket(null)
+                                    setDeleteError("")
                                 }}
                                 className="text-gray-400 hover:text-gray-600"
                             >
@@ -377,11 +388,15 @@ const AdminDashboardSupport = () => {
                             Are you sure you want to delete ticket ID:{" "}
                             <span className="font-medium">{pendingDeleteTicket?.id}</span>? This action cannot be undone.
                         </p>
+                        {deleteError && (
+                            <p className="text-red-500 text-sm mb-4">{deleteError}</p>
+                        )}
                         <div className="flex justify-end gap-2">
                             <button
                                 onClick={() => {
                                     setShowDeletePopup(false)
                                     setPendingDeleteTicket(null)
+                                    setDeleteError("")
                                 }}
                                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 cursor-pointer"
                             >

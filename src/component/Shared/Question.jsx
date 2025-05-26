@@ -127,7 +127,7 @@ const Question = () => {
         <div className="md:col-span-2 flex justify-center mt-2">
           <button
             type="submit"
-            className="px-16 py-2 bg-[#2E9DE0] text-white rounded hover:bg-[#1A9CC4] transition-colors cursor-pointer"
+            className="px-16 py-2 bg-[#848239] text-white rounded hover:bg-[#848239] transition-colors cursor-pointer"
           >
             Submit
           </button>

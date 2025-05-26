@@ -46,7 +46,7 @@ const Banner = () => {
                         Get everything done without the late nights. Increase your revenue and reputation with a single platform
                         built to help home service businesses succeed.
                     </p>
-                    <button className="bg-[#2E9DE0] hover:bg-[#2e81e0] text-white font-medium py-3 px-8 rounded-full transition duration-300 cursor-pointer">
+                    <button className="bg-[#848239] hover:bg-[#2e81e0] text-white font-medium py-3 px-8 rounded-full transition duration-300 cursor-pointer">
                         Get Started Now
                     </button>
                     <p className="mt-6 text-sm font-medium">Put ChasiX to work for you anytime.</p>

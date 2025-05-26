@@ -1,5 +1,6 @@
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { use } from "react";
 
 const baseQuery = fetchBaseQuery({
     baseUrl: "http://192.168.10.124:2000",
@@ -64,10 +65,21 @@ export const ApiSlice = createApi({
         }),
 
         serviceCommunityData: builder.query({
-            query:() => "api/v1/order-post/list/all/"
+            query: () => "api/v1/order-post/list/all/"
+        }),
+        //bit post project 
+
+        bitpoject: builder.mutation({
+            query: ({ warning }) => ({
+                url: `/api/v1/order-post/bids/place/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
         }),
 
-        
+
+
 
 
 
@@ -271,6 +283,17 @@ export const ApiSlice = createApi({
         withdrawal: builder.query({
             query: () => "/api/v1/admin/withdraw/request-list/"
         }),
+
+        adminSupportTicketDelete: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/admin/support/ticket/delete/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+
+
+
         // give warning
         withdrawalWarning: builder.mutation({
             query: ({ warning, id }) => ({
@@ -295,6 +318,7 @@ export const {
     useSupporTicketPostMutation,
     useSupportTikectEditMutation,
     useServiceCommunityDataQuery,
+    useBitpojectMutation,
 
 
 
@@ -330,8 +354,10 @@ export const {
     useSupporPostdeleteMutation,
     useSupportOrderQuery,
     useSupporTicketsQuery,
+    useAdminSupportTicketDeleteMutation,
     useWithdrawalQuery,
     useWithdrawalWarningMutation,
+
 
 
 
