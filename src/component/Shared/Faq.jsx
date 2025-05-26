@@ -103,6 +103,17 @@ const Faq = () => {
           </div>
         </div>
 
+
+                <div className="md:w-1/3 mt-10 md:mt-0 flex justify-center items-center">
+                    <div className="bg-[#848239] rounded-full w-64 h-64 flex flex-col justify-center items-center text-white p-6 text-center">
+                        <h3 className="text-2xl font-semibold mb-2">FAQ's</h3>
+                        <p className="text-sm">
+                            Let us know if you have any other questions, our team is always happy to help!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         <div className="md:w-1/3 mt-10 md:mt-0 flex justify-center items-center">
           <div className="bg-[#0092D8] rounded-full w-64 h-64 flex flex-col justify-center items-center text-white p-6 text-center">
             <h3 className="text-2xl font-semibold mb-2">FAQ's</h3>
@@ -111,6 +122,7 @@ const Faq = () => {
               happy to help!
             </p>
           </div>
+
         </div>
       </div>
     </div>

@@ -1,8 +1,5 @@
 import { Bell } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import useSocket from "../../../sockit/useSockit";
-import { useEffect } from "react";
-import { useGetChatListQuery } from "../../../Redux/feature/ChatSlice";
 const AdminDashboardNavbar = ({ notificationCount, setNotificationCount }) => {
   return (
     <div>
@@ -23,10 +20,9 @@ const AdminDashboardNavbar = ({ notificationCount, setNotificationCount }) => {
               className="cursor-pointer"
               onClick={() => setNotificationCount(0)}
             >
-              <div className="relative ">
-                <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 cursor-pointer ">
-                  <Bell className="h-7 w-7 text-gray-600" />{" "}
-                  {/* Increased base size */}
+              <div className="relative">
+                <button className="p-2 rounded-full hover:bg-gray-100 transition-transform duration-200 cursor-pointer">
+                  <Bell className="h-7 w-7 text-gray-600" />
                 </button>
                 {notificationCount > 0 && (
                   <div className="absolute text-[12px] p-[5px] -top-[3px] right-[3px] bg-red-400 rounded-full text-white w-5 h-5 max-w-8 flex items-center justify-center">

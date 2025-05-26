@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { use } from "react";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://192.168.10.124:2000",
@@ -16,6 +17,156 @@ const baseQuery = fetchBaseQuery({
 });
 
 export const ApiSlice = createApi({
+
+    reducerPath: "ApiSlice",
+    baseQuery,
+    // List all tag types used in the API slice
+    tagTypes: ["Profile", "UserDashboard", "Project", "Employees"],
+    endpoints: (builder) => ({
+
+
+        // user---------------------------------------------------------------------------------------------
+        getProfile: builder.query({
+            query: () => ({
+                url: "/api/v1/users/profile/",
+                method: "GET",
+            }),
+            providesTags: ["Profile"],
+        }),
+
+        // use Support
+        supportTicket: builder.query({
+            query: () => "/api/v1/tickets/"
+        }),
+
+        supportTicketDelete: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/tickets/ticket/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+        supporTicketPost: builder.mutation({
+            query: ({ warning }) => ({
+                url: `/api/v1/tickets/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
+        }),
+
+        supportTikectEdit: builder.mutation({
+            query: ({ id, question }) => ({
+                url: `/api/v1/tickets/ticket/${id}/`,
+                method: "PUT",
+                body: question
+            }),
+            invalidatesTags: ["question"]
+        }),
+
+        serviceCommunityData: builder.query({
+            query: () => "api/v1/order-post/list/all/"
+        }),
+        //bit post project 
+
+        bitpoject: builder.mutation({
+            query: ({ warning }) => ({
+                url: `/api/v1/order-post/bids/place/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
+        }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //admin-----------------------------------------------------------------------------------------------------------
+
+        totalSelles: builder.query({
+            query: () => "/api/v1/admin/dashboard/total-sales-last-month/",
+
+        }),
+
+        // todaySelas: builder.query({
+        //     query:() =>"/api/v1/admin/dashboard/total-sales-today/"
+        // }),
+
+        todaySelas: builder.query({
+            query: () => "/api/v1/admin/dashboard/total-sales-today/"
+        }),
+        totalUser: builder.query({
+            query: () => "/api/v1/admin/dashboard/total-user/"
+        }),
+        totalUserEarned: builder.query({
+            query: () => "/api/v1/admin/dashboard/total-user-earned-report/"
+        }),
+        topUserEarned: builder.query({
+            query: () => "/api/v1/admin/dashboard/top-earning-user-last-month/"
+        }),
+        selasOverview: builder.query({
+            query: () => "/api/v1/admin/dashboard/monthly-sales-report/"
+        }),
+        subscription: builder.query({
+            query: () => "/api/v1/admin/dashboard/subscription-upgrade-per-day/"
+        }),
+        managementUserList: builder.query({
+            query: () => "/api/v1/admin/management/user/list/"
+        }),
+        deleteManagementUser: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/admin/management/user/delete/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+
+        managementUserDetails: builder.query({
+            query: (id) => `/api/v1/admin/management/user/info/${id}/`
+        }),
+        managementSubmitWarning: builder.mutation({
+            query: ({ warning }) => ({
+                url: `/api/v1/admin/management/user/give-warning/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
+        }),
+        managementOrdersList: builder.query({
+            query: () => "/api/v1/admin/management/order/list/"
+        }),
+        managementOderparcentage: builder.mutation({
+            query: ({ warning, id }) => ({
+                url: `/api/v1/admin/management/order/partial-settlement/${id}/`,
+                method: "POST",
+                body: warning
+            }),
+            invalidatesTags: ["question"]
+        }),
+
   reducerPath: "ApiSlice",
   baseQuery,
   // List all tag types used in the API slice
@@ -29,6 +180,7 @@ export const ApiSlice = createApi({
       }),
       providesTags: ["Profile"],
     }),
+
 
     //admin-----------------------------------------------------------------------------------------------------------
 
@@ -178,6 +330,40 @@ export const ApiSlice = createApi({
       query: (id) => `/api/v1/admin/management/order/order-assessment/${id}/`,
     }),
 
+
+        supportOrder: builder.query({
+            query: () => "/api/v1/admin/support/order/list/"
+        }),
+        supporTickets: builder.query({
+            query: () => "/api/v1/admin/support/ticket/view/"
+        }),
+        withdrawal: builder.query({
+            query: () => "/api/v1/admin/withdraw/request-list/"
+        }),
+
+        adminSupportTicketDelete: builder.mutation({
+            query: (id) => ({
+                url: `/api/v1/admin/support/ticket/delete/${id}/`,
+                method: "DELETE"
+            }),
+            invalidatesTags: ["Management"]
+        }),
+
+
+
+        // give warning
+        withdrawalWarning: builder.mutation({
+            query: ({ warning, id }) => ({
+                url: `/api/v1/admin/withdraw/give-warning/${id}/`,
+                method: 'POST',
+                body: { warning },
+                providesTags: ['Comment'],
+            }),
+        }),
+
+
+
+
     // support report
     supporBlockReports: builder.query({
       query: () => "/api/v1/admin/support/blog/report-list/",
@@ -233,6 +419,7 @@ export const ApiSlice = createApi({
       invalidatesTags: ["DELET"],
     }),
 
+
     // give warning
     withdrawalWarning: builder.mutation({
       query: ({ warning, id }) => ({
@@ -250,6 +437,63 @@ export const ApiSlice = createApi({
 
 // Export hooks for usage in components
 export const {
+
+    useGetProfileQuery,
+    useSupportTicketQuery,
+    useSupportTicketDeleteMutation,
+    useSupporTicketPostMutation,
+    useSupportTikectEditMutation,
+    useServiceCommunityDataQuery,
+    useBitpojectMutation,
+
+
+
+    //rasif
+    useTotalSellesQuery,
+    useTodaySelasQuery,
+    useTotalUserQuery,
+    useTotalUserEarnedQuery,
+    useTopUserEarnedQuery,
+    useSelasOverviewQuery,
+    useSubscriptionQuery,
+    useManagementUserListQuery,
+    useDeleteManagementUserMutation,
+    useManagementUserDetailsQuery,
+    useManagementSubmitWarningMutation,
+    useManagementOrdersListQuery,
+    useManagementOderparcentageMutation,
+    useManagementOderCancelMutation,
+    useManagementOderPartialMutation,
+    useManagementOderViewMutation,
+    useManagementViewProjectDetailsMutation,
+    useManagementAssessOrderDetailsMutation,
+    useForumDataQuery,
+    useCreatePostMutation,
+    useCreateCommentMutation,
+    useCreateReactMutation,
+    useShowCommentQuery,
+    useShowContributotQuery,
+    useShowAllCommentQuery,
+    useShowNewUpdateQuery,
+    useSupporBlockReportsQuery,
+    useSupporReportQuery,
+    useSupporPostdeleteMutation,
+    useSupportOrderQuery,
+    useSupporTicketsQuery,
+    useAdminSupportTicketDeleteMutation,
+    useWithdrawalQuery,
+    useWithdrawalWarningMutation,
+
+
+
+
+
+
+
+
+
+
+
   useGetProfileQuery,
   //   abdullah
   useFaqDataQuery,
@@ -290,6 +534,7 @@ export const {
   useSupporTicketsQuery,
   useWithdrawalQuery,
   useWithdrawalWarningMutation,
+
 } = ApiSlice;
 
 export default ApiSlice;
