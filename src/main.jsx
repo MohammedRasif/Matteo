@@ -54,208 +54,208 @@ import EditPost from "./component/UsersDashboard/UserDashboardPages/BuyerDashboa
 import Admin_faq from "./component/AdminDashboard/AdminDashboardPages/Admin_faq.jsx";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Roots />,
-    // errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/pricing",
-        element: <Pricing />,
-      },
-      {
-        path: "/browse_projects",
-        element: <BrowseProjects />,
-      },
-      {
-        path: "/all_Projects",
-        element: <AllProjects />,
-      },
-      {
-        path: "/contact",
-        element: <Question />,
-      },
-    ],
-  },
+	{
+		path: "/",
+		element: <Roots />,
+		// errorElement: <ErrorPage />,
+		children: [
+			{
+				path: "/",
+				element: <Home />,
+			},
+			{
+				path: "/pricing",
+				element: <Pricing />,
+			},
+			{
+				path: "/browse_projects",
+				element: <BrowseProjects />,
+			},
+			{
+				path: "/all_Projects",
+				element: <AllProjects />,
+			},
+			{
+				path: "/contact",
+				element: <Question />,
+			},
+		],
+	},
 
-  {
-    path: "/registration",
-    element: <Register />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/confirm_email",
-    element: <ConfirmEmail />,
-  },
-  {
-    path: "/verification",
-    element: <Verification />,
-  },
-  {
-    path: "/confirm_password",
-    element: (
-      <NewPasswordRoute>
-        <ConfirmPassword />
-      </NewPasswordRoute>
-    ),
-  },
-  {
-    path: "/password_change_succesfull",
-    element: <PasswordChangeSuccesfully />,
-  },
-  {
-    path: "/confirm_password_verification",
-    element: (
-      <VerificationRoute>
-        <ConfirmPasswordVerification />
-      </VerificationRoute>
-    ),
-  },
+	{
+		path: "/registration",
+		element: <Register />,
+	},
+	{
+		path: "/login",
+		element: <Login />,
+	},
+	{
+		path: "/confirm_email",
+		element: <ConfirmEmail />,
+	},
+	{
+		path: "/verification",
+		element: <Verification />,
+	},
+	{
+		path: "/confirm_password",
+		element: (
+			<NewPasswordRoute>
+				<ConfirmPassword />
+			</NewPasswordRoute>
+		),
+	},
+	{
+		path: "/password_change_succesfull",
+		element: <PasswordChangeSuccesfully />,
+	},
+	{
+		path: "/confirm_password_verification",
+		element: (
+			<VerificationRoute>
+				<ConfirmPasswordVerification />
+			</VerificationRoute>
+		),
+	},
 
-  // ----------user dashboard---------
-  {
-    path: "/dashboard",
-    element: <UserDashboardLayout />,
-    children: [
-      {
-        index: true,
-        element: <OrderManagement />,
-      },
-      {
-        path: "Messages", // Relative path under /Admin_Dashboard
-        element: <UserDashboardMessage />,
-        children: [
-          {
-            path: ":id", // Relative path under /Admin_Dashboard/Message
-            element: <UserDashboardChats />,
-          },
-          {
-            path: "chatbot",
-            element: <UserDashboardAiChat />,
-          },
-        ],
-      },
-      {
-        path: "userSupport",
-        element: <UserSupport />,
-      },
-      {
-        path: "sellerDashboardPages",
-        element: <BuyerDashboardPages />,
-      },
-      {
-        path: "createBuyerOrder",
-        element: <CreateOrder />,
-      },
-      {
-        path: "edit_created_order",
-        element: <EditPost />,
-      },
+	// ----------user dashboard---------
+	{
+		path: "/dashboard",
+		element: <UserDashboardLayout />,
+		children: [
+			{
+				index: true,
+				element: <OrderManagement />,
+			},
+			{
+				path: "Messages", // Relative path under /Admin_Dashboard
+				element: <UserDashboardMessage />,
+				children: [
+					{
+						path: ":id", // Relative path under /Admin_Dashboard/Message
+						element: <UserDashboardChats />,
+					},
+					{
+						path: "chatbot",
+						element: <UserDashboardAiChat />,
+					},
+				],
+			},
+			{
+				path: "userSupport",
+				element: <UserSupport />,
+			},
+			{
+				path: "sellerDashboardPages",
+				element: <BuyerDashboardPages />,
+			},
+			{
+				path: "createBuyerOrder",
+				element: <CreateOrder />,
+			},
+			{
+				path: "edit_created_order",
+				element: <EditPost />,
+			},
 
-      {
-        path: "buyer_order_create",
-        element: <CreatedOrderedTable />,
-      },
-      {
-        path: "buyer_candidate_list",
-        element: <BuyerCandidateList />,
-      },
-      {
-        path: "user_profile_dettails",
-        element: <UserProfileDettails />,
-      },
-      {
-        path: "user_wallet",
-        element: <UserWallet />,
-      },
-      {
-        path: "user_withdrawal_method",
-        element: <UserWithdrawalMethod />,
-      },
-      {
-        path: "user_notifications",
-        element: <UserNotifications />,
-      },
-    ],
-  },
+			{
+				path: "buyer_order_create",
+				element: <CreatedOrderedTable />,
+			},
+			{
+				path: "buyer_candidate_list",
+				element: <BuyerCandidateList />,
+			},
+			{
+				path: "user_profile_dettails",
+				element: <UserProfileDettails />,
+			},
+			{
+				path: "user_wallet",
+				element: <UserWallet />,
+			},
+			{
+				path: "user_withdrawal_method",
+				element: <UserWithdrawalMethod />,
+			},
+			{
+				path: "user_notifications",
+				element: <UserNotifications />,
+			},
+		],
+	},
 
-  //--------------admin dashboard----------
+	//--------------admin dashboard----------
 
-  {
-    path: "/Admin_Dashboard",
-    element: <AdminDashboardLayout />,
-    children: [
-      {
-        index: true,
-        element: <AdminDashboard />,
-      },
-      {
-        path: "Message", // Relative path under /Admin_Dashboard
-        element: <AdminDashboardMessage />,
-        children: [
-          {
-            path: ":id", // Relative path under /Admin_Dashboard/Message
-            element: <AdminDashboardChats />,
-          },
-          {
-            path: "chatbot",
-            element: <AdminDashboardAiChat />,
-          },
-        ],
-      },
-      {
-        path: "/Admin_Dashboard/notification",
-        element: <AdminDashboardNotification />,
-      },
-      {
-        path: "/Admin_Dashboard/user",
-        element: <AdminDashboardUser />,
-      },
-      {
-        path: "/Admin_Dashboard/order",
-        element: <AdminDashboardOrders />,
-      },
-      {
-        path: "/Admin_Dashboard/blog",
-        element: <AdminDashboardBlog />,
-      },
-      {
-        path: "/Admin_Dashboard/tickets",
-        element: <AdminDashboardSupport />,
-      },
-      {
-        path: "/Admin_Dashboard/order_Assessment/:id",
-        element: <AdminDashboardOrderAsses />,
-      },
-      {
-        path: "/Admin_Dashboard/orders",
-        element: <AdminDashboardOrder />,
-      },
-      {
-        path: "/Admin_Dashboard/withdrawal",
-        element: <AdminDashboardWithdrawal />,
-      },
-      {
-        path: "/Admin_Dashboard/add_FAQ",
-        element: <Admin_faq />,
-      },
-    ],
-  },
+	{
+		path: "/Admin_Dashboard",
+		element: <AdminDashboardLayout />,
+		children: [
+			{
+				index: true,
+				element: <AdminDashboard />,
+			},
+			{
+				path: "Message", // Relative path under /Admin_Dashboard
+				element: <AdminDashboardMessage />,
+				children: [
+					{
+						path: ":id", // Relative path under /Admin_Dashboard/Message
+						element: <AdminDashboardChats />,
+					},
+					{
+						path: "chatbot",
+						element: <AdminDashboardAiChat />,
+					},
+				],
+			},
+			{
+				path: "/Admin_Dashboard/notification",
+				element: <AdminDashboardNotification />,
+			},
+			{
+				path: "/Admin_Dashboard/user",
+				element: <AdminDashboardUser />,
+			},
+			{
+				path: "/Admin_Dashboard/order",
+				element: <AdminDashboardOrders />,
+			},
+			{
+				path: "/Admin_Dashboard/blog",
+				element: <AdminDashboardBlog />,
+			},
+			{
+				path: "/Admin_Dashboard/tickets",
+				element: <AdminDashboardSupport />,
+			},
+			{
+				path: "/Admin_Dashboard/order_Assessment/:id",
+				element: <AdminDashboardOrderAsses />,
+			},
+			{
+				path: "/Admin_Dashboard/orders",
+				element: <AdminDashboardOrder />,
+			},
+			{
+				path: "/Admin_Dashboard/withdrawal",
+				element: <AdminDashboardWithdrawal />,
+			},
+			{
+				path: "/Admin_Dashboard/add_FAQ",
+				element: <Admin_faq />,
+			},
+		],
+	},
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Provider store={store}>
-      <React.StrictMode>
-        <RouterProvider router={router} />
-      </React.StrictMode>
-    </Provider>
-  </StrictMode>
+	<StrictMode>
+		<Provider store={store}>
+			<React.StrictMode>
+				<RouterProvider router={router} />
+			</React.StrictMode>
+		</Provider>
+	</StrictMode>
 );
