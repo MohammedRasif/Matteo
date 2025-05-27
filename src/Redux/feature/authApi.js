@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseUrl } from "../../component/Shared/baseUrls";
 
 export const authApi = createApi({
 	reducerPath: "authApi",
 	baseQuery: fetchBaseQuery({
-		baseUrl: "http://192.168.10.124:2100/api/v1", //  Update this with your backend URL
+		baseUrl: `${BaseUrl}/api/v1`, //  Update this with your backend URL
 	}),
 	endpoints: (builder) => ({
 		register: builder.mutation({

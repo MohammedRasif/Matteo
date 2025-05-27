@@ -52,6 +52,8 @@ import NewPasswordRoute from "./Root/NewPasswordRoute.jsx";
 import VerificationRoute from "./Root/VerificationRoute.jsx";
 import EditPost from "./component/UsersDashboard/UserDashboardPages/BuyerDashboardPages/EditPost.jsx";
 import Admin_faq from "./component/AdminDashboard/AdminDashboardPages/Admin_faq.jsx";
+import SubscriptionSuccess from "./component/Shared/SubscriptionSuccess.jsx";
+import SubscriptionCancel from "./component/Shared/SubscriptionCancel.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -66,6 +68,14 @@ const router = createBrowserRouter([
 			{
 				path: "/pricing",
 				element: <Pricing />,
+			},
+			{
+				path: "/subscription_success",
+				element: <SubscriptionSuccess />,
+			},
+			{
+				path: "/subscription_cancel",
+				element: <SubscriptionCancel />,
 			},
 			{
 				path: "/browse_projects",

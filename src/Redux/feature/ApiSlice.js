@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseUrl } from "../../component/Shared/baseUrls";
 
 const baseQuery = fetchBaseQuery({
-	baseUrl: "http://192.168.10.124:2100",
+	baseUrl: BaseUrl,
 	prepareHeaders: (headers, { getState }) => {
 		const accessToken = localStorage.getItem("access_token");
 		const token = getState().auth.token || accessToken;
@@ -129,6 +130,16 @@ export const ApiSlice = createApi({
 				body: warning,
 			}),
 			invalidatesTags: ["question"],
+		}),
+
+		// pricing subscription endpoint
+		subscribe: builder.mutation({
+			query: (payload) => ({
+				url: "/api/v1/stripe_payment/subscribe/",
+				method: "POST",
+				body: payload,
+			}),
+			providesTags: ["Profile"],
 		}),
 
 		// Forum Endpoints
@@ -331,6 +342,7 @@ export const {
 	useAddFaqMutation,
 	useUpdateFaqMutation,
 	useDeleteFaqMutation,
+	useSubscribeMutation,
 } = ApiSlice;
 
 export default ApiSlice;
