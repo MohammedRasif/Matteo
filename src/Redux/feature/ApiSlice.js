@@ -291,6 +291,15 @@ export const ApiSlice = createApi({
 			}),
 			invalidatesTags: ["Management"],
 		}),
+
+		// contact endpoint
+		askQna: builder.mutation({
+			query: (payload) => ({
+				url: `/api/v1/qna/ask/`,
+				method: "POST",
+				body: payload,
+			}),
+		}),
 	}),
 });
 
