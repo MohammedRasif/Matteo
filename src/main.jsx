@@ -20,7 +20,6 @@ import AdminDashboardSupport from "./component/AdminDashboard/AdminDashboardPage
 import AdminDashboardOrders from "./component/AdminDashboard/AdminDashboardPages/AdminDashboardOrders.jsx";
 import AdminDashboardOrderAsses from "./component/AdminDashboard/AdminDashboardPages/AdminDashboardOrderAsses.jsx";
 import AdminDashboardWithdrawal from "./component/AdminDashboard/AdminDashboardPages/AdminDashboardWithdrawal.jsx";
-import Pricing from "./component/Shared/Pricing.jsx";
 import BrowseProjects from "./component/Shared/BrowseProjects.jsx";
 import AllProjects from "./component/Shared/AllProjects.jsx";
 import Question from "./component/Shared/Question.jsx";
@@ -54,6 +53,13 @@ import EditPost from "./component/UsersDashboard/UserDashboardPages/BuyerDashboa
 import Admin_faq from "./component/AdminDashboard/AdminDashboardPages/Admin_faq.jsx";
 import SubscriptionSuccess from "./component/Shared/SubscriptionSuccess.jsx";
 import SubscriptionCancel from "./component/Shared/SubscriptionCancel.jsx";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import Pricing from "./component/Shared/Pricing.jsx";
+
+const stripePromise = loadStripe(
+	"pk_test_51OXdHWFvvW23GozqFvd4UOjV8dig6tr9xrS8OI1tQtHQLM1Bmp93SjKqcPFlfzjB1p5N7pqzsWkH0u9WjPQ6GgP700wCQY1NnR"
+);
 
 const router = createBrowserRouter([
 	{
@@ -187,7 +193,11 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "user_withdrawal_method",
-				element: <UserWithdrawalMethod />,
+				element: (
+					<Elements stripe={stripePromise}>
+						<UserWithdrawalMethod />,
+					</Elements>
+				),
 			},
 			{
 				path: "user_notifications",
