@@ -185,7 +185,7 @@ const Pricing = () => {
 												className="flex items-start border-b border-gray-500 mb-4"
 											>
 												{/* <IoCheckmarkDoneSharp
-                          className="text-[#0077B6] mt-1 mr-2 flex-shrink-0"
+                          className="text-[#848239] mt-1 mr-2 flex-shrink-0"
                           size={20}
                         /> */}
 												<span>{feature}</span>

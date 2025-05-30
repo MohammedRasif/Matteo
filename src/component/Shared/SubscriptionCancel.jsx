@@ -21,7 +21,7 @@ export default function SubscriptionCancel() {
 
 					<Link
 						to="/"
-						className="bg-[#0D95DD] text-white font-bold cursor-pointer py-3 px-10 rounded-lg mt-5"
+						className="bg-[#848239] text-white font-bold cursor-pointer py-3 px-10 rounded-lg mt-5"
 					>
 						<button className="pointer-events-none">Go Back</button>
 					</Link>

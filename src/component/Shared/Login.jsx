@@ -132,7 +132,7 @@ function Login() {
 							onChange={(e) => setEmail(e.target.value)}
 							onFocus={() => setEmailFocused(true)}
 							onBlur={() => setEmailFocused(email !== "")}
-							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
+							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#848239] rounded pl-10"
 							disabled={isLoading}
 						/>
 						<MdEmail className="text-[#959AA6] bottom-[12px] left-3 absolute" />
@@ -149,13 +149,13 @@ function Login() {
 							onChange={(e) => setPassword(e.target.value)}
 							onFocus={() => setPasswordFocused(true)}
 							onBlur={() => setPasswordFocused(password !== "")}
-							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#5C91B1] rounded pl-10"
+							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#848239] rounded pl-10"
 							disabled={isLoading}
 						/>
 						<LuLockKeyhole className="text-[#959AA6] absolute bottom-[14px] left-3" />
 					</div>
 					<NavLink to="/confirm_email">
-						<p className="text-[16px] text-[#1B97D8] text-end underline">
+						<p className="text-[16px] text-[#848239] text-end underline">
 							Forget Password?
 						</p>
 					</NavLink>
@@ -163,7 +163,7 @@ function Login() {
 					<div className="flex justify-center mt-16">
 						<button
 							type="submit"
-							className="bg-[#1B97D8] text-white rounded mx-auto px-6 py-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+							className="bg-[#848239] text-white rounded mx-auto px-6 py-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 							disabled={isLoading}
 						>
 							{isLoading ? "Logging in..." : "Login"}
@@ -173,7 +173,7 @@ function Login() {
 					<p className="text-center text-gray-600 mt-6">
 						Don’t have account?{" "}
 						<NavLink to="/registration">
-							<a className="text-[#1B97D8] border rounded-lg p-1 border-[#1B97D8]">
+							<a className="text-[#848239] border rounded-lg p-1 border-[#848239]">
 								Sign Up
 							</a>
 						</NavLink>

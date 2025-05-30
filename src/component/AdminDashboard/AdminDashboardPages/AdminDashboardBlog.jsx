@@ -168,12 +168,12 @@ const AdminDashboardBlog = () => {
 				{/* Tabs */}
 				<div className="mb-6 flex justify-between">
 					<div></div>
-					<div className="inline-flex rounded-md border border-[#0D95DD]">
+					<div className="inline-flex rounded-md border border-[#848239]">
 						<button
 							onClick={() => setActiveTab("Reports")}
 							className={`px-4 py-2 text-sm font-medium cursor-pointer ${
 								activeTab === "Reports"
-									? "bg-[#0D95DD] text-white"
+									? "bg-[#848239] text-white"
 									: "bg-gray-200 text-gray-700 hover:bg-gray-300"
 							} rounded-l-md`}
 						>
@@ -183,7 +183,7 @@ const AdminDashboardBlog = () => {
 							onClick={() => setActiveTab("Posts")}
 							className={`px-4 py-2 text-sm font-medium cursor-pointer ${
 								activeTab === "Posts"
-									? "bg-[#0D95DD] text-white"
+									? "bg-[#848239] text-white"
 									: "bg-gray-200 text-gray-700 hover:bg-gray-300"
 							} rounded-r-md`}
 						>
@@ -425,7 +425,7 @@ const AdminDashboardBlog = () => {
 								</button>
 							</div>
 							<div className="flex items-center justify-center my-2">
-								<h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+								<h1 className="border-[#848239] font-medium text-[#848239] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
 									Description of report
 								</h1>
 							</div>
@@ -442,7 +442,7 @@ const AdminDashboardBlog = () => {
 									onClick={() =>
 										setShowViewReportPopup(false)
 									}
-									className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+									className="px-10 py-1 bg-[#848239] text-white rounded-md cursor-pointer"
 								>
 									Okay
 								</button>
@@ -465,7 +465,7 @@ const AdminDashboardBlog = () => {
 								</button>
 							</div>
 							<div className="flex items-center justify-center my-2">
-								<h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+								<h1 className="border-[#848239] font-medium text-[#848239] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
 									Warning
 								</h1>
 							</div>
@@ -486,7 +486,7 @@ const AdminDashboardBlog = () => {
 								</button>
 								<button
 									onClick={() => setShowWarningPopup(false)}
-									className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+									className="px-10 py-1 bg-[#848239] text-white rounded-md cursor-pointer"
 								>
 									Cancel
 								</button>
