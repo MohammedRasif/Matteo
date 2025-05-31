@@ -3,13 +3,15 @@ import { BaseUrl } from "../../component/Shared/baseUrls";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: BaseUrl,
-	prepareHeaders: (headers, { getState }) => {
+	prepareHeaders: (headers, { getState, endpoint }) => {
 		const accessToken = localStorage.getItem("access_token");
 		const token = getState().auth.token || accessToken;
 		if (token) {
 			headers.set("Authorization", `Bearer ${token}`);
 		}
-		headers.set("Content-Type", "application/json");
+		if (endpoint !== "updateProfile") {
+			headers.set("Content-Type", "application/json");
+		}
 		return headers;
 	},
 });
@@ -38,6 +40,15 @@ export const ApiSlice = createApi({
 			}),
 			providesTags: ["Profile"],
 		}),
+
+		updateProfile: builder.mutation({
+			query: (payload) => ({
+				url: "/api/v1/users/update-profile/",
+				method: "PUT",
+				body: payload,
+			}),
+		}),
+
 		supportTicket: builder.query({
 			query: () => "/api/v1/tickets/",
 		}),
@@ -239,13 +250,53 @@ export const ApiSlice = createApi({
 			providesTags: ["Comment"],
 		}),
 
-		addWithdrawalMethod: builder.mutation({
-			query: ({ payload, id }) => ({
-				url: `/api/v1/wallet/add-withdrawal-method/`,
+		// addWithdrawalMethod: builder.mutation({
+		// 	query: ({ payload, id }) => ({
+		// 		url: `/api/v1/wallet/add-withdrawal-method/`,
+		// 		method: "POST",
+		// 		body: payload,
+		// 	}),
+		// 	providesTags: ["Comment"],
+		// }),
+
+		// admin wallet
+		approveWithdrawalRequest: builder.mutation({
+			query: (id) => ({
+				url: `/api/v1/wallet/admin/withdraw/approve/${id}/`,
+				method: "POST",
+			}),
+		}),
+
+		rejectWithdrawalRequest: builder.mutation({
+			query: (id) => ({
+				url: `/api/v1/wallet/admin/withdraw/reject/${id}/`,
+				method: "POST",
+			}),
+		}),
+
+		// user wallet
+		getUserWallet: builder.query({
+			query: () => `/api/v1/wallet/wallet-balance/`,
+		}),
+
+		getUserTransactionHistory: builder.query({
+			query: () => `/api/v1/wallet/wallet-history/`,
+		}),
+
+		addWithdrawRequest: builder.mutation({
+			query: (payload) => ({
+				url: `/api/v1/wallet/withdraw/`,
 				method: "POST",
 				body: payload,
 			}),
-			providesTags: ["Comment"],
+		}),
+
+		addWithdrawalMethod: builder.mutation({
+			query: (payload) => ({
+				url: `/api/v1/stripe_payment/add_external_acc/`,
+				method: "POST",
+				body: payload,
+			}),
 		}),
 
 		// FAQ Endpoints
@@ -352,6 +403,13 @@ export const {
 	useUpdateFaqMutation,
 	useDeleteFaqMutation,
 	useSubscribeMutation,
+	useGetUserWalletQuery,
+	useGetUserTransactionHistoryQuery,
+	useAddWithdrawRequestMutation,
+	useApproveWithdrawalRequestMutation,
+	useRejectWithdrawalRequestMutation,
+	useUpdateProfileMutation,
+	useAskQnaMutation,
 } = ApiSlice;
 
 export default ApiSlice;

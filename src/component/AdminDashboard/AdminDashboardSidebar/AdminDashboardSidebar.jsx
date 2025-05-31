@@ -55,8 +55,8 @@ const AdminDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -69,8 +69,8 @@ const AdminDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -81,7 +81,7 @@ const AdminDashboardSidebar = () => {
 				{/* Management Section */}
 				<div
 					className={`${
-						isManagementActive ? "bg-[#0D95DD] rounded-md" : ""
+						isManagementActive ? "bg-[#848239] rounded-md" : ""
 					}`}
 				>
 					<div className="pl-6">
@@ -92,7 +92,7 @@ const AdminDashboardSidebar = () => {
 							<div
 								className={`flex items-center space-x-2 py-[11px] cursor-pointer ${
 									isManagementActive
-										? "bg-[#0D95DD] text-white"
+										? "bg-[#848239] text-white"
 										: ""
 								}`}
 							>
@@ -121,9 +121,9 @@ const AdminDashboardSidebar = () => {
 					<NavLink
 						to="/Admin_Dashboard/user"
 						className={({ isActive }) =>
-							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-[#848239]/80 hover:text-white rounded-md transition ${
 								isActive
-									? "bg-blue-300 text-white font-medium rounded-md"
+									? "bg-[#848239]/80 text-white font-medium rounded-md"
 									: ""
 							}`
 						}
@@ -134,11 +134,11 @@ const AdminDashboardSidebar = () => {
 					<NavLink
 						to="/Admin_Dashboard/order"
 						className={({ isActive }) =>
-							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-[#848239]/80 hover:text-white rounded-md transition ${
 								isActive ||
 								location.pathname ===
 									"/Admin_Dashboard/order_Assessment"
-									? "bg-blue-300 text-white font-medium rounded-md"
+									? "bg-[#848239]/80 text-white font-medium rounded-md"
 									: ""
 							}`
 						}
@@ -151,7 +151,7 @@ const AdminDashboardSidebar = () => {
 				{/* Support Section */}
 				<div
 					className={`${
-						isSupportActive ? "bg-[#0D95DD] rounded-md" : ""
+						isSupportActive ? "bg-[#848239] rounded-md" : ""
 					}`}
 				>
 					<div className="pl-6">
@@ -162,7 +162,7 @@ const AdminDashboardSidebar = () => {
 							<div
 								className={`flex items-center space-x-2 py-[11px] cursor-pointer ${
 									isSupportActive
-										? "bg-[#0D95DD] text-white"
+										? "bg-[#848239] text-white"
 										: ""
 								}`}
 							>
@@ -191,9 +191,9 @@ const AdminDashboardSidebar = () => {
 					<NavLink
 						to="/Admin_Dashboard/blog"
 						className={({ isActive }) =>
-							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-[#848239]/80 hover:text-white rounded-md transition ${
 								isActive
-									? "bg-blue-300 text-white font-medium rounded-md"
+									? "bg-[#848239]/80 text-white font-medium rounded-md"
 									: ""
 							}`
 						}
@@ -204,9 +204,9 @@ const AdminDashboardSidebar = () => {
 					<NavLink
 						to="/Admin_Dashboard/orders"
 						className={({ isActive }) =>
-							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-[#848239]/80 hover:text-white rounded-md transition ${
 								isActive
-									? "bg-blue-300 text-white font-medium rounded-md"
+									? "bg-[#848239]/80 text-white font-medium rounded-md"
 									: ""
 							}`
 						}
@@ -217,9 +217,9 @@ const AdminDashboardSidebar = () => {
 					<NavLink
 						to="/Admin_Dashboard/tickets"
 						className={({ isActive }) =>
-							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-blue-300 hover:text-white rounded-md transition ${
+							`py-[11px] flex items-center pl-5 text-black font-medium hover:bg-[#848239]/80 hover:text-white rounded-md transition ${
 								isActive
-									? "bg-blue-300 text-white font-medium rounded-md"
+									? "bg-[#848239]/80 text-white font-medium rounded-md"
 									: ""
 							}`
 						}
@@ -234,8 +234,8 @@ const AdminDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -249,8 +249,8 @@ const AdminDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -260,7 +260,7 @@ const AdminDashboardSidebar = () => {
 			</div>
 
 			{/* Logout */}
-			<div className="text-center w-full bg-[#B8E5FF] rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
+			<div className="text-center w-full bg-[#848239] text-white rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
 				<button
 					onClick={handleLogout}
 					className="text-[17px] font-medium cursor-pointer"

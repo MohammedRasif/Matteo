@@ -5,6 +5,7 @@ import { useGetProfileQuery } from "../../Redux/feature/ApiSlice";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { GoChevronRight } from "react-icons/go";
 import img from "../image/Vector.svg";
+import { BaseUrl } from "../Shared/baseUrls";
 
 const Navbar = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -67,7 +68,7 @@ const Navbar = () => {
 						<div className="flex items-center">
 							<NavLink
 								to="/"
-								className=" font-bold text-[#0077b6]"
+								className=" font-bold text-[#848239]"
 							>
 								<img src={img} className="h-14 w-12" alt="" />
 							</NavLink>
@@ -126,23 +127,23 @@ const Navbar = () => {
                   >
                     <GoChevronRight className="h-5 w-5 text-gray-700 cursor-pointer" />
                   </button> */}
+									<span className="text-gray-700 font-medium">
+										{profile?.username || profile?.email}
+									</span>
 									<button
 										onClick={toggleProfileDropdown}
 										aria-label="Toggle profile dropdown"
 									>
-										{profile.image ? (
-											<img
-												src={profile.image}
-												alt="User profile"
-												className="h-10 w-10 rounded-full object-cover cursor-pointer"
-											/>
-										) : (
-											<FaRegCircleUser className="h-10 w-10 text-gray-800 cursor-pointer" />
-										)}
+										<img
+											src={
+												!isLoading && profile.image
+													? `${BaseUrl}${profile.image}`
+													: "/placeholder.png"
+											}
+											alt="User profile"
+											className="h-10 w-10 rounded-full object-cover cursor-pointer"
+										/>
 									</button>
-									<span className="text-gray-700 font-medium">
-										{profile.email || "No email available"}
-									</span>
 									{isProfileDropdownOpen && (
 										<div className="absolute top-12 right-0 bg-white shadow-lg rounded-md py-2 w-48 z-50">
 											<NavLink
@@ -244,23 +245,23 @@ const Navbar = () => {
 								>
 									<GoChevronRight className="h-5 w-5 text-gray-700 cursor-pointer" />
 								</button>
+								<span className="text-gray-700 font-medium">
+									{profile?.username || profile?.email}
+								</span>
 								<button
 									onClick={toggleProfileDropdown}
 									aria-label="Toggle profile dropdown"
 								>
-									{profile.image ? (
-										<img
-											src={profile.image}
-											alt="User profile"
-											className="h-10 w-10 rounded-full object-cover cursor-pointer"
-										/>
-									) : (
-										<FaRegCircleUser className="h-10 w-10 text-gray-800 cursor-pointer" />
-									)}
+									<img
+										src={
+											!isLoading && profile.image
+												? `${BaseUrl}${profile.image}`
+												: "/placeholder.png"
+										}
+										alt="User profile"
+										className="h-10 w-10 rounded-full object-cover cursor-pointer"
+									/>
 								</button>
-								<span className="text-gray-700 font-medium">
-									{profile.email || "No email available"}
-								</span>
 								{isProfileDropdownOpen && (
 									<div className="absolute top-12 right-0 bg-white shadow-lg rounded-md py-2 w-48 z-50">
 										<NavLink

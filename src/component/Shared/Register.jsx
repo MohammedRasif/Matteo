@@ -120,7 +120,7 @@ function Register() {
 							placeholder="user@gmail.com"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className="w-full px-4 py-2 border bg-[#848239] border-[#5C91B1] rounded pl-10"
+							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#848239] rounded pl-10"
 							required
 						/>
 						<MdEmail className="text-[#959AA6] bottom-[12px] left-3 absolute" />
@@ -133,7 +133,7 @@ function Register() {
 						<select
 							value={role}
 							onChange={(e) => setRole(e.target.value)}
-							className="w-1/2 px-8 py-2 border bg-[#848239] border-[#5C91B1] rounded"
+							className="w-1/2 px-8 py-2 border bg-[#F8FCFF] border-[#848239] rounded"
 						>
 							<option value="student">Student</option>
 							<option value="hostler">Hostler</option>
@@ -156,7 +156,7 @@ function Register() {
 							placeholder="Password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
-							className="w-full px-4 py-2 border bg-[#848239] border-[#5C91B1] rounded pl-10 pr-10"
+							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#848239] rounded pl-10 pr-10"
 							required
 						/>
 						<LuLockKeyhole className="text-[#959AA6] absolute bottom-[14px] left-3" />
@@ -182,7 +182,7 @@ function Register() {
 							placeholder="Confirm Password"
 							value={confirmPassword}
 							onChange={(e) => setConfirmPassword(e.target.value)}
-							className="w-full px-4 py-2 border bg-[#848239] border-[#5C91B1] rounded pl-10 pr-10"
+							className="w-full px-4 py-2 border bg-[#F8FCFF] border-[#848239] rounded pl-10 pr-10"
 							required
 						/>
 						<LuLockKeyhole className="text-[#959AA6] absolute bottom-[14px] left-3" />

@@ -39,8 +39,8 @@ const UserDashboardSidebar = () => {
 					className={() =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isDashboardActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -53,8 +53,8 @@ const UserDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -67,8 +67,8 @@ const UserDashboardSidebar = () => {
 					className={() =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isProjectActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -81,8 +81,8 @@ const UserDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -95,8 +95,8 @@ const UserDashboardSidebar = () => {
 					className={() =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isWalletActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -109,8 +109,8 @@ const UserDashboardSidebar = () => {
 					className={({ isActive }) =>
 						`flex items-center gap-3 px-6 py-[11px] transition-colors duration-200 ${
 							isActive
-								? "bg-[#0D95DD] text-white rounded-md"
-								: "hover:bg-[#0daddd] hover:text-white rounded-md"
+								? "bg-[#848239] text-white rounded-md"
+								: "hover:bg-[#848239] hover:text-white rounded-md"
 						}`
 					}
 				>
@@ -120,7 +120,7 @@ const UserDashboardSidebar = () => {
 			</div>
 
 			{/* Logout */}
-			<div className="text-center w-full bg-[#B8E5FF] rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
+			<div className="text-center w-full bg-[#848239] text-white rounded-sm py-[11px] absolute bottom-0 cursor-pointer">
 				<button
 					onClick={handleLogout}
 					className="text-[17px] font-medium cursor-pointer"

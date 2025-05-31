@@ -7,8 +7,56 @@ import imgFour from "../../../image/Discover.png"; // Discover
 import { Link } from "react-router-dom";
 import { useAddWithdrawalMethodMutation } from "../../../../Redux/feature/ApiSlice";
 
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { BaseUrl } from "../../../Shared/baseUrls";
+
 function UserWithdrawalMethod() {
-	const [data] = useAddWithdrawalMethodMutation();
+	const stripe = useStripe();
+	const elements = useElements();
+	const [errorMessage, setErrorMessage] = useState(null);
+	const [addWithdrawalMethod] = useAddWithdrawalMethodMutation();
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+
+		if (!stripe || !elements) {
+			return; // Stripe.js has not loaded yet
+		}
+
+		const cardElement = elements.getElement(CardElement);
+
+		const { token, error } = await stripe.createToken(cardElement, {
+			currency: "usd",
+		});
+		console.log(token);
+
+		if (error) {
+			setErrorMessage(error.message); // Display error in the UI
+			console.error(error.message);
+		} else {
+			setErrorMessage(null); // Clear any previous error
+			console.log("Token created:", token.id);
+
+			// Send the token to your server
+			try {
+				const payload = { token: token.id };
+
+				const response = await addWithdrawalMethod(payload).unwrap();
+
+				// const response = await fetch(
+				// 	`${BaseUrl}/api/v1/stripe_payment/add_external_acc/`,
+				// 	{
+				// 		method: "POST",
+				// 		headers: { "Content-Type": "application/json" },
+				// 		body: JSON.stringify({ token: token.id }),
+				// 	}
+				// );
+				console.log("Server response:", response);
+			} catch (error) {
+				console.error("Error sending token to server:", error);
+			}
+		}
+	};
 
 	const [formData, setFormData] = useState({
 		cardholderName: "",
@@ -44,45 +92,45 @@ function UserWithdrawalMethod() {
 		}
 	};
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	// const handleSubmit = async (e) => {
+	// 	e.preventDefault();
 
-		// Basic validation
-		if (
-			!formData.cardholderName ||
-			!formData.email ||
-			!formData.cardNumber
-		) {
-			alert("Please fill in all required fields.");
-			return;
-		}
+	// 	// Basic validation
+	// 	if (
+	// 		!formData.cardholderName ||
+	// 		!formData.email ||
+	// 		!formData.cardNumber
+	// 	) {
+	// 		alert("Please fill in all required fields.");
+	// 		return;
+	// 	}
 
-		// Email validation
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if (!emailRegex.test(formData.email)) {
-			alert("Please enter a valid email address.");
-			return;
-		}
+	// 	// Email validation
+	// 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	// 	if (!emailRegex.test(formData.email)) {
+	// 		alert("Please enter a valid email address.");
+	// 		return;
+	// 	}
 
-		// Card number validation (basic, for demo purposes)
-		const cardNumberRegex = /^\d{16}$/;
-		if (!cardNumberRegex.test(formData.cardNumber)) {
-			alert("Please enter a valid 16-digit card number.");
-			return;
-		}
+	// 	// Card number validation (basic, for demo purposes)
+	// 	const cardNumberRegex = /^\d{16}$/;
+	// 	if (!cardNumberRegex.test(formData.cardNumber)) {
+	// 		alert("Please enter a valid 16-digit card number.");
+	// 		return;
+	// 	}
 
-		// Handle form submission logic here
-		const addWithdrawalMethodPayload = {
-			email: formData.email,
-			card_number: formData.cardNumber,
-			cardholder_name: formData.cardholderName,
-			card_type: formData.cardType[0],
-		};
-		const response = await data({
-			payload: addWithdrawalMethodPayload,
-		}).unwrap();
-		console.log(response);
-	};
+	// 	// Handle form submission logic here
+	// 	const addWithdrawalMethodPayload = {
+	// 		email: formData.email,
+	// 		card_number: formData.cardNumber,
+	// 		cardholder_name: formData.cardholderName,
+	// 		card_type: formData.cardType[0],
+	// 	};
+	// 	const response = await addWithdrawalMethod({
+	// 		payload: addWithdrawalMethodPayload,
+	// 	}).unwrap();
+	// 	console.log(response);
+	// };
 
 	return (
 		<div className="p-6 pt-10 nunito">
@@ -97,8 +145,35 @@ function UserWithdrawalMethod() {
 					Withdrawal Method
 				</h1>
 			</div>
+
+			<div className="my-8">
+				<form id="payment-form" onSubmit={handleSubmit}>
+					<div
+						id="card-element"
+						className="border border-gray-300 rounded-md p-2 bg-white shadow-sm"
+					>
+						<CardElement />
+					</div>
+					<div id="card-errors" role="alert">
+						{errorMessage && (
+							<div style={{ color: "red" }}>{errorMessage}</div>
+						)}
+					</div>
+
+					<div className="mt-10">
+						<button
+							type="submit"
+							disabled={!stripe}
+							className="px-10 w-[117px] py-2 bg-[#848239] text-[#FFFFFF] font-medium rounded-md cursor-pointer"
+						>
+							Save
+						</button>
+					</div>
+				</form>
+			</div>
+
 			{/* table for withdrawal method */}
-			<div className="  bg-[#F6F8FA] rounded-[16px] p-8 py-8 mt-10">
+			<div className="bg-[#F6F8FA] rounded-[16px] p-8 py-8 mt-10">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div className="col-span-1">
@@ -115,7 +190,7 @@ function UserWithdrawalMethod() {
 								placeholder="Enter here"
 								value={formData.cardholderName}
 								onChange={handleChange}
-								className="w-full px-3 py-2  rounded-md bg-[#F8FCFF] border border-[#5C91B1]"
+								className="w-full px-3 py-2  rounded-md bg-[#F8FCFF] border border-[#848239]"
 							/>
 						</div>
 
@@ -133,7 +208,7 @@ function UserWithdrawalMethod() {
 								placeholder="Enter here"
 								value={formData.email}
 								onChange={handleChange}
-								className="w-full px-3 py-2  rounded-md bg-[#F8FCFF] border border-[#5C91B1]"
+								className="w-full px-3 py-2  rounded-md bg-[#F8FCFF] border border-[#848239]"
 							/>
 						</div>
 					</div>
@@ -153,7 +228,7 @@ function UserWithdrawalMethod() {
 								placeholder="Enter here"
 								value={formData.cardNumber}
 								onChange={handleChange}
-								className="w-full px-3 py-2 rounded-md bg-[#F8FCFF] border border-[#5C91B1]"
+								className="w-full px-3 py-2 rounded-md bg-[#F8FCFF] border border-[#848239]"
 							/>
 						</div>
 
@@ -173,7 +248,7 @@ function UserWithdrawalMethod() {
 													card
 												)}
 												onChange={handleChange}
-												className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+												className="h-4 w-4 text-[#F8FCFF] border-gray-300 rounded focus:ring-[#F8FCFF]"
 											/>
 											<label
 												htmlFor={card}
@@ -202,7 +277,7 @@ function UserWithdrawalMethod() {
 					<div className="mt-10 text-center">
 						<button
 							type="submit"
-							className="px-10 w-[117px] py-2 bg-[#2E9DE0] text-[#FFFFFF] font-medium rounded-md "
+							className="px-10 w-[117px] py-2 bg-[#848239] text-white font-medium rounded-md cursor-pointer"
 						>
 							Save
 						</button>

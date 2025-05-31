@@ -438,7 +438,7 @@
 //                         onChange={(e) =>
 //                           setSettlementData((prev) => ({ ...prev, seller_percentage: e.target.value }))
 //                         }
-//                         className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+//                         className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 //                       />
 //                     </div>
 //                     <div className="flex-1">
@@ -453,7 +453,7 @@
 //                         onChange={(e) =>
 //                           setSettlementData((prev) => ({ ...prev, buyer_percentage: e.target.value }))
 //                         }
-//                         className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+//                         className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 //                       />
 //                     </div>
 //                   </div>
@@ -467,7 +467,7 @@
 //                       placeholder="Enter note"
 //                       value={settlementData.note}
 //                       onChange={(e) => setSettlementData((prev) => ({ ...prev, note: e.target.value }))}
-//                       className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+//                       className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 //                     />
 //                   </div>
 //                 </div>
@@ -475,13 +475,13 @@
 //               <div className="flex flex-row gap-2 px-4">
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Cancel
 //                 </button>
 //                 <button
 //                   onClick={handleSettlementSubmit}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Done
 //                 </button>
@@ -511,7 +511,7 @@
 //                       placeholder="Enter reason"
 //                       value={cancelReason}
 //                       onChange={(e) => setCancelReason(e.target.value)}
-//                       className="w-full rounded-md border border-[#0D95DD] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD]"
+//                       className="w-full rounded-md border border-[#848239] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239]"
 //                     />
 //                   </div>
 //                 </div>
@@ -519,13 +519,13 @@
 //               <div className="flex flex-row gap-2 px-4">
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Cancel
 //                 </button>
 //                 <button
 //                   onClick={handleCancelSubmit}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Submit
 //                 </button>
@@ -551,7 +551,7 @@
 //               <div className="flex flex-row gap-2 px-4">
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Close
 //                 </button>
@@ -579,7 +579,7 @@
 //                     <textarea
 //                       id="assessment"
 //                       placeholder="Enter assessment"
-//                       className="w-full rounded-md border border-[#0D95DD] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD]"
+//                       className="w-full rounded-md border border-[#848239] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239]"
 //                     />
 //                   </div>
 //                 </div>
@@ -587,13 +587,13 @@
 //               <div className="flex flex-row gap-2 px-4">
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Cancel
 //                 </button>
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Submit
 //                 </button>
@@ -619,7 +619,7 @@
 //               <div className="flex flex-row gap-2 px-4">
 //                 <button
 //                   onClick={handleClosePopup}
-//                   className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+//                   className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 //                 >
 //                   Close
 //                 </button>
@@ -1242,7 +1242,7 @@ const AdminDashboardOrders = () => {
 														})
 													)
 												}
-												className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+												className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 											/>
 										</div>
 										<div className="flex-1">
@@ -1268,7 +1268,7 @@ const AdminDashboardOrders = () => {
 														})
 													)
 												}
-												className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+												className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 											/>
 										</div>
 									</div>
@@ -1290,7 +1290,7 @@ const AdminDashboardOrders = () => {
 													note: e.target.value,
 												}))
 											}
-											className="h-9 w-full rounded-md border border-[#0D95DD] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-transparent"
+											className="h-9 w-full rounded-md border border-[#848239] px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-transparent"
 										/>
 									</div>
 								</div>
@@ -1298,13 +1298,13 @@ const AdminDashboardOrders = () => {
 							<div className="flex flex-row gap-2 px-4">
 								<button
 									onClick={handleClosePopup}
-									className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+									className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 								>
 									Cancel
 								</button>
 								<button
 									onClick={handleSettlementSubmit}
-									className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+									className="w-full px-4 h-9 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 								>
 									Done
 								</button>
@@ -1344,7 +1344,7 @@ const AdminDashboardOrders = () => {
 											onChange={(e) =>
 												setCancelReason(e.target.value)
 											}
-											className="w-full rounded-md border border-[#0D95DD] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D95DD]"
+											className="w-full rounded-md border border-[#848239] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#848239]"
 										/>
 									</div>
 								</div>
@@ -1352,13 +1352,13 @@ const AdminDashboardOrders = () => {
 							<div className="flex flex-row gap-2 px-4">
 								<button
 									onClick={handleClosePopup}
-									className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+									className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 								>
 									Cancel
 								</button>
 								<button
 									onClick={handleCancelSubmit}
-									className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+									className="w-full px-4 h-9 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 								>
 									Submit
 								</button>
@@ -1402,7 +1402,7 @@ const AdminDashboardOrders = () => {
 							<div className="flex flex-row gap-2 px-4">
 								<button
 									onClick={handleClosePopup}
-									className="w-full px-4 h-9 cursor-pointer border border-[#0D95DD] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm"
+									className="w-full px-4 h-9 cursor-pointer border border-[#848239] text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm"
 								>
 									Close
 								</button>
@@ -1421,7 +1421,7 @@ const AdminDashboardOrders = () => {
 							className="bg-white rounded-lg shadow-lg max-w-2xl w-full overflow-hidden"
 							onClick={(e) => e.stopPropagation()}
 						>
-							<div className="bg-[#0D95DD] px-6 py-4">
+							<div className="bg-[#848239] px-6 py-4">
 								<h1 className="text-white text-lg font-medium">
 									View Project Details
 								</h1>
@@ -1429,7 +1429,7 @@ const AdminDashboardOrders = () => {
 							<div className="p-6 max-h-[70vh] overflow-y-auto">
 								{isProjectLoading ? (
 									<div className="flex items-center justify-center h-40">
-										<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#0D95DD]"></div>
+										<div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#848239]"></div>
 									</div>
 								) : projectError ? (
 									<div className="bg-red-50 border border-red-200 rounded-md p-4 text-red-600">
@@ -1442,7 +1442,7 @@ const AdminDashboardOrders = () => {
 											<h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													className="h-5 w-5 mr-2 text-[#0D95DD]"
+													className="h-5 w-5 mr-2 text-[#848239]"
 													viewBox="0 0 20 20"
 													fill="currentColor"
 												>
@@ -1757,7 +1757,7 @@ const AdminDashboardOrders = () => {
 											<h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													className="h-5 w-5 mr-2 text-[#0D95DD]"
+													className="h-5 w-5 mr-2 text-[#848239]"
 													viewBox="0 0 20 20"
 													fill="currentColor"
 												>
@@ -1774,7 +1774,7 @@ const AdminDashboardOrders = () => {
 													<p className="text-sm font-medium text-gray-500">
 														Tasks Completed
 													</p>
-													<p className="text-2xl font-bold text-[#0D95DD]">
+													<p className="text-2xl font-bold text-[#848239]">
 														{
 															managemantViewProjectDetails.task_completed_count
 														}
@@ -1784,7 +1784,7 @@ const AdminDashboardOrders = () => {
 													<p className="text-sm font-medium text-gray-500">
 														Total Amount
 													</p>
-													<p className="text-2xl font-bold text-[#0D95DD]">
+													<p className="text-2xl font-bold text-[#848239]">
 														$
 														{
 															managemantViewProjectDetails.task_completed_amount
@@ -1795,7 +1795,7 @@ const AdminDashboardOrders = () => {
 													<p className="text-sm font-medium text-gray-500">
 														Rating Count
 													</p>
-													<p className="text-2xl font-bold text-[#0D95DD]">
+													<p className="text-2xl font-bold text-[#848239]">
 														{
 															managemantViewProjectDetails.rating_count
 														}
@@ -1805,7 +1805,7 @@ const AdminDashboardOrders = () => {
 													<p className="text-sm font-medium text-gray-500">
 														Rating Sum
 													</p>
-													<p className="text-2xl font-bold text-[#0D95DD]">
+													<p className="text-2xl font-bold text-[#848239]">
 														{
 															managemantViewProjectDetails.rating_sum
 														}
@@ -1819,7 +1819,7 @@ const AdminDashboardOrders = () => {
 														Average Rating
 													</p>
 													<div className="flex items-center mt-1">
-														<p className="text-xl font-bold text-[#0D95DD] mr-2">
+														<p className="text-xl font-bold text-[#848239] mr-2">
 															{(
 																managemantViewProjectDetails.rating_sum /
 																managemantViewProjectDetails.rating_count
@@ -1863,7 +1863,7 @@ const AdminDashboardOrders = () => {
 							<div className="bg-gray-50 px-6 py-4 flex justify-end">
 								<button
 									onClick={handleClosePopup}
-									className="px-6 py-2 cursor-pointer border border-[#0D95DD] bg-[#0D95DD] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#0D95DD] text-sm font-medium"
+									className="px-6 py-2 cursor-pointer border border-[#848239] bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none focus:ring-2 focus:ring-[#848239] text-sm font-medium"
 								>
 									Close
 								</button>

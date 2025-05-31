@@ -529,13 +529,13 @@ const AdminDashboardUser = () => {
 							</button>
 						</div>
 						<div className="flex items-center justify-center my-2">
-							<h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-5 py-2 w-56 rounded-md flex items-center justify-center text-[15px] mb-5">
+							<h1 className="border-[#848239] font-medium text-[#848239] border px-5 py-2 w-56 rounded-md flex items-center justify-center text-[15px] mb-5">
 								Description
 							</h1>
 						</div>
 						<textarea
 							placeholder="Write a description..."
-							className="w-full min-h-[100px] bg-gray-50 border border-gray-300 rounded-md px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0D95DD] focus:border-[#0D95DD] transition duration-200 resize"
+							className="w-full min-h-[100px] bg-gray-50 border border-gray-300 rounded-md px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#848239] focus:border-[#848239] transition duration-200 resize"
 							value={warningReason}
 							onChange={(e) => setWarningReason(e.target.value)}
 						/>
@@ -546,7 +546,7 @@ const AdminDashboardUser = () => {
 										activePopup.replace("warning-", "")
 									)
 								}
-								className="px-10 py-2 bg-[#0D95DD] text-white rounded-md cursor-pointer text-[14px]"
+								className="px-10 py-2 bg-[#848239] text-white rounded-md cursor-pointer text-[14px]"
 							>
 								Submit
 							</button>

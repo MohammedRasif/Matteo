@@ -246,7 +246,7 @@ const Order = () => {
 							</button>
 						</div>
 						<div className="flex items-center justify-center my-2">
-							<h1 className="border-[#0D95DD] font-medium text-[#0D95DD] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
+							<h1 className="border-[#848239] font-medium text-[#848239] border px-6 py-2 w-56 rounded-md flex items-center justify-center">
 								Support request
 							</h1>
 						</div>
@@ -256,7 +256,7 @@ const Order = () => {
 						<div className="flex justify-center gap-2 mt-5">
 							<button
 								onClick={() => setShowPopup(false)}
-								className="px-10 py-1 bg-[#0D95DD] text-white rounded-md cursor-pointer"
+								className="px-10 py-1 bg-[#848239] text-white rounded-md cursor-pointer"
 							>
 								Okay
 							</button>
