@@ -1,8 +1,10 @@
 import { Bell } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { BaseUrl } from "../../Shared/baseUrls";
 import { useGetProfileQuery } from "../../../Redux/feature/ApiSlice";
+import { useEffect, useState } from "react";
 const AdminDashboardNavbar = ({ notificationCount, setNotificationCount }) => {
+	const navigate = useNavigate();
 	const accessToken = localStorage.getItem("access_token");
 	const {
 		data: profile,
@@ -11,6 +13,15 @@ const AdminDashboardNavbar = ({ notificationCount, setNotificationCount }) => {
 	} = useGetProfileQuery(undefined, {
 		skip: !accessToken,
 	});
+	const [isAdmin, setIsAdmin] = useState(false);
+
+	useEffect(() => {
+		if (profile?.is_admin) setIsAdmin(profile?.is_admin);
+
+		console.log("fsdaf ", isAdmin);
+
+		// if (!isAdmin) return navigate("/");
+	}, [profile, navigate]);
 
 	return (
 		<div>

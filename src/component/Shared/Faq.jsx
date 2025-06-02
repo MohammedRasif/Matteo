@@ -82,7 +82,6 @@ const Faq = () => {
 		if (data) {
 			setFaqItems(data);
 		}
-		console.log(data);
 	}, [data]);
 
 	const toggleItem = (index) => {

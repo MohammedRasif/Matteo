@@ -184,8 +184,8 @@ function SellerDashboardPages() {
 	console.log(orderManagementData);
 	const filteredOrders = orderManagementData.filter(
 		(order) =>
-			// order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) &&
-			statusFilter === "" || order.status === statusFilter
+			order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) &&
+			(statusFilter === "" || order.status === statusFilter)
 	);
 
 	return (
@@ -273,7 +273,11 @@ function SellerDashboardPages() {
 								{/* User info with profile image */}
 								<td className="px-4 py-3 flex items-center gap-2">
 									<img
-										src={order.image}
+										src={
+											order.image
+												? `${BaseUrl}${order.image}`
+												: "/placeholder.png"
+										}
 										alt={order.username}
 										className="w-[35px] h-[35px] rounded-full"
 									/>

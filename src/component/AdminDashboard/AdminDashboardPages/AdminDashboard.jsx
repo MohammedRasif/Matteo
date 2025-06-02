@@ -33,8 +33,6 @@ const AdminDashboard = () => {
 	const { data: SelasOverview } = useSelasOverviewQuery();
 	const { data: subscription } = useSubscriptionQuery();
 
-	console.log(subscription, "hello");
-
 	const chartData =
 		SelasOverview?.map((item) => ({
 			name: item.month,

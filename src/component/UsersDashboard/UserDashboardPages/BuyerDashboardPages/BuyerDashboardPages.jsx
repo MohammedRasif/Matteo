@@ -19,6 +19,7 @@ import { PiDotsThreeBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import GiveAReviewRating from "../../GiveAReviewRating";
+import { BaseUrl } from "../../../Shared/baseUrls";
 
 function BuyerDashboardPages() {
 	// State for orders
@@ -284,7 +285,11 @@ function BuyerDashboardPages() {
 							>
 								<td className="px-4 py-3 flex items-center gap-2">
 									<img
-										src={order.image}
+										src={
+											order.image
+												? `${BaseUrl}${order.image}`
+												: "/placeholder.png"
+										}
 										alt={order.username}
 										className="w-[35px] h-[35px] rounded-full"
 									/>
