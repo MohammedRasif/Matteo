@@ -25,88 +25,7 @@ function SellerDashboardPages() {
   const actionDropdownRef = useRef(null); // For action dropdown
 
   // Make orderManagementData a state variable
-  const [orderManagementData, setOrderManagementData] = useState([
-    {
-      user_id: "U12345",
-      username: "john_doe",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
-      delivery_time: "2025-04-10T15:30:00Z",
-      order_id: "ORD1001",
-      amount: 59.99,
-      status: "Delivered",
-      action: "⋯",
-    },
-    {
-      user_id: "U12346",
-      username: "emma_smith",
-      image: "https://randomuser.me/api/portraits/women/46.jpg",
-      delivery_time: "2025-04-11T12:00:00Z",
-      order_id: "ORD1002",
-      amount: 89.5,
-      status: "In-Progress",
-      action: "⋯",
-    },
-    {
-      user_id: "U12347",
-      username: "michael_lee",
-      image: "https://randomuser.me/api/portraits/men/47.jpg",
-      delivery_time: "2025-04-12T09:45:00Z",
-      order_id: "ORD1003",
-      amount: 120.0,
-      status: "Late",
-      action: "⋯",
-    },
-    {
-      user_id: "U12348",
-      username: "sarah_jones",
-      image: "https://randomuser.me/api/portraits/women/48.jpg",
-      delivery_time: "2025-04-09T17:20:00Z",
-      order_id: "ORD1004",
-      amount: 42.75,
-      status: "Cancelled",
-      action: "⋯",
-    },
-    {
-      user_id: "U12349",
-      username: "david_khan",
-      image: "https://randomuser.me/api/portraits/men/49.jpg",
-      delivery_time: "2025-04-13T10:15:00Z",
-      order_id: "ORD1005",
-      amount: 75.25,
-      status: "Complete",
-      action: "⋯",
-    },
-    {
-      user_id: "U12350",
-      username: "olivia_wilson",
-      image: "https://randomuser.me/api/portraits/women/50.jpg",
-      delivery_time: "2025-04-14T13:00:00Z",
-      order_id: "ORD1006",
-      amount: 150.99,
-      status: "In-Progress",
-      action: "⋯",
-    },
-    {
-      user_id: "U12351",
-      username: "liam_brown",
-      image: "https://randomuser.me/api/portraits/men/51.jpg",
-      delivery_time: "2025-04-15T08:45:00Z",
-      order_id: "ORD1007",
-      amount: 65.0,
-      status: "Delivered",
-      action: "⋯",
-    },
-    {
-      user_id: "U12352",
-      username: "ava_davis",
-      image: "https://randomuser.me/api/portraits/women/52.jpg",
-      delivery_time: "2025-04-16T16:30:00Z",
-      order_id: "ORD1008",
-      amount: 99.0,
-      status: "Cancel request",
-      action: "⋯",
-    },
-  ]);
+  const [orderManagementData, setOrderManagementData] = useState([]);
 
   const description = `Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dum my text of the printing and type setting industry. Lorem standard dummy text ever since the. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`;
 
@@ -264,7 +183,7 @@ function SellerDashboardPages() {
                 {/* User info with profile image */}
                 <td className="px-4 py-3 flex items-center gap-2">
                   <img
-                    src={order.image}
+                    src={`http://172.252.13.96:7000${order.image}`}
                     alt={order.username}
                     className="w-[35px] h-[35px] rounded-full"
                   />

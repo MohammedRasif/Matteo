@@ -14,7 +14,7 @@ const UserDashboardMessage = () => {
 
   useEffect(() => {
     ws.current = new WebSocket(
-      `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
+      `ws://172.252.13.96:7000/ws/api/v1/chat/?Authorization=Bearer ${token}`
     );
 
     ws.current.onopen = () => console.log("✅ WebSocket connected");

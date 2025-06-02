@@ -30,7 +30,7 @@ const AdminDashboardNotification = () => {
   // WebSocket setup
   useEffect(() => {
     ws.current = new WebSocket(
-      `ws://192.168.10.35:8000/ws/api/v1/notification/subscribe/?Authorization=Bearer ${token}`
+      `ws://172.252.13.96:7000/ws/api/v1/notification/subscribe/?Authorization=Bearer ${token}`
     );
 
     ws.current.onopen = () =>
