@@ -1,104 +1,128 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import AdminDashboardNavbar from "../AdminDashboardNavbar.jsx/AdminDashboardNavbar";
 import AdminDashboardSidebar from "../AdminDashboardSidebar/AdminDashboardSidebar";
 import { useEffect, useRef, useState } from "react";
 
 const AdminDashboardLayout = () => {
-  const chatWs = useRef(null);
-  const notificationWs = useRef(null);
-  const token = localStorage.getItem("access_token");
-  const [notificationCount, setNotificationCount] = useState(0);
+	const navigate = useNavigate();
+	const chatWs = useRef(null);
+	const notificationWs = useRef(null);
+	const token = localStorage.getItem("access_token");
+	const [notificationCount, setNotificationCount] = useState(0);
 
-  // WebSocket setup
-  useEffect(() => {
-    // Chat WebSocket
-    chatWs.current = new WebSocket(
-      `ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
-    );
+	// Check if user is logged in
+	const isUserLoggedIn = !!(
+		localStorage.getItem("access_token") ||
+		localStorage.getItem("refresh_token")
+	);
 
-    chatWs.current.onopen = () => console.log("✅ Chat WebSocket connected");
+	// Redirect if not authenticated
+	useEffect(() => {
+		if (!isUserLoggedIn) {
+			console.log("redirecting...");
+			navigate("/login", { replace: true });
+		}
+	}, [isUserLoggedIn, navigate]);
 
-    chatWs.current.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log("📩 Received chat message:", data);
-        // TODO: Handle chat messages if needed
-      } catch (error) {
-        console.error("❌ Error parsing chat message:", error);
-        console.log("📥 Raw chat data:", event.data);
-      }
-    };
+	// WebSocket setup
+	useEffect(() => {
+		if (!isUserLoggedIn) return; // Skip WebSocket setup if not authenticated
 
-    chatWs.current.onclose = () => console.log("🔌 Chat WebSocket closed");
-    chatWs.current.onerror = (err) =>
-      console.error("❌ Chat WebSocket error:", err);
+		// Chat WebSocket
+		chatWs.current = new WebSocket(
+			`ws://192.168.10.35:8000/ws/api/v1/chat/?Authorization=Bearer ${token}`
+		);
 
-    // Notification WebSocket
-    notificationWs.current = new WebSocket(
-      `ws://192.168.10.35:8000/ws/api/v1/notification/subscribe/?Authorization=Bearer ${token}`
-    );
+		chatWs.current.onopen = () =>
+			console.log("✅ Chat WebSocket connected");
 
-    notificationWs.current.onopen = () =>
-      console.log("✅ Notification WebSocket connected");
+		chatWs.current.onmessage = (event) => {
+			try {
+				const data = JSON.parse(event.data);
+				console.log("📩 Received chat message:", data);
+				// TODO: Handle chat messages if needed
+			} catch (error) {
+				console.error("❌ Error parsing chat message:", error);
+				console.log("📥 Raw chat data:", event.data);
+			}
+		};
 
-    notificationWs.current.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log("🔔 Received notification:", data);
-        setNotificationCount((prev) => {
-          const newCount = prev + 1;
-          console.log("📈 Updated notificationCount:", newCount);
-          return newCount;
-        });
-      } catch (error) {
-        console.error("❌ Error parsing notification:", error);
-        console.log("📥 Raw notification data:", event.data);
-      }
-    };
+		chatWs.current.onclose = () => console.log("🔌 Chat WebSocket closed");
+		chatWs.current.onerror = (err) =>
+			console.error("❌ Chat WebSocket error:", err);
 
-    notificationWs.current.onclose = () =>
-      console.log("🔌 Notification WebSocket closed");
-    notificationWs.current.onerror = (err) =>
-      console.error("❌ Notification WebSocket error:", err);
+		// Notification WebSocket
+		notificationWs.current = new WebSocket(
+			`ws://192.168.10.35:8000/ws/api/v1/notification/subscribe/?Authorization=Bearer ${token}`
+		);
 
-    return () => {
-      if (chatWs.current) chatWs.current.close();
-      if (notificationWs.current) notificationWs.current.close();
-    };
-  }, []);
+		notificationWs.current.onopen = () =>
+			console.log("✅ Notification WebSocket connected");
 
-  return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="bg-white h-full fixed transition-all duration-300 ease-in-out z-40 w-[350px]">
-        <div className="h-full flex flex-col justify-between">
-          <AdminDashboardSidebar />
-        </div>
-      </div>
+		notificationWs.current.onmessage = (event) => {
+			try {
+				const data = JSON.parse(event.data);
+				console.log("🔔 Received notification:", data);
+				setNotificationCount((prev) => {
+					const newCount = prev + 1;
+					console.log("📈 Updated notificationCount:", newCount);
+					return newCount;
+				});
+			} catch (error) {
+				console.error("❌ Error parsing notification:", error);
+				console.log("📥 Raw notification data:", event.data);
+			}
+		};
 
-      {/* Main Content Area */}
-      <div className="flex flex-col ml-[350px] w-[calc(100%-350px)]">
-        {/* Navbar */}
-        <div
-          className="fixed top-0 bg-white transition-all duration-300 z-50 shadow"
-          style={{
-            left: 0,
-            width: "100%",
-          }}
-        >
-          <AdminDashboardNavbar
-            notificationCount={notificationCount}
-            setNotificationCount={setNotificationCount}
-          />
-        </div>
+		notificationWs.current.onclose = () =>
+			console.log("🔌 Notification WebSocket closed");
+		notificationWs.current.onerror = (err) =>
+			console.error("❌ Notification WebSocket error:", err);
 
-        {/* Outlet */}
-        <div className="h-full bg-gray-200 mt-16 overflow-auto">
-          <Outlet />
-        </div>
-      </div>
-    </div>
-  );
+		// Cleanup WebSockets on component unmount
+		return () => {
+			if (chatWs.current) chatWs.current.close();
+			if (notificationWs.current) notificationWs.current.close();
+		};
+	}, [isUserLoggedIn, token]);
+
+	// Render nothing while redirecting
+	if (!isUserLoggedIn) {
+		return null;
+	}
+
+	return (
+		<div className="flex h-screen">
+			{/* Sidebar */}
+			<div className="bg-white h-full fixed transition-all duration-300 ease-in-out z-40 w-[350px]">
+				<div className="h-full flex flex-col justify-between">
+					<AdminDashboardSidebar />
+				</div>
+			</div>
+
+			{/* Main Content Area */}
+			<div className="flex flex-col ml-[350px] w-[calc(100%-350px)]">
+				{/* Navbar */}
+				<div
+					className="fixed top-0 bg-white transition-all duration-300 z-50 shadow"
+					style={{
+						left: 0,
+						width: "100%",
+					}}
+				>
+					<AdminDashboardNavbar
+						notificationCount={notificationCount}
+						setNotificationCount={setNotificationCount}
+					/>
+				</div>
+
+				{/* Outlet */}
+				<div className="h-full bg-gray-200 mt-16 overflow-auto">
+					<Outlet />
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default AdminDashboardLayout;
