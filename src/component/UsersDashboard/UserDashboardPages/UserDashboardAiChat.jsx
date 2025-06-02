@@ -16,6 +16,7 @@ const UserDashboardAiChat = () => {
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
   const ws = useRef(null);
+  const [messageBuffer, setMessageBuffer] = useState("");
 
   // WebSocket setup
   useEffect(() => {
@@ -28,36 +29,50 @@ const UserDashboardAiChat = () => {
     };
 
     ws.current.onmessage = (event) => {
-      setIsLoading(false);
       try {
         const data = JSON.parse(event.data);
-        if (data.message != "<|END_PACKET|>") {
-          console.log("Received message:", data.message);
-
-          if (data.message) {
+        if (data.message === "<|END_PACKET|>") {
+          if (messageBuffer) {
             setMessages((prev) => [
               ...prev,
               {
-                text: data.message,
+                text: messageBuffer,
                 isUser: false,
                 timestamp: new Date(),
               },
             ]);
+            setMessageBuffer("");
           }
-        }
-        if (data.message === "<|END_PACKET|>") {
           setIsLoading(false);
-          console.log("End packet received, stopping loading state");
+        } else if (data.message) {
+          setMessageBuffer((prev) => {
+            const updatedBuffer = prev + data.message;
+            // Update messages with the current buffer to show progress
+            setMessages((prevMessages) => {
+              const newMessages = [...prevMessages];
+              const lastMessage = newMessages[newMessages.length - 1];
+              if (lastMessage && !lastMessage.isUser) {
+                // Update the last bot message
+                newMessages[newMessages.length - 1] = {
+                  ...lastMessage,
+                  text: updatedBuffer,
+                };
+              } else {
+                // Add a new temporary message
+                newMessages.push({
+                  text: updatedBuffer,
+                  isUser: false,
+                  timestamp: new Date(),
+                });
+              }
+              return newMessages;
+            });
+            return updatedBuffer;
+          });
+          setIsLoading(true);
         }
-      } catch {
-        setMessages((prev) => [
-          ...prev,
-          {
-            text: event.data,
-            isUser: false,
-            timestamp: new Date(),
-          },
-        ]);
+      } catch (err) {
+        console.error("Error parsing WebSocket message:", err);
       }
     };
 
