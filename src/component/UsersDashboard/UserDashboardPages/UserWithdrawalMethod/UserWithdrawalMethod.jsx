@@ -6,9 +6,9 @@ import imgThree from "../../../image/Frame.png"; // Visa
 import imgFour from "../../../image/Discover.png"; // Discover
 import { Link } from "react-router-dom";
 import { useAddWithdrawalMethodMutation } from "../../../../Redux/feature/ApiSlice";
-
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { BaseUrl } from "../../../Shared/baseUrls";
+import toast, { Toaster } from "react-hot-toast";
 
 function UserWithdrawalMethod() {
 	const stripe = useStripe();
@@ -52,8 +52,13 @@ function UserWithdrawalMethod() {
 				// 	}
 				// );
 				console.log("Server response:", response);
+				toast.success(
+					response.message || "Successfully added withdrawal method"
+				);
 			} catch (error) {
-				console.error("Error sending token to server:", error);
+				const errorMessage = error?.data?.error || error.message;
+				console.log("Error sending token to server:", errorMessage);
+				toast.error(errorMessage);
 			}
 		}
 	};
@@ -134,6 +139,7 @@ function UserWithdrawalMethod() {
 
 	return (
 		<div className="p-6 pt-10 nunito">
+			<Toaster />
 			<div className="relative">
 				<Link
 					to="/dashboard/user_wallet"
@@ -173,7 +179,7 @@ function UserWithdrawalMethod() {
 			</div>
 
 			{/* table for withdrawal method */}
-			<div className="bg-[#F6F8FA] rounded-[16px] p-8 py-8 mt-10">
+			{/* <div className="bg-[#F6F8FA] rounded-[16px] p-8 py-8 mt-10">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div className="col-span-1">
@@ -283,7 +289,7 @@ function UserWithdrawalMethod() {
 						</button>
 					</div>
 				</form>
-			</div>
+			</div> */}
 		</div>
 	);
 }

@@ -181,10 +181,11 @@ function SellerDashboardPages() {
 	};
 
 	// Filter by orderId & status
+	console.log(orderManagementData);
 	const filteredOrders = orderManagementData.filter(
 		(order) =>
-			order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) &&
-			(statusFilter === "" || order.status === statusFilter)
+			// order.order_id.toLowerCase().includes(searchQuery.toLowerCase()) &&
+			statusFilter === "" || order.status === statusFilter
 	);
 
 	return (
