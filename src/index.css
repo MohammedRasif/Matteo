@@ -2,9 +2,16 @@
 @import "tailwindcss";
 
 .nunito {
-  font-family: "Nunito Sans", sans-serif;
+	font-family: "Nunito Sans", sans-serif;
 }
 
 .roboto {
-  font-family: "Roboto", sans-serif;
+	font-family: "Roboto", sans-serif;
+}
+
+@layer base {
+	input,
+	textarea {
+		outline: none;
+	}
 }

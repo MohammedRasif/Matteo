@@ -25,6 +25,10 @@ export const ChatSlice = createApi({
     getChatList: builder.query({
       query: () => `/api/v1/chat/list_user_chats/`,
     }),
+    // get candidates of a post
+    getCandidates: builder.query({
+      query: (id) => `/api/v1/order-post/bids/${id}/`,
+    }),
 
     // Example: Send message
     sendMessage: builder.mutation({
@@ -41,5 +45,6 @@ export const {
   useGetChatHistoryQuery,
   useSendMessageMutation,
   useGetChatListQuery,
+  useGetCandidatesQuery,
 } = ChatSlice;
 export default ChatSlice;
