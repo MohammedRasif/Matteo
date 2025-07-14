@@ -27,10 +27,10 @@ const UserDashboardMessage = () => {
 
         const senderId = String(message.sender || message.sender_id || "");
 
-        if (senderId && users.some((user) => String(user.id) === senderId)) {
+        if (senderId && users.some((user) => String(user.user_id) === senderId)) {
           setUsers((prevUsers) => {
             const updatedUsers = prevUsers.map((user) =>
-              String(user.id) === senderId
+              String(user.user_id) === senderId
                 ? {
                     ...user,
                     number: (Number(user.number) || 0) + 1,
@@ -94,11 +94,11 @@ const UserDashboardMessage = () => {
   }, [location.pathname, users]);
 
   const handleUserClick = (user) => {
-    setSelectedUserId(user.id);
+    setSelectedUserId(user.user_id);
     // Reset the number for the clicked user
     setUsers((prevUsers) => {
       const updatedUsers = prevUsers.map((u) =>
-        String(u.id) === String(user.id)
+        String(u.user_id) === String(user.user_id)
           ? { ...u, number: 0 } // Reset number to 0
           : u
       );
@@ -110,7 +110,7 @@ const UserDashboardMessage = () => {
       );
       return [...updatedUsers]; // Ensure new array for React to detect change
     });
-    navigate(`/dashboard/Messages/${user.id}`, { state: { user } });
+    navigate(`/dashboard/Messages/${user.room_id}`, { state: { user } });
   };
 
   const handleChatbotClick = () => {
@@ -139,11 +139,11 @@ const UserDashboardMessage = () => {
             onClick={handleChatbotClick}
             className={`flex items-center space-x-2 px-[10px] py-[8px] mt-2 cursor-pointer ${
               location.pathname === "/dashboard/Messages/chatbot"
-                ? "bg-[#B6E3FC]"
+                ? "bg-[#848239]"
                 : "hover:bg-[#B6E3FC]"
             }`}
           >
-            <div className="bg-[#2F80A9] h-10 w-10 text-white flex items-center justify-center rounded-full">
+            <div className="bg-[#848239] h-10 w-10 text-white flex items-center justify-center rounded-full">
               <VscRobot size={25} />
             </div>
             <div className="text-md">
@@ -159,11 +159,11 @@ const UserDashboardMessage = () => {
             )}
             {users.map((user) => (
               <div
-                key={user.id}
+                key={user.user_id}
                 onClick={() => handleUserClick(user)}
                 className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#252c3b] text-gray-700 dark:text-gray-200 transition-colors border-b border-gray-200 ${
                   selectedUserId === user.id
-                    ? "bg-blue-100 dark:bg-[#2F80A9]"
+                    ? "bg-blue-100 dark:bg-[#848239]"
                     : ""
                 }`}
               >

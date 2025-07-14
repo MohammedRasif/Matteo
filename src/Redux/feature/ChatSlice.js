@@ -29,7 +29,6 @@ export const ChatSlice = createApi({
     getCandidates: builder.query({
       query: (id) => `/api/v1/order-post/bids/${id}/`,
     }),
-
     // Example: Send message
     sendMessage: builder.mutation({
       query: (payload) => ({

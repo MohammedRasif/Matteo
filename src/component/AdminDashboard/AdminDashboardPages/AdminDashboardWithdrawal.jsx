@@ -486,7 +486,7 @@ const AdminDashboardWithdrawal = () => {
 									</td>
 									<td className="px-6 py-4 whitespace-nowrap">
 										<button
-											className="bg-blue-500 text-white text-xs px-3 py-1 rounded-2xl cursor-pointer"
+											className="bg-[#848239] text-white text-xs px-3 py-1 rounded-2xl cursor-pointer"
 											onClick={() =>
 												handleViewClick(request)
 											}
@@ -860,7 +860,7 @@ const AdminDashboardWithdrawal = () => {
 							{warningStatus !== "success" && (
 								<button
 									onClick={handleWarningSubmit}
-									className="px-8 py-2 bg-[#848239] text-white rounded-md hover:bg-[#0A7BBF] focus:outline-none text-md font-medium cursor-pointer"
+									className="px-8 py-2 bg-[#848239] text-white rounded-md hover:bg-[#848239] focus:outline-none text-md font-medium cursor-pointer"
 									disabled={warningStatus === "loading"}
 								>
 									Submit

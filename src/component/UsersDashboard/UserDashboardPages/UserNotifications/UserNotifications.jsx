@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useNotificationsQuery } from "../../../../Redux/feature/ApiSlice";
+import { data } from "react-router-dom";
 
 const UserNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -7,6 +9,7 @@ const UserNotifications = () => {
   const [notificationToDelete, setNotificationToDelete] = useState(null);
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
+  const {data:notificationsData,isLoading,refetch,error}=useNotificationsQuery()
 
   // Convert ISO timestamp to relative time (e.g., "Today", "Yesterday")
   const getRelativeTime = (timestamp) => {
@@ -24,6 +27,14 @@ const UserNotifications = () => {
       return "Unknown";
     }
   };
+  useEffect(()=>{
+    refetch()
+    console.log(notificationsData);
+    if (!isLoading) {
+      
+      setNotifications(notificationsData)
+    }
+  },[notificationsData])
 
   // WebSocket setup
   useEffect(() => {
@@ -74,6 +85,7 @@ const UserNotifications = () => {
       if (ws.current) ws.current.close();
     };
   }, []);
+
 
   const handleDeleteClick = (notification) => {
     setNotificationToDelete(notification);

@@ -16,7 +16,9 @@ const UserDashboardSidebar = () => {
 		location.pathname === "/dashboard" ||
 		location.pathname.startsWith("/dashboard/createBuyerOrder") ||
 		location.pathname.startsWith("/dashboard/createSellerOrder") ||
-		location.pathname.startsWith("/dashboard/buyer_order_create");
+		location.pathname.startsWith("/dashboard/buyer_order_create") || 
+		location.pathname.startsWith("/dashboard/edit_created_order") || 
+		location.pathname.startsWith("/dashboard/buyer_candidate_list");
 	const isWalletActive =
 		location.pathname === "/dashboard/user_wallet" ||
 		location.pathname.startsWith("/dashboard/user_withdrawal_method");

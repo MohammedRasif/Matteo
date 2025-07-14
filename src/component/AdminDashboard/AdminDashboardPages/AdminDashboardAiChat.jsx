@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { PaperclipIcon, SendIcon } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { VscRobot } from "react-icons/vsc";
-
+const WS_URL = "ws://172.252.13.96:7000/ws/api/v1/chat_bot/";
 const AdminDashboardAiChat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -18,33 +18,78 @@ const AdminDashboardAiChat = () => {
   const ws = useRef(null);
   const token =
     typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+  const [messageBuffer, setMessageBuffer] = useState("");
 
   useEffect(() => {
-    ws.current = new WebSocket(
-      `ws://192.168.10.35:8000/ws/api/v1/chat_bot/?Authorization=Bearer ${token}`
-    );
-
-    ws.current.onopen = () => console.log("✅ WebSocket connected");
-    ws.current.onerror = (err) => console.error("❌ WebSocket error:", err);
-    ws.current.onclose = () => console.log("🔌 WebSocket closed");
-
-    ws.current.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      setMessages((prev) => [
-        ...prev,
-        {
-          text: data.message,
-          isUser: false,
-          timestamp: new Date(),
-        },
-      ]);
-      console.log(data);
-    };
-
-    return () => {
-      ws.current?.close();
-    };
-  }, []);
+      ws.current = new WebSocket(
+        `${WS_URL}?Authorization=Bearer ${localStorage.getItem("access_token")}`
+      );
+  
+      ws.current.onopen = () => {
+        console.log("WebSocket connected");
+      };
+  
+      ws.current.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.message === "<|END_PACKET|>") {
+            if (messageBuffer) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  text: messageBuffer,
+                  isUser: false,
+                  timestamp: new Date(),
+                },
+              ]);
+              setMessageBuffer("");
+            }
+            setIsLoading(false);
+          } else if (data.message) {
+            setMessageBuffer((prev) => {
+              const updatedBuffer = prev + data.message;
+              // Update messages with the current buffer to show progress
+              setMessages((prevMessages) => {
+                const newMessages = [...prevMessages];
+                const lastMessage = newMessages[newMessages.length - 1];
+                if (lastMessage && !lastMessage.isUser) {
+                  // Update the last bot message
+                  newMessages[newMessages.length - 1] = {
+                    ...lastMessage,
+                    text: updatedBuffer,
+                  };
+                } else {
+                  // Add a new temporary message
+                  newMessages.push({
+                    text: updatedBuffer,
+                    isUser: false,
+                    timestamp: new Date(),
+                  });
+                }
+                return newMessages;
+              });
+              return updatedBuffer;
+            });
+            setIsLoading(true);
+          }
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      };
+  
+      ws.current.onerror = (err) => {
+        setIsLoading(false);
+        console.error("WebSocket error:", err);
+      };
+  
+      ws.current.onclose = () => {
+        console.log("WebSocket closed");
+      };
+  
+      return () => {
+        ws.current && ws.current.close();
+      };
+    }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -108,7 +153,7 @@ const AdminDashboardAiChat = () => {
       style={{ height: "80vh" }}
     >
       <div className="flex items-center space-x-4 p-3 border-b border-gray-200 bg-white">
-        <div className="h-[46px] w-11 rounded-full bg-[#2F80A9] flex items-center justify-center">
+        <div className="h-[46px] w-11 rounded-full bg-[#848239] flex items-center justify-center">
           <VscRobot className="h-6 w-6 text-white" />
         </div>
         <h1 className="font-medium text-gray-800">AI Assistant</h1>
@@ -118,7 +163,7 @@ const AdminDashboardAiChat = () => {
         {!hasUserSentMessage && (
           <div className="absolute bottom-0">
             <div className="flex items-start space-x-3">
-              <div className="h-10 w-10 rounded-full bg-[#2F80A9] text-white flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-[#848239] text-white flex items-center justify-center">
                 <VscRobot className="h-5 w-5" />
               </div>
               <div className="px-5 py-4 rounded-lg bg-gray-200 text-black shadow-sm max-w-[70%]">
@@ -134,23 +179,23 @@ const AdminDashboardAiChat = () => {
           <div key={index} className="flex w-full">
             {message.isUser ? (
               <div className="flex flex-col items-end w-full">
-                <div className="flex justify-end items-end space-x-3">
-                  <div className="px-4 py-3 rounded-xl bg-[#2F80A9] text-white shadow-md w-1/2">
+                <div className="flex justify-end items-end pl-[10%] space-x-3">
+                  <div className="px-4 mr-2  py-3 rounded-xl bg-[#848239] text-white shadow-md w-fit ">
                     <span>{message.text}</span>
                   </div>
-                  <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                  {/* <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
                     <img
                       src="https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738148405/fotor-2025010923230_1_u9l6vi.png"
                       alt=""
                       className="h-10 w-10 rounded-full object-cover"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-start w-full">
                 <div className="flex items-start space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-[#2F80A9] flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-full bg-[#848239] flex items-center justify-center">
                     <VscRobot className="h-5 w-5 text-white" />
                   </div>
                   <div className="px-5 py-4 rounded-lg bg-gray-200 text-black shadow-sm max-w-[70%]">
@@ -165,7 +210,7 @@ const AdminDashboardAiChat = () => {
           <div className="flex w-full">
             <div className="flex flex-col items-start w-full">
               <div className="flex items-start space-x-3">
-                <div className="h-10 w-10 rounded-full bg-[#2F80A9] flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-[#848239] flex items-center justify-center">
                   <VscRobot className="h-5 w-5 text-white" />
                 </div>
                 <div className="px-5 py-4 rounded-lg bg-gray-200 text-black shadow-sm">
@@ -199,7 +244,7 @@ const AdminDashboardAiChat = () => {
                 setSelectedFile(null);
                 setSelectedFileName("");
               }}
-              className="absolute top-1 right-1 bg-[#2F80A9] text-white rounded-full p-[2px] hover:bg-[#2f6ea9] cursor-pointer"
+              className="absolute top-1 right-1 bg-[#848239] text-white rounded-full p-[2px] hover:bg-[#2f6ea9] cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

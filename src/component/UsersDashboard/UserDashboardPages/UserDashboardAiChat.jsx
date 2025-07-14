@@ -162,7 +162,7 @@ const UserDashboardAiChat = () => {
     >
       {/* Header with AI bot info */}
       <div className="flex items-center space-x-4 p-3 border-b border-gray-200 bg-white">
-        <div className="h-[46px] w-11 rounded-full bg-[#2F80A9] flex items-center justify-center">
+        <div className="h-[46px] w-11 rounded-full bg-[#848239] flex items-center justify-center">
           <VscRobot className="h-6 w-6 text-white" />
         </div>
         <h1 className="font-medium text-gray-800">AI Assistant</h1>
@@ -174,7 +174,7 @@ const UserDashboardAiChat = () => {
         {!hasUserSentMessage && (
           <div className="absolute bottom-0">
             <div className="flex items-start space-x-3">
-              <div className="h-10 w-10 rounded-full bg-[#2F80A9] text-white flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-[#848239] text-white flex items-center justify-center">
                 <VscRobot className="h-5 w-5" />
               </div>
               <div className="px-5 py-4 rounded-lg bg-gray-200  text-black  lg:text-[16px] shadow-sm max-w-[70%]">
@@ -193,7 +193,7 @@ const UserDashboardAiChat = () => {
               <div className="flex flex-col items-end w-full">
                 <div className="flex justify-end items-end space-x-3">
                   {message.text ? (
-                    <div className="px-4 py-3 rounded-xl bg-[#2F80A9] text-white lg:text-[16px] shadow-md w-fit">
+                    <div className="px-4 py-3 rounded-xl bg-[#848239] text-white lg:text-[16px] shadow-md w-fit">
                       <span>{message.text}</span>
                     </div>
                   ) : (
@@ -212,19 +212,19 @@ const UserDashboardAiChat = () => {
                       </div>
                     </div>
                   )}
-                  <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                  {/* <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
                     <img
                       src="https://res.cloudinary.com/dfsu0cuvb/image/upload/v1738148405/fotor-2025010923230_1_u9l6vi.png"
                       alt=""
                       className="h-10 w-10 rounded-full object-cover"
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-start w-full">
                 <div className="flex items-start space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-[#2F80A9] flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-full bg-[#848239] flex items-center justify-center">
                     <VscRobot className="h-5 w-5 text-white" />
                   </div>
                   <div className="px-5 py-4 rounded-lg bg-gray-200  text-black lg:text-[16px] shadow-sm max-w-[70%]">
@@ -239,7 +239,7 @@ const UserDashboardAiChat = () => {
           <div className="flex w-full">
             <div className="flex flex-col items-start w-full">
               <div className="flex items-start space-x-3">
-                <div className="h-10 w-10 rounded-full bg-[#2F80A9] flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full bg-[#848239] flex items-center justify-center">
                   <VscRobot className="h-5 w-5 text-white" />
                 </div>
                 <div className="px-5 py-4 rounded-lg bg-gray-200  text-black shadow-sm">
@@ -278,7 +278,7 @@ const UserDashboardAiChat = () => {
                 setSelectedImage(null);
                 setSelectedFileName("");
               }}
-              className="absolute top-1 right-1 bg-[#2F80A9] text-white rounded-full p-[2px] hover:bg-[#2f6ea9] cursor-pointer"
+              className="absolute top-1 right-1 bg-[#848239] text-white rounded-full p-[2px] hover:bg-[#2f6ea9] cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

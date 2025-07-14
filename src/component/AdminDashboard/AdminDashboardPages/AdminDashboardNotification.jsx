@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useNotificationsQuery } from "../../../Redux/feature/ApiSlice";
 
 const AdminDashboardNotification = () => {
   const [notifications, setNotifications] = useState([]);
@@ -9,6 +10,7 @@ const AdminDashboardNotification = () => {
   const [notificationToDelete, setNotificationToDelete] = useState(null);
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
+  const {data:notificationsData,isLoading,refetch,error}=useNotificationsQuery()
 
   // Convert ISO timestamp to relative time (e.g., "Today", "Yesterday")
   const getRelativeTime = (timestamp) => {
@@ -27,6 +29,13 @@ const AdminDashboardNotification = () => {
     }
   };
 
+  useEffect(()=>{
+    refetch()
+    if (!isLoading){
+      setNotifications(notificationsData)
+
+    }
+  },[notificationsData])
   // WebSocket setup
   useEffect(() => {
     ws.current = new WebSocket(

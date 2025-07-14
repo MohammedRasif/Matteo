@@ -171,7 +171,7 @@ const AllProjects = () => {
         }
 
         const bidData = {
-            service_id: currentProject.id,
+            service: currentProject.id,
             bid_amount: bidAmountNumber
         }
 

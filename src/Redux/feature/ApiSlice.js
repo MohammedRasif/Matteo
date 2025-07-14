@@ -335,6 +335,9 @@ export const ApiSlice = createApi({
 		supporReport: builder.query({
 			query: () => "/api/v1/admin/support/blog/post-list/",
 		}),
+		history:builder.query({
+			query:(id)=>`/api/v1/chat/history/${id}/`
+		}),
 		supporPostdelete: builder.mutation({
 			query: (id) => ({
 				url: `/api/v1/admin/support/blog/post/delete/${id}/`,
@@ -342,6 +345,19 @@ export const ApiSlice = createApi({
 			}),
 			invalidatesTags: ["Management"],
 		}),
+		// notification
+		notifications:builder.query({
+			query:()=>`/api/v1/notification/list/`,
+		}),
+
+
+		postAssign: builder.mutation({
+  query: ({ payload, id }) => ({
+    url: `api/v1/orders/bid/assign/${id}/`,
+    method: "POST",
+    body: payload,
+  }),
+}),
 
 		// contact endpoint
 		askQna: builder.mutation({
@@ -356,6 +372,8 @@ export const ApiSlice = createApi({
 
 // Export hooks for usage in components
 export const {
+	useNotificationsQuery,
+	useHistoryQuery,
 	useGetProfileQuery,
 	useSupportTicketQuery,
 	useSupportTicketDeleteMutation,
@@ -410,6 +428,7 @@ export const {
 	useRejectWithdrawalRequestMutation,
 	useUpdateProfileMutation,
 	useAskQnaMutation,
+	usePostAssignMutation,
 } = ApiSlice;
 
 export default ApiSlice;

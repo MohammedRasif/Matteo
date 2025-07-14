@@ -132,35 +132,36 @@ const AdminDashboardUser = () => {
 	};
 
 	const handleWarningSubmit = async (userId) => {
-		console.log("userId in handleWarningSubmit:", userId); // Debug userId
-		console.log("warningReason:", warningReason); // Debug reason
+    console.log("userId in handleWarningSubmit:", userId); // Debug userId
+    console.log("warningReason:", warningReason); // Debug reason
 
-		if (!warningReason.trim()) {
-			alert("Please provide a reason for the warning.");
-			return;
-		}
+    if (!warningReason.trim()) {
+        alert("Please provide a reason for the warning.");
+        return;
+    }
 
-		try {
-			const payload = {
-				user_id: userId, // Keep as string, remove parseInt
-				reason: warningReason,
-			};
-			console.log("Submitting payload:", payload); // Debug payload
+    try {
+        const payload = {
+            user_id: userId, // Keep as string
+            reason: warningReason,
+        };
+        console.log("Submitting payload:", payload); // Debug payload
 
-			await submiteData(payload).unwrap();
-			alert(`Warning submitted successfully for user ${userId}!`);
-			setActivePopup(null);
-			setWarningReason("");
-			setSelectedUserId(null);
-		} catch (error) {
-			console.error("Failed to submit warning, full error:", error); // Log full error
-			alert(
-				`Failed to submit warning: ${
-					error?.data?.message || error?.message || "Unknown error"
-				}`
-			);
-		}
-	};
+        // Wrap payload in an object with key 'warning' to match mutation
+        await submiteData({ warning: payload }).unwrap();
+        alert(`Warning submitted successfully for user ${userId}!`);
+        setActivePopup(null);
+        setWarningReason("");
+        setSelectedUserId(null);
+    } catch (error) {
+        console.error("Failed to submit warning, full error:", error); // Log full error
+        alert(
+            `Failed to submit warning: ${
+                error?.data?.message || error?.message || "Unknown error"
+            }`
+        );
+    }
+};
 
 	return (
 		<div className="p-5 pt-10 roboto">

@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { PaperclipIcon, SendIcon } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useGetChatHistoryQuery } from "../../../Redux/feature/ChatSlice";
+import { useHistoryQuery } from "../../../Redux/feature/ApiSlice";
 
 const UserDashboardChats = () => {
   const location = useLocation();
@@ -17,16 +18,25 @@ const UserDashboardChats = () => {
   const fileInputRef = useRef(null);
   const ws = useRef(null);
   const token = localStorage.getItem("access_token");
-
+  const [roomId,setRoomId]=useState("")
+  const room_id = useParams()
+  const {data:chatHistory,isLoading,isSuccess,error,refetch}=useHistoryQuery(room_id.id)
   // Fetch chat history
-  const {
-    data: chatHistory,
-    isLoading,
-    isSuccess,
-    error,
-  } = useGetChatHistoryQuery(user?.user?.id, {
-    skip: !user?.user?.id, // Avoid calling before user is ready
-  });
+  // const {
+  //   data: chatHistory,
+  //   isLoading,
+  //   isSuccess,
+  //   error,
+  // } = useGetChatHistoryQuery(user?.user?.user_id, {
+  //   skip: !user?.user?.user_id, // Avoid calling before user is ready
+  // });
+  useEffect(()=>{
+    setRoomId(room_id.id)
+    console.log(roomId);
+    refetch()
+    console.log(history);
+    // setMessages(history)
+  },[room_id,roomId])
 
   // Set initial messages from chat history
   useEffect(() => {
@@ -45,18 +55,18 @@ const UserDashboardChats = () => {
         is_edited: msg.is_edited || false,
         is_reported: msg.is_reported || false,
         attachment_data: msg.attachment_data || msg.attachment || "",
-        isUser: !(msg.sender === user.user.id),
+        isUser: !(msg.sender === user.user.receiver_id),
       }));
       setMessages(normalizedHistory);
     }
     if (error) {
       console.error("❌ Error fetching chat history:", error);
     }
-  }, [isSuccess, chatHistory, error, user?.user?.id]);
+  }, [isSuccess, chatHistory, error, user?.user?.user_id]);
 
   // WebSocket setup
   useEffect(() => {
-    if (!user || !user.user?.id) {
+    if (!user || !user.user?.user_id) {
       console.log("🚫 No user or user ID found");
       return;
     }
@@ -68,40 +78,50 @@ const UserDashboardChats = () => {
     ws.current.onopen = () => console.log("✅ WebSocket connected");
 
     ws.current.onmessage = (event) => {
+      console.log(event.data);
       try {
         const raw = JSON.parse(event.data);
         console.log("📥 Raw WebSocket data:", raw);
         const incoming = raw.message || raw;
         console.log("📩 Received message:", incoming);
+        console.log("is equal",incoming.sender ,room_id.id);
+        if (String(incoming.sender) == String(room_id.id)) {
+          const normalizedMessage = {
+            id: incoming.id || null,
+            sender: incoming.sender || null,
+            receiver: incoming.receiver || null,
+            message: incoming.message || "",
+            timestamp: incoming.timestamp || "",
+            reply_to: incoming.reply_to || null,
+            attachment_name: incoming.attachment_name || "",
+            is_read: incoming.is_read || false,
+            is_deleted: incoming.is_deleted || false,
+            is_edited: incoming.is_edited || false,
+            is_reported: incoming.is_reported || false,
+            attachment_data:
+              incoming.attachment_data || incoming.attachment || "",
+            isUser: !(incoming.sender === user.user.receiver_id), // Fixed sender comparison
+          };
 
-        const normalizedMessage = {
-          id: incoming.id || null,
-          sender: incoming.sender || null,
-          receiver: incoming.receiver || null,
-          message: incoming.message || "",
-          timestamp: incoming.timestamp || "",
-          reply_to: incoming.reply_to || null,
-          attachment_name: incoming.attachment_name || "",
-          is_read: incoming.is_read || false,
-          is_deleted: incoming.is_deleted || false,
-          is_edited: incoming.is_edited || false,
-          is_reported: incoming.is_reported || false,
-          attachment_data:
-            incoming.attachment_data || incoming.attachment || "",
-          isUser: !(incoming.sender === user.user.id), // Fixed sender comparison
-        };
+          setMessages((prev) => [...prev, normalizedMessage]);
+        }
 
-        setMessages((prev) => [...prev, normalizedMessage]);
+
       } catch (error) {
         console.error("❌ Error parsing message:", error);
       }
     };
 
     ws.current.onerror = (err) => console.error("❌ WebSocket error:", err);
-    ws.current.onclose = () => console.log("🔌 WebSocket closed");
+    ws.current.onclose = () => {
+      console.log("🔌 WebSocket closed")
+      ws.current = new WebSocket(
+        `ws://172.252.13.96:7000/ws/api/v1/chat/?Authorization=Bearer ${token}`
+      )
+    };
 
     return () => ws.current?.close();
-  }, [user?.user?.id]);
+  }, [user?.user?.receiver_id]);
 
   useEffect(() => {
     console.log("📜 Updated messages state:", messages);
@@ -140,11 +160,11 @@ const UserDashboardChats = () => {
     }
 
     const messagePayload = {
-      user_id: user?.user?.id,
+      user_id: user?.user?.receiver_id,
       message: newMessage.trim() || "",
       attachment_name: selectedFileName || "",
       attachment_data: "",
-      receiver_id: user?.user?.id, // TODO: Replace with actual receiver ID
+      receiver_id: user?.user?.receiver_id, // TODO: Replace with actual receiver ID
     };
 
     if (selectedFile && fileInputRef.current?.files[0]) {
@@ -178,8 +198,8 @@ const UserDashboardChats = () => {
           ...prev,
           {
             id: null,
-            sender: user?.user?.id,
-            receiver: user?.user?.id, // TODO: Replace with actual receiver ID
+            sender: user?.user?.user_id,
+            receiver: user?.user?.receiver_id, // TODO: Replace with actual receiver ID
             message: newMessage.trim() || "",
             timestamp: new Date().toISOString(),
             reply_to: null,
@@ -254,11 +274,11 @@ const UserDashboardChats = () => {
       )}
 
       <div className="flex-1 p-4 space-y-4 overflow-y-auto">
-        {messages.map((message, index) => (
+        {!isLoading && messages.map((message, index) => (
           <div key={index}>
             {message.isUser ? (
               <div className="flex justify-end space-x-2">
-                <div className="max-w-full w-fit bg-[#2F80A9] text-white rounded-lg p-3 text-md font-medium">
+                <div className="max-w-full w-fit bg-[#848239] text-white rounded-lg p-3 text-md font-medium">
                   {message.attachment_data && message.attachment_name && (
                     <div className="mb-2">
                       {isImage(message.attachment_name) ? (

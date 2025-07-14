@@ -17,7 +17,7 @@ const AdminDashboardMessage = () => {
       `ws://172.252.13.96:7000/ws/api/v1/chat/?Authorization=Bearer ${token}`
     );
 
-    ws.current.onopen = () => console.log("✅ WebSocket connected");
+    ws.current.onopen = () => console.log("✅ WebSocket connected chat page",ws);
 
     ws.current.onmessage = (event) => {
       try {
@@ -50,7 +50,7 @@ const AdminDashboardMessage = () => {
       }
     };
 
-    ws.current.onclose = () => console.log("🔌 WebSocket closed");
+    ws.current.onclose = () => console.log("🔌 WebSocket closed admin chat");
     ws.current.onerror = (err) => console.error("❌ WebSocket error:", err);
 
     return () => {
@@ -85,7 +85,7 @@ const AdminDashboardMessage = () => {
 
     if (
       pathParts.includes("Message") &&
-      users.some((user) => String(user.id) === userIdFromPath)
+      users.some((user) => String(user.user_id) === userIdFromPath)
     ) {
       setSelectedUserId(userIdFromPath);
     } else {
@@ -94,11 +94,11 @@ const AdminDashboardMessage = () => {
   }, [location.pathname, users]);
 
   const handleUserClick = (user) => {
-    setSelectedUserId(user.id);
+    setSelectedUserId(user.user_id);
     // Reset the number for the clicked user
     setUsers((prevUsers) => {
       const updatedUsers = prevUsers.map((u) =>
-        String(u.id) === String(user.id)
+        String(u.id) === String(user.user_id)
           ? { ...u, number: 0 } // Reset number to 0
           : u
       );
@@ -110,7 +110,7 @@ const AdminDashboardMessage = () => {
       );
       return [...updatedUsers]; // Ensure new array for React to detect change
     });
-    navigate(`/Admin_Dashboard/Message/${user.id}`, { state: { user } });
+    navigate(`/Admin_Dashboard/Message/${user.room_id}`, { state: { user } });
   };
 
   const handleChatbotClick = () => {
@@ -139,11 +139,11 @@ const AdminDashboardMessage = () => {
             onClick={handleChatbotClick}
             className={`flex items-center space-x-2 px-[10px] py-[8px] mt-2 cursor-pointer ${
               location.pathname === "/Admin_Dashboard/Message/chatbot"
-                ? "bg-[#B6E3FC]"
-                : "hover:bg-[#B6E3FC]"
+                ? "bg-[#848239]"
+                : "hover:bg-[#848239]"
             }`}
           >
-            <div className="bg-[#2F80A9] h-10 w-10 text-white flex items-center justify-center rounded-full">
+            <div className="bg-[#848239] h-10 w-10 text-white flex items-center justify-center rounded-full">
               <VscRobot size={25} />
             </div>
             <div className="text-md">
@@ -163,7 +163,7 @@ const AdminDashboardMessage = () => {
                 onClick={() => handleUserClick(user)}
                 className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-[#252c3b] text-gray-700 dark:text-gray-200 transition-colors border-b border-gray-200 ${
                   selectedUserId === user.id
-                    ? "bg-blue-100 dark:bg-[#2F80A9]"
+                    ? "bg-blue-100 dark:bg-[#848239]"
                     : ""
                 }`}
               >

@@ -183,7 +183,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							/>
 						</div>
 
@@ -205,7 +205,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							/>
 						</div>
 
@@ -229,7 +229,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							/>
 						</div>
 					</div>
@@ -253,7 +253,7 @@ function EditPost() {
 							rows={5}
 							required
 							style={{ maxHeight: "12rem", overflowY: "auto" }}
-							className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded resize-none"
+							className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded resize-none"
 						/>
 					</div>
 
@@ -276,7 +276,7 @@ function EditPost() {
 								})
 							}
 							required
-							className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+							className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 						/>
 					</div>
 
@@ -297,7 +297,7 @@ function EditPost() {
 									locationField: e.target.value,
 								})
 							}
-							className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+							className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 						/>
 					</div>
 
@@ -320,7 +320,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							/>
 						</div>
 
@@ -342,7 +342,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							/>
 						</div>
 
@@ -363,7 +363,7 @@ function EditPost() {
 									})
 								}
 								required
-								className="w-full px-3 py-2 border border-[#5C91B1] bg-[#848239] rounded"
+								className="w-full px-3 py-2 border border-[#5C91B1] bg-white rounded"
 							>
 								<option value="USD">USD</option>
 								<option value="BDT">BDT</option>
@@ -405,7 +405,7 @@ function EditPost() {
 
 					<button
 						type="submit"
-						className="w-[231px] bg-[#2E9DE0] hover:cursor-pointer text-[#848239] text-[20px] py-2 rounded mt-10"
+						className="w-[231px] bg-[#848239] text-white hover:cursor-pointer text-wbg-white text-[20px] py-2 rounded mt-10"
 					>
 						Update Post
 					</button>

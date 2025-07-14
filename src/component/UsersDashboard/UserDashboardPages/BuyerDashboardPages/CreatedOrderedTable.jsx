@@ -27,6 +27,8 @@ import { VscEye } from "react-icons/vsc";
 import GiveAReviewRating from "../../GiveAReviewRating"; // Assuming this component is available
 import FormatDateTime from "./FormatDateTime";
 import toast, { Toaster } from "react-hot-toast";
+import { div } from "framer-motion/client";
+import { usePostAssignMutation } from "../../../../Redux/feature/ApiSlice";
 
 function CreatedOrderedTable() {
 	const navigate = useNavigate();
@@ -42,10 +44,58 @@ function CreatedOrderedTable() {
 	const dropdownRef = useRef(null); // For status filter dropdown
 	const actionDropdownRef = useRef(null); // For action dropdown
 	const [projectData, setProjectData] = useState([]);
+	console.log(projectData);
 	const token = localStorage.getItem("access_token");
 	const [detailsId, setDetailsId] = useState("");
 
+
+
 	const description = `Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the Lorem Ipsum is simply dum my text of the printing and type setting industry. Lorem standard dummy text ever since the. Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`;
+
+
+	// State to manage form inputs
+	const [formData, setFormData] = useState({
+		username: '',
+		amount: '',
+		deadline: '',
+	});
+
+	// Get projectId from localStorage
+	const id = localStorage.getItem("projectId");
+
+	// Destructure the mutation hook
+	const [assignPost] = usePostAssignMutation();
+
+	// Handle input changes
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+
+	// Handle form submission
+	const handleSubmit = async () => {
+		try {
+			// Send the form data and id to the mutation
+			await assignPost({
+				payload: {
+					username: formData.username,
+					amount: formData.amount,
+					deadline: formData.deadline,
+				},
+				id, // Pass the id for the URL
+			}).unwrap();
+			handleCloseModal();
+			toast.success('Candidate assigned successfully!');
+		} catch (error) {
+			console.error('Error assigning candidate:', error);
+			toast.error('Failed to assign candidate');
+		}
+	};
+
+
 
 	useEffect(() => {
 		const handleClickOutside = (event) => {
@@ -68,6 +118,9 @@ function CreatedOrderedTable() {
 			document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
+	useEffect(() => {
+		console.log(detailsId);
+	}, [detailsId])
 	const handleTabChange = (tab) => {
 		setActiveTab(tab);
 		tab === "buyer"
@@ -80,7 +133,7 @@ function CreatedOrderedTable() {
 	};
 
 	const handleDropdownToggleAction = (id) => {
-		setDetailsId(id);
+		setDetailsId(prev => id);
 		setOpenDropdownAction((prev) => (prev === id ? null : id));
 	};
 
@@ -121,7 +174,7 @@ function CreatedOrderedTable() {
 				);
 				setOpenDropdownAction(null);
 				setOpenModal(false);
-				toast.error("Deleted successfully!!");
+				toast.success("Deleted successfully!!");
 			})
 			.catch((err) => {
 				console.log("Error deleting order:", err.message);
@@ -197,21 +250,19 @@ function CreatedOrderedTable() {
 				<div className="flex mb-4 justify-center">
 					<div className="bg-[#acaeaf23] rounded-full">
 						<button
-							className={`px-6 py-2 rounded-full hover:cursor-pointer ${
-								activeTab === "seller"
-									? "bg-[#848239] text-white"
-									: "text-[#012939]"
-							}`}
+							className={`px-6 py-2 rounded-full hover:cursor-pointer ${activeTab === "seller"
+								? "bg-[#848239] text-white"
+								: "text-[#012939]"
+								}`}
 							onClick={() => handleTabChange("seller")}
 						>
 							Seller
 						</button>
 						<button
-							className={`px-6 py-2 rounded-full hover:cursor-pointer ${
-								activeTab === "buyer"
-									? "bg-[#848239] text-white"
-									: "text-[#012939]"
-							}`}
+							className={`px-6 py-2 rounded-full hover:cursor-pointer ${activeTab === "buyer"
+								? "bg-[#848239] text-white"
+								: "text-[#012939]"
+								}`}
 							onClick={() => handleTabChange("buyer")}
 						>
 							Buyer
@@ -231,9 +282,8 @@ function CreatedOrderedTable() {
 						>
 							<p>{statusFilter || "All Orders"}</p>
 							<IoIosArrowForward
-								className={`transition-transform ${
-									isOpen ? "rotate-90" : ""
-								}`}
+								className={`transition-transform ${isOpen ? "rotate-90" : ""
+									}`}
 							/>
 						</div>
 						{isOpen && (
@@ -300,6 +350,9 @@ function CreatedOrderedTable() {
 											Date of creation
 										</th>
 										<th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
+											UserName
+										</th>
+										<th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
 											Duration
 										</th>
 										<th className="px-6 py-4 text-sm font-semibold text-[#2c3e50]">
@@ -320,6 +373,9 @@ function CreatedOrderedTable() {
 												{project.date}
 											</td>
 											<td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
+												{project.username}
+											</td>
+											<td className="border-b border-[#C1DDEF] px-6 py-4 text-sm">
 												<div className="flex items-center">
 													<ClockIcon className="mr-2 h-4 w-4 text-[#718096]" />
 													{project.duration} / days
@@ -337,16 +393,21 @@ function CreatedOrderedTable() {
 												{project?.payment_type}
 											</td>
 											<td className="border-b border-[#C1DDEF] px-6 py-4 text-sm w-[195px]">
+
+
 												<div
 													className="relative"
 													ref={(el) =>
-														(dropdownRefs.current[
-															project.projectId
-														] = el)
+													(dropdownRefs.current[
+														project.projectId
+													] = el)
 													}
 												>
 													<button
+
+
 														onClick={() =>
+
 															handleDropdownToggleAction(
 																project.projectId
 															)
@@ -357,58 +418,69 @@ function CreatedOrderedTable() {
 													</button>
 													{openDropdownAction ===
 														project.projectId && (
-														<div className="absolute right-0 mt-1 w-[195px] bg-[#FAFDFF] rounded z-10">
-															<ul className="text-sm text-[#2c3e50]">
-																<Link
-																	to="/dashboard/buyer_candidate_list"
-																	state={{
-																		id: project.projectId,
-																	}}
-																	className="px-4 py-2 cursor-pointer flex items-center gap-2"
-																>
-																	<IoEyeOutline />{" "}
-																	Show all
-																	bids
-																</Link>
-																<Link
-																	to={`/dashboard/edit_created_order`}
-																	state={{
-																		id: project.projectId,
-																	}}
-																	className="px-4 py-2 cursor-pointer flex items-center gap-2"
-																>
-																	<BiEdit />
-																	Edit
-																</Link>
-																<li
-																	onClick={() =>
-																		handleDeleteProject(
-																			project.projectId
-																		)
-																	}
-																	className="px-4 py-2 cursor-pointer flex items-center gap-2"
-																>
-																	<RiDeleteBinLine />
-																	Delete
-																</li>
-																<li className="px-4 py-2 cursor-pointer flex items-center gap-2">
-																	<BsPersonCheckFill />
-																	Assign
-																</li>
-																<li
-																	onClick={() => {
-																		handleOpenModal(
-																			"details"
-																		);
-																	}}
-																	className="px-4 py-2 cursor-pointer flex items-center gap-2"
-																>
-																	<TbListDetails />
-																	Details
-																</li>
-															</ul>
-														</div>
-													)}
+															<div className="absolute right-0 mt-1 w-[195px] bg-[#FAFDFF] rounded z-10">
+																<ul className="text-sm text-[#2c3e50]">
+																	<Link
+																		to="/dashboard/buyer_candidate_list"
+																		state={{
+																			id: project.projectId,
+																		}}
+
+																		className="px-4 py-2 cursor-pointer flex items-center gap-2"
+																	>
+																		<IoEyeOutline />{" "}
+																		Show all
+																		bids
+																	</Link>
+																	<Link
+																		to={`/dashboard/edit_created_order`}
+																		state={{
+																			id: project.projectId,
+																		}}
+																		className="px-4 py-2 cursor-pointer flex items-center gap-2"
+																	>
+																		<BiEdit />
+																		Edit
+																	</Link>
+																	<li
+																		onClick={() => {
+																			handleDeleteProject(
+																				project.projectId
+																			)
+
+																		}}
+
+
+																		className="px-4 py-2 cursor-pointer flex items-center gap-2"
+																	>
+																		<RiDeleteBinLine />
+																		Delete
+																	</li>
+																	{/* <li
+																		onClick={() => {
+																			handleOpenModal("assing")
+																			localStorage.setItem("projectId", project.projectId);
+																			// alert(project.projectId)
+																		}}
+
+																		className="px-4 py-2 cursor-pointer flex items-center gap-2">
+																		<BsPersonCheckFill />
+																		Assign
+																	</li> */}
+																	<li
+																		onClick={() => {
+																			handleOpenModal(
+																				"details"
+																			);
+																		}}
+																		className="px-4 py-2 cursor-pointer flex items-center gap-2"
+																	>
+																		<TbListDetails />
+																		Details
+																	</li>
+																</ul>
+															</div>
+														)}
 												</div>
 											</td>
 										</tr>
@@ -471,25 +543,24 @@ function CreatedOrderedTable() {
 											${order.amount.toFixed(2)}
 										</td>
 										<td
-											className={`px-4 py-2 text-sm font-semibold ${
-												order.status === "In-Progress"
-													? "text-[#6055C2]"
-													: order.status ===
-													  "Delivered"
+											className={`px-4 py-2 text-sm font-semibold ${order.status === "In-Progress"
+												? "text-[#6055C2]"
+												: order.status ===
+													"Delivered"
 													? "text-[#268F39] flex items-center cursor-pointer"
 													: order.status === "Late"
-													? "text-[#E35A5A]"
-													: order.status ===
-													  "Cancelled"
-													? "text-[#5D7595]"
-													: order.status ===
-													  "Cancel request"
-													? "text-[#E35A5A] flex items-center cursor-pointer"
-													: order.status ===
-													  "Complete"
-													? "text-[#088ED5] flex items-center cursor-pointer"
-													: ""
-											}`}
+														? "text-[#E35A5A]"
+														: order.status ===
+															"Cancelled"
+															? "text-[#5D7595]"
+															: order.status ===
+																"Cancel request"
+																? "text-[#E35A5A] flex items-center cursor-pointer"
+																: order.status ===
+																	"Complete"
+																	? "text-[#088ED5] flex items-center cursor-pointer"
+																	: ""
+												}`}
 										>
 											<span
 												className="inline-flex items-center"
@@ -528,11 +599,11 @@ function CreatedOrderedTable() {
 												{(order.status ===
 													"Delivered" ||
 													order.status ===
-														"Complete" ||
+													"Complete" ||
 													order.status ===
-														"Cancel request") && (
-													<VscEye className="ml-1 text-[16px] cursor-pointer" />
-												)}
+													"Cancel request") && (
+														<VscEye className="ml-1 text-[16px] cursor-pointer" />
+													)}
 											</span>
 										</td>
 										<td className="px-4 py-3 relative text-[#012939]">
@@ -548,408 +619,408 @@ function CreatedOrderedTable() {
 											</div>
 											{openDropdownAction ===
 												order.order_id && (
-												<div
-													ref={actionDropdownRef}
-													className="absolute right-0 w-[195px] text-[16px] text-[#012939] bg-[#FAFDFF] border border-gray-200 rounded shadow-md z-20 p-2 space-y-2"
-												>
-													{(() => {
-														const status =
-															order.status
-																? order.status
+													<div
+														ref={actionDropdownRef}
+														className="absolute right-0 w-[195px] text-[16px] text-[#012939] bg-[#FAFDFF] border border-gray-200 rounded shadow-md z-20 p-2 space-y-2"
+													>
+														{(() => {
+															const status =
+																order.status
+																	? order.status
 																		.toLowerCase()
 																		.replace(
 																			/[-_\s]/g,
 																			""
 																		)
-																: "";
-														if (
-															[
-																"inprogress",
-																"late",
-															].includes(status)
-														) {
-															return (
-																<>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"cancel"
-																			)
-																		}
-																	>
-																		<RxCrossCircled />
-																		<p>
-																			Request
-																			to
-																			cancel
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"extend"
-																			)
-																		}
-																	>
-																		<MdMoreTime />
-																		<p>
-																			Extend
-																			time
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"support"
-																			)
-																		}
-																	>
-																		<MdOutlineHeadsetMic />
-																		<p>
-																			Admin
-																			support
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"details"
-																			)
-																		}
-																	>
-																		<TbListDetails />
-																		<p>
-																			View
-																			project
-																			details
-																		</p>
-																	</div>
-																</>
+																	: "";
+															if (
+																[
+																	"inprogress",
+																	"late",
+																].includes(status)
+															) {
+																return (
+																	<>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"cancel"
+																				)
+																			}
+																		>
+																			<RxCrossCircled />
+																			<p>
+																				Request
+																				to
+																				cancel
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"extend"
+																				)
+																			}
+																		>
+																			<MdMoreTime />
+																			<p>
+																				Extend
+																				time
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"support"
+																				)
+																			}
+																		>
+																			<MdOutlineHeadsetMic />
+																			<p>
+																				Admin
+																				support
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"details"
+																				)
+																			}
+																		>
+																			<TbListDetails />
+																			<p>
+																				View
+																				project
+																				details
+																			</p>
+																		</div>
+																	</>
+																);
+															}
+															if (
+																[
+																	"complete",
+																	"completed",
+																].includes(status)
+															) {
+																return (
+																	<>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"cancel"
+																				)
+																			}
+																		>
+																			<RxCrossCircled />
+																			<p>
+																				Request
+																				to
+																				cancel
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"extend"
+																				)
+																			}
+																		>
+																			<MdMoreTime />
+																			<p>
+																				Extend
+																				time
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"tip"
+																				)
+																			}
+																		>
+																			<CiDollar />
+																			<p>
+																				Give
+																				a
+																				tip
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"review"
+																				)
+																			}
+																		>
+																			<TbFileLike />
+																			<p>
+																				Give
+																				a
+																				review
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"delivery"
+																				)
+																			}
+																		>
+																			<MdOutlineCleanHands />
+																			<p>
+																				View
+																				delivery
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"support"
+																				)
+																			}
+																		>
+																			<MdOutlineHeadsetMic />
+																			<p>
+																				Admin
+																				support
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"details"
+																				)
+																			}
+																		>
+																			<TbListDetails />
+																			<p>
+																				View
+																				project
+																				details
+																			</p>
+																		</div>
+																	</>
+																);
+															}
+															if (
+																status ===
+																"cancelled"
+															) {
+																return (
+																	<>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleDeleteOrder(
+																					order.order_id
+																				)
+																			}
+																		>
+																			<RiDeleteBin6Line />
+																			<p>
+																				Delete
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"support"
+																				)
+																			}
+																		>
+																			<MdOutlineHeadsetMic />
+																			<p>
+																				Admin
+																				support
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"details"
+																				)
+																			}
+																		>
+																			<TbListDetails />
+																			<p>
+																				View
+																				project
+																				details
+																			</p>
+																		</div>
+																	</>
+																);
+															}
+															if (
+																status ===
+																"delivered"
+															) {
+																return (
+																	<>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"cancel"
+																				)
+																			}
+																		>
+																			<RxCrossCircled />
+																			<p>
+																				Request
+																				to
+																				cancel
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"extend"
+																				)
+																			}
+																		>
+																			<MdMoreTime />
+																			<p>
+																				Extend
+																				time
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"delivery"
+																				)
+																			}
+																		>
+																			<MdOutlineCleanHands />
+																			<p>
+																				View
+																				delivery
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"support"
+																				)
+																			}
+																		>
+																			<MdOutlineHeadsetMic />
+																			<p>
+																				Admin
+																				support
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"details"
+																				)
+																			}
+																		>
+																			<TbListDetails />
+																			<p>
+																				View
+																				project
+																				details
+																			</p>
+																		</div>
+																	</>
+																);
+															}
+															if (
+																status ===
+																"cancelrequest"
+															) {
+																return (
+																	<>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"extend"
+																				)
+																			}
+																		>
+																			<MdMoreTime />
+																			<p>
+																				Extend
+																				time
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"viewCancel"
+																				)
+																			}
+																		>
+																			<MdOutlineCleanHands />
+																			<p>
+																				View
+																				cancel
+																				request
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"support"
+																				)
+																			}
+																		>
+																			<MdOutlineHeadsetMic />
+																			<p>
+																				Admin
+																				support
+																			</p>
+																		</div>
+																		<div
+																			className="flex items-center gap-2 cursor-pointer"
+																			onClick={() =>
+																				handleOpenModal(
+																					"details"
+																				)
+																			}
+																		>
+																			<TbListDetails />
+																			<p>
+																				View
+																				project
+																				details
+																			</p>
+																		</div>
+																	</>
+																);
+															}
+															console.log(
+																`Unexpected order status: ${order.status}`
 															);
-														}
-														if (
-															[
-																"complete",
-																"completed",
-															].includes(status)
-														) {
-															return (
-																<>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"cancel"
-																			)
-																		}
-																	>
-																		<RxCrossCircled />
-																		<p>
-																			Request
-																			to
-																			cancel
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"extend"
-																			)
-																		}
-																	>
-																		<MdMoreTime />
-																		<p>
-																			Extend
-																			time
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"tip"
-																			)
-																		}
-																	>
-																		<CiDollar />
-																		<p>
-																			Give
-																			a
-																			tip
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"review"
-																			)
-																		}
-																	>
-																		<TbFileLike />
-																		<p>
-																			Give
-																			a
-																			review
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"delivery"
-																			)
-																		}
-																	>
-																		<MdOutlineCleanHands />
-																		<p>
-																			View
-																			delivery
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"support"
-																			)
-																		}
-																	>
-																		<MdOutlineHeadsetMic />
-																		<p>
-																			Admin
-																			support
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"details"
-																			)
-																		}
-																	>
-																		<TbListDetails />
-																		<p>
-																			View
-																			project
-																			details
-																		</p>
-																	</div>
-																</>
-															);
-														}
-														if (
-															status ===
-															"cancelled"
-														) {
-															return (
-																<>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleDeleteOrder(
-																				order.order_id
-																			)
-																		}
-																	>
-																		<RiDeleteBin6Line />
-																		<p>
-																			Delete
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"support"
-																			)
-																		}
-																	>
-																		<MdOutlineHeadsetMic />
-																		<p>
-																			Admin
-																			support
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"details"
-																			)
-																		}
-																	>
-																		<TbListDetails />
-																		<p>
-																			View
-																			project
-																			details
-																		</p>
-																	</div>
-																</>
-															);
-														}
-														if (
-															status ===
-															"delivered"
-														) {
-															return (
-																<>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"cancel"
-																			)
-																		}
-																	>
-																		<RxCrossCircled />
-																		<p>
-																			Request
-																			to
-																			cancel
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"extend"
-																			)
-																		}
-																	>
-																		<MdMoreTime />
-																		<p>
-																			Extend
-																			time
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"delivery"
-																			)
-																		}
-																	>
-																		<MdOutlineCleanHands />
-																		<p>
-																			View
-																			delivery
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"support"
-																			)
-																		}
-																	>
-																		<MdOutlineHeadsetMic />
-																		<p>
-																			Admin
-																			support
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"details"
-																			)
-																		}
-																	>
-																		<TbListDetails />
-																		<p>
-																			View
-																			project
-																			details
-																		</p>
-																	</div>
-																</>
-															);
-														}
-														if (
-															status ===
-															"cancelrequest"
-														) {
-															return (
-																<>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"extend"
-																			)
-																		}
-																	>
-																		<MdMoreTime />
-																		<p>
-																			Extend
-																			time
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"viewCancel"
-																			)
-																		}
-																	>
-																		<MdOutlineCleanHands />
-																		<p>
-																			View
-																			cancel
-																			request
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"support"
-																			)
-																		}
-																	>
-																		<MdOutlineHeadsetMic />
-																		<p>
-																			Admin
-																			support
-																		</p>
-																	</div>
-																	<div
-																		className="flex items-center gap-2 cursor-pointer"
-																		onClick={() =>
-																			handleOpenModal(
-																				"details"
-																			)
-																		}
-																	>
-																		<TbListDetails />
-																		<p>
-																			View
-																			project
-																			details
-																		</p>
-																	</div>
-																</>
-															);
-														}
-														console.log(
-															`Unexpected order status: ${order.status}`
-														);
-														return null;
-													})()}
-												</div>
-											)}
+															return null;
+														})()}
+													</div>
+												)}
 										</td>
 
 										{/* Status Modals */}
@@ -1472,6 +1543,92 @@ function CreatedOrderedTable() {
 										<button className="btn btn-active bg-[#848239] p-4 rounded-2xl w-[120px] font-bold text-[17px] text-[#FFFFFF] cursor-pointer">
 											Deliver
 										</button>
+									</div>
+								</div>
+							)}
+
+							{modalContent === "assing" && (
+								<div className="modal-box relative bg-[#EFF2F6] w-[470px] rounded p-6 text-[#154153]">
+
+									{/* Back Button */}
+									<button
+										className="btn btn-sm btn-circle hover:cursor-pointer flex items-center gap-2 mb-4"
+										onClick={handleCloseModal}
+									>
+										<GoArrowLeft /> <span>Back</span>
+									</button>
+
+									{/* Modal Title */}
+									<h1 className="text-xl font-semibold mb-4">Assign Candidate</h1>
+
+
+									{/* Form Fields */}
+									<div className="flex flex-col gap-4">
+										{/* Candidate Username */}
+										<div className="flex gap-4">
+											<div className="flex-1">
+												<label className="block text-sm mb-1">Candidate username</label>
+												<div className="relative">
+													<input
+														type="text"
+														name="username"
+														value={formData.username}
+														onChange={handleInputChange}
+														placeholder="Search by username"
+														className="w-full p-2 border border-[#D3D3D3] rounded text-sm focus:outline-none focus:ring-1 focus:ring-[#154153]"
+													/>
+												</div>
+											</div>
+										</div>
+
+										{/* Amount and Deadline */}
+										<div className="flex gap-4">
+											<div className="flex-1">
+												<label className="block text-sm mb-1">Amount</label>
+												<input
+													type="text"
+													name="amount"
+													value={formData.amount}
+													onChange={handleInputChange}
+													placeholder="Enter amount"
+													className="w-full p-2 border border-[#D3D3D3] rounded text-sm focus:outline-none focus:ring-1 focus:ring-[#154153]"
+												/>
+											</div>
+											<div className="flex-1">
+												<label className="block text-sm mb-1">Deadline</label>
+												<input
+													type="text"
+													name="deadline"
+													value={formData.deadline}
+													onChange={handleInputChange}
+													placeholder=" yyyy/mm/dd"
+													className="w-full p-2 border border-[#D3D3D3] rounded text-sm focus:outline-none focus:ring-1 focus:ring-[#154153]"
+												/>
+											</div>
+										</div>
+
+										{/* Total Amount and Fee Note */}
+										<div className="flex justify-between items-center text-sm">
+											<span>Total amount: 105</span>
+											<span className="text-[#848239]">ChaskiX will charge 5%</span>
+										</div>
+
+										{/* Action Buttons */}
+										<div className="flex gap-4 mt-4">
+											<button
+												className="flex-1 p-2 border border-[#154153] rounded text-[#154153] hover:bg-gray-200 cursor-pointer"
+												onClick={handleCloseModal}
+											>
+												Cancel
+											</button>
+											<button
+												className="flex-1 p-2 rounded text-white cursor-pointer"
+												style={{ backgroundColor: 'rgba(132, 130, 57, 1)' }}
+												onClick={handleSubmit}
+											>
+												Confirm
+											</button>
+										</div>
 									</div>
 								</div>
 							)}
